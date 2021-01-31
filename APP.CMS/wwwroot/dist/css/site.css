@@ -1,0 +1,13 @@
+﻿.error{
+    border-color:red;
+}
+.fa-asterisk {
+    color: red;
+    font-size: 8px !important
+}
+.btn{
+    min-width:75px !important;
+}
+.card-footer{
+    text-align:center;
+}

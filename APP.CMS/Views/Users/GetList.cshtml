@@ -1,0 +1,26 @@
+﻿@using APP.UTILS;
+@model List<APP.MODELS.Users>
+
+<table style="width:100%" class="table table-bordered table-hover table-striped" id="tblDisplay">
+    <thead>
+        <tr>
+            <th style="width:5%" class="text-center"><input type="checkbox" id="checkAll" /></th>
+            <th style="width:70%">Tên người dùng</th>
+            <th style="text-align:center;width:20%">Thao tác</th>
+        </tr>
+    </thead>
+    @{
+        for (int i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            <tr>
+                <td class="text-center"><input type="checkbox" data-id-box="@item.Id" id="td_all" /></td>
+                <td text-align:left">@item.UserName</td>
+                <td style="text-align:center;width:20%;">
+                    <a href="javascript:;" onclick="openUpdate(@item.Id)"><i class="fas fa-edit custom-icon-edit" data-toggle="tooltip" data-placement="bottom" title="Chỉnh sửa dữ liệu"></i></a>
+                    <a href="javascript:;" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt custom-icon-delete" data-toggle="tooltip" data-placement="bottom" title="Xóa dữ liệu"></i></a>
+                </td>
+            </tr>
+        }
+    }
+</table>

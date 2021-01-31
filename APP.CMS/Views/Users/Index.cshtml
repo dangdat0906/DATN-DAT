@@ -1,0 +1,107 @@
+﻿@using APP.UTILS;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header" id="card-header">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-1">
+                                <a href="/"><i class="fas fa-home" id="iconTop"></i></a>
+                            </div>
+                            <div class="col">
+                                <p id="titleCardTop">/ @ViewData["Title"]</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9" style="text-align:right">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-minus" style="color:black"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                            <i class="fas fa-times" style="color:black"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <input type="text" id="txtName" class="form-control textSize" placeholder="Nhập tên người dùng" />
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="text" id="txtCode" class="form-control textSize" placeholder="Nhập mã người dùng" />
+                    </div>
+                    <div class="col-lg-3">
+                        <select id="drStatus" class="form-control textSize">
+                            <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                            <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                            <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-5 mt-1">
+                        <button id="btnSearch" class="btn btn btn-primary btn-sm"><i class="fas fa-search mr-2"></i>Tìm kiếm</button>
+                        <button id="btnCreate" class="btn btn btn-success btn-sm"><i class="fas fa-plus mr-2"></i>Thêm mới</button>
+                        <button id="btnXoaNhieu" class="btn btn btn-danger btn-sm"><i class="fas fa-times mr-2"></i>Xóa nhiều</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="" id="dtTable">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+    var urlDomain = "/users";
+    $(document).ready(function () {
+        getData("", "", -1);
+        searching();
+
+    })
+    function searching() {
+        $("#btnSearch").on('click', function () {
+            var name = $("#txtName").val();
+            var code = $('#txtCode').val();
+            var status = $("#drStatus").val()
+            getData(name, code, status);
+        });
+    }
+    $('#btnCreate').on('click', function () {
+        openCreate();
+    });
+    function getData(name, code, status) {
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/get-list/?name=" + name + "&code=" + code + "&status=" + status,
+            method: "GET",
+            success: function (response) {
+                $('#dtTable').html(response);
+                hideLoading();
+            }
+        });
+    }
+
+    function openCreate() {
+        $.ajax({
+            url: urlDomain + "/create",
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "TẠO MỚI NGƯỜI DÙNG")
+            }
+        });
+    }
+
+</script>
