@@ -15,17 +15,26 @@ namespace APP.REPOSITORY
         Task Commit();
         Task Rollback();
         Task SaveChange();
+        public IMenuRepository MenuRepository { get; }
+        public IRolesRepository RolesRepository { get; }
+        public IRole_PermissionsRepository Role_PermissionsRepository { get; }
+        public IAccountsRepository AccountsRepository { get; }
+        public IAccountRolesRepository AccountRolesRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
         APPDbContext _dbContext;
         IDbContextTransaction _transaction;
-
+        
         public UnitOfWork(IDbContextFactory<APPDbContext> dbContextFactory, Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContextFactory.GetContext();
             UserRepository = new UserRepository(_dbContext);
-
+            MenuRepository = new MenuRepository(_dbContext);
+            RolesRepository = new RolesRepository(_dbContext);
+            Role_PermissionsRepository = new Role_PermissionsRepository(_dbContext);
+            AccountsRepository = new AccountsRepository(_dbContext);
+            AccountRolesRepository = new AccountRolesRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -52,7 +61,11 @@ namespace APP.REPOSITORY
 
         private bool disposedValue = false; // To detect redundant calls
         public IUserRepository UserRepository { get; }
-
+        public IMenuRepository MenuRepository { get; }
+        public IRolesRepository RolesRepository { get; }
+        public IRole_PermissionsRepository Role_PermissionsRepository { get; }
+        public IAccountsRepository AccountsRepository { get; }
+        public IAccountRolesRepository AccountRolesRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)

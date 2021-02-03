@@ -1,0 +1,229 @@
+﻿@model APP.MODELS.Accounts
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Đăng nhập hệ thống</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="~/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css" rel="stylesheet" />
+    <link href="~/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" rel="stylesheet" />
+    <link href="~/plugins/fontawesome-free/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+    <link href="~/plugins/loading-modal/css/jquery.loadingModal.css" rel="stylesheet" />
+    <link href="~/dist/css/LoginCss.css" rel="stylesheet" />
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/loading-modal/js/jquery.loadingModal.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/dist/js/site.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi"
+            async defer>
+    </script>
+
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+
+
+<body>
+    <div id="login">
+
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <div id="login-form" class="form">
+                            <div class="row login-header">
+                                <div class="col-2">
+                                    <img src="~/dist/img/logo_admin.png" />
+                                </div>
+                                <div class="col-10 text-left"><h3>ĐĂNG NHẬP HỆ THỐNG</h3></div>
+                            </div>
+                            @if (Model != null)
+                            {
+                                <div class=" form-group">
+                                    <label for="username" class="text-info">Tên đăng nhập:</label><br>
+                                    <input required type="text" name="username" value="@Model.UserName" id="username" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="text-info">Mật khẩu:</label><br>
+                                    <input required type="password" name="password" value="@Model.Password" id="password" class="form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <label for="remember-me" class="text-info">
+                                            <span>Nhớ mật khẩu</span>
+                                            <span>
+                                                @if (Model.RememberPass == true)
+                                                {
+                                                    <input id="remember-me" name="remember-me" checked type="checkbox">
+                                                }
+                                                else
+                                                {
+                                                    <input id="remember-me" name="remember-me" type="checkbox">
+                                                }
+                                            </span>
+                                        </label><br>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="/tai-khoan/quen-mat-khau" class="text-info">Quên mật khẩu</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class=" form-group">
+                                    <label for="username" class="text-info">Tên đăng nhập:</label><br>
+                                    <input required type="text" name="username" id="username" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="text-info">Mật khẩu:</label><br>
+                                    <input required type="password" name="password" id="password" class="form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-6"><label for="remember-me" class="text-info"><span>Nhớ mật khẩu</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br></div>
+                                    <div class="col-6">
+                                        <a href="/tai-khoan/quen-mat-khau" class="text-info">Quên mật khẩu</a>
+                                    </div>
+                                </div>
+                            }
+
+
+                            <div class="form-group">
+                                @*<div class="col-7  d-flex align-items-center">
+                                        <h2 type="text" id="mainCaptcha"></h2>
+
+                                    </div>
+                                    <div class="col-1 d-flex align-items-center">
+                                        <a href="javascript:;" id="refresh" onclick="Captcha();"><i class="fas fa-redo-alt"></i></a>
+                                    </div>
+                                    <div class="col-4  d-flex align-items-center">
+                                        <input type="text" placeholder="Mã xác thực" class="form-control" id="txtInput" />
+                                    </div>*@
+                                @*<div class="g-recaptcha"
+                                    data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>*@
+                                @*<div id="html_element"></div>*@
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="button" onclick="login()"  name="login" class="btn btn-info btn-md" id="btnLogin" value="Đăng nhập">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var captcharesponse = null;
+        var catpcha = null;
+        var checkCaptcha = false;
+        var verifyCallback = function (response) {
+            checkCaptcha = true;
+        };
+     
+        var onloadCallback = function () {
+           catpcha =  grecaptcha.render('html_element', {
+               'sitekey': '6Ld61-AZAAAAAMM0EwmwyBsdwxdvtdUz9YbxZt0f',
+               'callback': verifyCallback,
+               'theme': 'light',
+               'lang': 'vi'
+           }); 
+        };
+        $(document).ready(function () {
+            
+        })
+       
+        function login() {
+            //captcharesponse = grecaptcha.getResponse(catpcha);
+            addRequired($("#login-box"))
+            if (ValidateFormLogin($("#login-box"))) {
+                return;
+            }
+            //if (!checkCaptcha) {
+            //    showAlert("Vui lòng ấn xác nhận")
+            //    return;
+            //}
+            //if (!ValidCaptcha()) {
+            //    return;
+            //}
+            showLoading()
+            $.ajax({
+                url: "/tai-khoan/dang-nhap",
+                method: "post",
+                data: {
+                    UserName: $("#username").val(),
+                    Password: $("#password").val(),
+                    RememberPass: $("#remember-me").prop("checked"),
+                    captcharesponse: JSON.stringify(captcharesponse)
+
+                },
+                success: function (response) {
+                    if (response.result) {
+                        location.href = "/"
+                    }
+                    else {
+                        hideLoading();
+                        showAlert(response.message, 1)
+                    }
+                }
+            })
+
+        }
+        function ValidateFormLogin(frm) {
+            var error = false;
+            var mess = '';
+            if ($("#username").val() == '') {
+                error = true;
+                mess = 'Tài khoản không được để trống';
+            }
+            if (error == false && $("#password").val() == '') {
+                error = true;
+                mess = 'Mật khẩu không được để trống';
+            }
+
+            if (error) {
+                toastr.error(mess)
+            }
+            return error;
+        }
+        //function Captcha() {
+        //    var alpha = new Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+        //        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        //        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        //    var i;
+        //    for (i = 0; i < 6; i++) {
+        //        var a = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var b = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var c = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var d = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var e = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var f = alpha[Math.floor(Math.random() * alpha.length)];
+        //        var g = alpha[Math.floor(Math.random() * alpha.length)];
+        //    }
+        //    var code = a + ' ' + b + ' ' + ' ' + c + ' ' + d + ' ' + e + ' ' + f + ' ' + g;
+        //    document.getElementById("mainCaptcha").innerHTML = code
+        //    document.getElementById("mainCaptcha").value = code
+        //}
+        //function ValidCaptcha() {
+        //    var string1 = removeSpaces(document.getElementById('mainCaptcha').value);
+        //    var string2 = removeSpaces(document.getElementById('txtInput').value);
+        //    if (string1 == string2) {
+        //        return true;
+        //    } else {
+        //        showAlert("Mã xác thực không đúng");
+        //        return false;
+        //    }
+        //}
+        //function removeSpaces(string) {
+        //    return string.split(' ').join('');
+        //}
+    </script>
+</body>
+
+</html>
+

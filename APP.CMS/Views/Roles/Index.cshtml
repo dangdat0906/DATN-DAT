@@ -1,0 +1,105 @@
+﻿@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row" id="frmFilter">
+                    <div class="col-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <input id="txtSearchName" type="text" class="form-control" placeholder="Tên nhóm quyền">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2">
+                        <div class="form-group">
+
+                            <select id="drStatus" class="form-control">
+                                <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                                <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                                <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                                <option value="@((int)StatusEnum.Removed)">@Extensions.GetEnumDescription(StatusEnum.Removed)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-4">
+                                    <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-2">
+                        @{
+                            if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                            {
+                                <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
+                            }
+                        }
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable" class="table-responsive p-0">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/nhom-quyen"
+    var take = 10
+    var skip = 0
+
+    $(document).ready(function () {
+        getData();
+
+        frmFilter.find("#btnSearch").on("click", function () {
+            getData();
+        });
+        frmFilter.find("#btnCreate").on("click", function () {
+            openCreate();
+        });
+
+    })
+    function getData() {
+        showLoading()
+        var name = frmFilter.find("#txtSearchName").val();
+        var parentId = frmFilter.find("#drParent").val();
+        var status = frmFilter.find("#drStatus").val();
+
+
+        $.ajax({
+            url: urlDomain + "/get-list?name=" + name + "&parentId=" + parentId + "&status=" + status,
+            method: "GET",
+            data: {
+                title: frmFilter.find("#txtName").val(),
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $("#dtTable").html(response);
+                hideLoading()
+            }
+        }).then(function () {
+             if (@((int)ViewData[nameof(RolesEnum.Update)]) == 0) {
+                $('#dtTable').find('.btn-update').css('display', 'none');
+                $('#dtTable').find('.checkStatus').attr('disabled', 'disabled');
+            }
+            if (@((int)ViewData[nameof(RolesEnum.Delete)]) == 0) {
+                $('#dtTable').find('.btn-delete').css('display', 'none');
+
+            }
+        })
+    }
+
+    function openCreate() {
+        location.href = urlDomain + '/them-moi';
+    }
+
+</script>
+

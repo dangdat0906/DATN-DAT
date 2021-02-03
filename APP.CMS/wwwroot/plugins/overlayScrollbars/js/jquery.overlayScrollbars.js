@@ -4072,7 +4072,7 @@
                 }
 
 
-                //==== Utils ====//
+                //==== UTILS ====//
 
                 /**
                  * Calls the callback with the given name. The Context of this callback is always _base (this).
@@ -4355,7 +4355,7 @@
                 }
 
 
-                //==== Utils Cache ====//
+                //==== UTILS Cache ====//
 
                 /**
                  * Compares two values or objects and returns true if they aren't equal.

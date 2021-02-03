@@ -1,0 +1,323 @@
+﻿@model APP.MODELS.Roles
+@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmUpdate">
+                <input type="hidden" id="txtId" value="@Model.Id" />
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-2" for="txtName">Tên nhóm quyền</label>
+                    <input type="text" required name="name" value="@Model.Name" class="form-control col-sm-4" id="txtName">
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtNote" required>Ghi chú</label>
+                    <textarea class="form-control col-sm-8" id="txtNote">@Model.Note</textarea>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            @if (Model.Status == 1)
+                            {
+                                <input type="checkbox" class="form-check-input" id="ckStatus" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" class="form-check-input" id="ckStatus">
+                            }
+                            <label >Trạng thái</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Chọn menu</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <ul class="list-group" id="listmenu" style="list-style:none">
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Chọn quyền</h3>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div id="roles">
+
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+<div id="btn" style="margin-top:40px">
+    <button type="button" id="btbExit" class="btn btn-danger pull-left">Trở lại</button>
+    <button type="button" id="btnUpdate" class="btn btn-primary">Lưu</button>
+</div>
+<script>
+
+    var frmUpdate = $("#frmUpdate")
+    var urlDomain = "/nhom-quyen";
+    var listRole = [];
+    var ListPermission = [];
+    var role = "";
+    $(document).ready(function () {
+        addRequired(frmUpdate);
+        getListPermission();
+    })
+    $('#btn').find('#btnUpdate').off("click").on('click', function (e) {
+        e.preventDefault();
+        update();
+    });
+    $('#btn').find('#btbExit').off("click").on('click', function (e) {
+        location.href = urlDomain + "/danh-sach";
+    });
+    function evenCheckbox() {
+        $(".family :checkbox:not(.invalid)").change(function (e) {
+            if ($(this).hasClass("parent")) {
+
+                var f = $(this).closest(".family");
+                f.find(".child:not(.invalid)")
+                    .prop("checked", this.checked)
+                    .triggerHandler('change.input');
+                if (!this.checked) {
+                    $(f).find(".sublist").css("display", "none");
+                    
+                } else {
+                    $(f).find(".sublist").css("display", "block");
+                    
+                }
+
+            } else if ($(this).hasClass("parent")) {
+
+                var t = $(this);
+                var fs = t.parents(".family");
+
+                fs.each(function (i, e) {
+                    var f = $(e);
+
+                    var p = f.find(".parent").filter(function () {
+                        return f.is($(this).closest(".family"));
+                    });
+
+                    var c = f.find(".child:not(.invalid)");
+                    var all_checked = true;
+                    c.each(function (i, e) {
+                        return all_checked = $(e).prop("checked") && all_checked;
+                    });
+                    p.prop("checked", all_checked)
+
+
+                });
+            }
+
+        });
+        $(".menu").click(function () {
+            $(".listrole").css("display", "none");
+            var id = $(this).find("input[type='checkbox']:first").val();
+            $("#menuid_" + id).css("display", "block");
+            console.log(id);
+        })
+    }
+
+
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        var listRolePermission = [];
+        $("#listmenu").find("input[type='checkbox']").each(function (i, item) {
+            if ($(item).prop("checked")) {
+                var menuid = $(item).val();
+                var roles = $("#roles").find("#menuid_" + menuid + " input[type='checkbox']:checked");
+                if (roles.length > 0) {
+                    roles.each(function () {
+                        var rolePermission = {
+                            MenuId: menuid,
+                            ActionCode: $(this).val()
+                        }
+                        listRolePermission.push(rolePermission);
+                    })
+                }
+                else {
+                    var rolePermission = {
+                        MenuId: menuid,
+                        ActionCode: ""
+                    }
+                    listRolePermission.push(rolePermission);
+                }
+
+
+            }
+        });
+     
+
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                Id: frmUpdate.find("#txtId").val(),
+                Name: frmUpdate.find("#txtName").val(),
+                Note: frmUpdate.find("#txtNote").val(),
+                Status: frmUpdate.find('#ckStatus').prop('checked') ? 1 : 0,
+                Role_Permissions: listRolePermission
+
+            }
+            , success: function (response) {
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    location.href = urlDomain + '/danh-sach';
+
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        })
+    }
+
+    function getMenuItem(itemData) {
+        var roles = $("#roles");
+        var html = '<li><div class="family checkbox">';
+        var data = ListPermission.find(x => x.menuId == itemData.id);
+        if (data != null) {
+            html += '<div class="menu"><input  type="checkbox" checked value="' + itemData.id + '" class="parent child" style="margin-right:5px" />' + '<label>' + itemData.name + '</label></div>';
+        }
+        else {
+            html += '<div class="menu"><input  type="checkbox" value="' + itemData.id + '" class="parent child" style="margin-right:5px" />' + '<label>' + itemData.name + '</label></div>';
+        }
+        var roleBox = '<div  style="display:none" class="listrole" id="menuid_' + itemData.id + '">' + role + '</div>';
+        roles.append(roleBox);
+        if (itemData.listChild != 0) {
+            var subList = '<ul  class="sublist"  style="list-style:none">';
+            $.each(itemData.listChild, function () {
+
+                subList += getMenuItem(this);
+            });
+            subList += '</ul>';
+        }
+
+        html += subList + '</div></li>';
+        return html;
+    }
+
+    function getMenu() {
+       
+        var $menu = $("#listmenu");
+        var html = ''
+        $.each(ListMenu, function () {
+            html += getMenuItem(this);
+        });
+        $menu.html(html);
+        var f = $("#listmenu").find(".family");
+        var check = f.find("input:checkbox:first").each(function () {
+            if(!this.checked) {
+                var f = $(this).closest(".family");
+                $(f).find(".sublist").css("display", "none");
+            }
+        })
+       
+        
+    }
+    function GetListMenu() {
+        
+        $.ajax({
+            url: urlDomain + '/get-list-child',
+            method: "GET",
+
+            success(response) {
+                ListMenu = response;              
+                
+                
+            }
+        }).then(function () {
+            GetListRole();
+        })
+
+    }
+    function getListPermission() {
+        $.ajax({
+            url: urlDomain + '/get-permission-by-roleid?roleId=' + frmUpdate.find("#txtId").val(),
+            method: "GET",
+
+            success(response) {
+                ListPermission = response;
+                
+            }
+        }).then(function () {
+            GetListMenu();        
+        })
+        
+
+    }
+
+    function GetListRole() {
+        $.ajax({
+            url: urlDomain + '/get-role',
+            method: "GET",
+
+            success(response) {
+                listRole = response.data;
+            }
+        }).then(function () {
+            $.each(listRole, function (i, item) {
+                role += '<div class="form-check"><input  type="checkbox" value="' + item.value + '"  style="margin-right:5px" />' + '<label>' + item.title + '</label></div>'
+            })
+            getMenu();            
+            evenCheckbox();
+            setSelectedActionCode();
+        });
+
+    }
+    function setSelectedActionCode() {
+          
+            $.each(ListPermission, function (i, item) {
+                $("#roles").find("#menuid_" + item.menuId + " input[type='checkbox']").each(function () {
+                    var actionCode = $(this).val()
+                    console.log(actionCode);
+                    var action = ListPermission.find(x => x.actionCode == actionCode && x.menuId == item.menuId);
+                    console.log(action);
+                    if (action != null) {
+                        $(this).prop("checked", true);
+
+                    }
+                })
+            })
+      
+        
+    }
+</script>
+

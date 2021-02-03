@@ -22,5 +22,10 @@ namespace APP.MODELS
             // modelBuilder.HasDefaultSchema("orcl");
         }
         public DbSet<Users> Users { get; set; }
+        public DbSet<Menus> Menus { get; set; }
+        public DbSet<Roles> Roles { get; set; }
+        public DbSet<Role_Permissions> Role_Permissions { get; set; }
+        public DbSet<Accounts> Accounts { get; set; }
+        public DbSet<AccountRoles> AccountRoles { get; set; }
     }
 }

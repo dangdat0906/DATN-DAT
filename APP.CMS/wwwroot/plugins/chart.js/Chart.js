@@ -13039,7 +13039,7 @@ var scale_linear = scale_linearbase.extend({
 		return this._getScaleLabel(this.chart.data.datasets[datasetIndex].data[index]);
 	},
 
-	// Utils
+	// UTILS
 	getPixelForValue: function(value) {
 		var me = this;
 		return me.getPixelForDecimal((+me.getRightValue(value) - me._startValue) / me._valueRange);

@@ -576,7 +576,7 @@ function arrayToUtcDate(a) {
     }
     return new Date(Date.UTC.apply(Date, a));
 }
-// Other Utils
+// Other UTILS
 function isValidDate(m) {
     return !isNaN(m.valueOf());
 }
@@ -1785,7 +1785,7 @@ function formatWeekNumber(num, weekLabel, locale, display) {
     }
     return parts.join('');
 }
-// Range Formatting Utils
+// Range Formatting UTILS
 // 0 = exactly the same
 // 1 = different by time
 // and bigger
@@ -1893,7 +1893,7 @@ function createFormatter(input, defaultSeparator) {
         return new FuncFormatter(input);
     }
 }
-// String Utils
+// String UTILS
 // timeZoneOffset is in minutes
 function buildIsoString(marker, timeZoneOffset, stripZeroTime) {
     if (stripZeroTime === void 0) { stripZeroTime = false; }
@@ -1931,7 +1931,7 @@ function formatTimeZoneOffset(minutes, doIso) {
         return 'GMT' + sign + hours + (mins ? ':' + padStart(mins, 2) : '');
     }
 }
-// Arg Utils
+// Arg UTILS
 function createVerboseFormattingArg(start, end, context, separator) {
     var startInfo = expandZonedMarker(start, context.calendarSystem);
     var endInfo = end ? expandZonedMarker(end, context.calendarSystem) : null;
@@ -2836,7 +2836,7 @@ function isDateSelectionPropsValid(state, calendar, dateSpanMeta, filterConfig) 
     }
     return true;
 }
-// Constraint Utils
+// Constraint UTILS
 // ------------------------------------------------------------------------------------------------------------------------
 function allConstraintsPass(constraints, subjectRange, otherEventStore, businessHoursUnexpanded, calendar) {
     for (var _i = 0, constraints_1 = constraints; _i < constraints_1.length; _i++) {
@@ -4042,7 +4042,7 @@ var DateComponent = /** @class */ (function (_super) {
         }
         return isDateSelectionValid(selection, calendar);
     };
-    // Pointer Interaction Utils
+    // Pointer Interaction UTILS
     // -----------------------------------------------------------------------------------------------------------------
     DateComponent.prototype.isValidSegDownEl = function (el) {
         return !this.props.eventDrag && // HACK
@@ -7124,7 +7124,7 @@ var Calendar = /** @class */ (function () {
     Calendar.prototype.getDate = function () {
         return this.dateEnv.toDate(this.state.currentDate);
     };
-    // Date Formatting Utils
+    // Date Formatting UTILS
     // -----------------------------------------------------------------------------------------------------------------
     Calendar.prototype.formatDate = function (d, formatter) {
         var dateEnv = this.dateEnv;
@@ -7253,7 +7253,7 @@ var Calendar = /** @class */ (function () {
         __assign(props, buildDateSpanApi(dateSpan, this.dateEnv));
         return props;
     };
-    // Date Utils
+    // Date UTILS
     // -----------------------------------------------------------------------------------------------------------------
     // Returns a DateMarker for the current date, as defined by the client's computer or from the `now` option
     Calendar.prototype.getNow = function () {

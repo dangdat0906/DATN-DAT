@@ -1,0 +1,123 @@
+﻿
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Đăng nhập hệ thống</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="~/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css" rel="stylesheet" />
+    <link href="~/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+    <link href="~/plugins/loading-modal/css/jquery.loadingModal.css" rel="stylesheet" />
+    <link href="~/dist/css/LoginCss.css" rel="stylesheet" />
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/loading-modal/js/jquery.loadingModal.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/dist/js/site.js"></script>
+    <script src="~/plugins/toastr/toastr.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+
+
+<body>
+    <div id="login">
+
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <div id="login-form" class="form">
+                            <div class="row login-header">
+                                <div class="col-2">
+                                    <img src="~/dist/img/logo_admin.png" />
+                                </div>
+                                <div class="col-10 text-left"><h3>Quên Mật Khẩu</h3></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="username" class="text-info">Nhập địa chỉ email </label><br>
+                                <input required type="text" name="username" id="username" class="form-control">
+                            </div>
+                            <div class="form-group">
+                       
+                                <div class="col-md-6">
+                                    <a href="/tai-khoan/dang-nhap" class="text-info">Quay lại trang đăng nhập</a>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="button" name="login" class="btn btn-info btn-md" id="btnLogin" value="Lấy lại mật khẩu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#btnLogin").off('click').on('click', function (e) {
+                e.preventDefault();
+                login();
+            })
+            $('#login-box').keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    login();
+                }
+            });
+        })
+        
+        function login() {
+            addRequired($("#login-box"))
+            if (ValidateFormLogin($("#login-box"))) {
+                return;
+            }
+            showLoading()
+            $.ajax({
+                url: "/tai-khoan/quen-mat-khau",
+                method: "post",
+                data: {
+                    email: $("#username").val(),
+                   
+
+                },
+                success: function (response) {
+                    if (response.result) {
+                        hideLoading();
+                        showAlert(response.message, 2)
+                    }
+                    else {
+                        hideLoading();
+                        showAlert(response.message,1)
+                    }
+                }
+            })
+
+        }
+        function ValidateFormLogin(frm) {
+            var error = false;
+            var mess = '';
+            if ($("#username").val() == '') {
+                error = true;
+                mess = 'Tài khoản không được để trống';
+            }
+            if (error == false && $("#password").val() == '') {
+                error = true;
+                mess = 'Mật khẩu không được để trống';
+            }
+
+            if (error) {
+                toastr.error(mess)
+            }
+            return error;
+        }
+    </script>
+</body>
+
+</html>
+

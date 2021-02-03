@@ -1949,7 +1949,7 @@ Docs & License: https://fullcalendar.io/
         };
         return ExternalElementDragging;
     }());
-    // Utils for computing event store from the DragMeta
+    // UTILS for computing event store from the DragMeta
     // ----------------------------------------------------------------------------------------------------
     function computeEventForDateSpan(dateSpan, dragMeta, calendar) {
         var defProps = __assign({}, dragMeta.leftoverProps);
@@ -1971,7 +1971,7 @@ Docs & License: https://fullcalendar.io/
         var instance = core.createEventInstance(def.defId, { start: start, end: end });
         return { def: def, instance: instance };
     }
-    // Utils for extracting data from element
+    // UTILS for extracting data from element
     // ----------------------------------------------------------------------------------------------------
     function getDragMetaFromEl(el) {
         var str = getEmbeddedElData(el, 'event');

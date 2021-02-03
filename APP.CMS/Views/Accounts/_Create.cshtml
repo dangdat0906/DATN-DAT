@@ -1,0 +1,192 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmCreate">
+
+
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtFullName" required>Tên người dùng</label>
+                    <input type="text" required name="fullName" class="form-control col-sm-4" id="txtFullName">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtPhoneNumber" required>Số điện thoại</label>
+                    <input type="tel" required class="form-control col-sm-4"  data-mask="999 999-9999" id="txtPhoneNumber">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtEmail" required>Email</label>
+                    <input type="text" required name="txtEmail" class="form-control col-sm-4" id="txtEmail">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" required for="txtFullName">Chọn đơn vị</label>
+                    <select id="cbDonVi" required class="select2 col-sm-6" data-placeholder="đơn vị">
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" required for="txtFullName">Chọn chức vụ</label>
+                    <select id="cbChucVu" required class="select2 col-sm-6" data-placeholder="Chọn chức vụ">
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-3" for="txtUserName">Tên đăng nhập</label>
+                    <input type="text" required name="userName" class="form-control col-sm-4" id="txtUserName">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtPass" required>Mật khẩu</label>
+                    <input type="password" required name="txtPass" class="form-control col-sm-4" id="txtPass">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" required for="txtFullName">Chọn nhóm quyền</label>
+                    <select id="cbRoles" required class="select2 col-sm-6" multiple="multiple" data-placeholder="Chọn nhóm quyền">
+                    </select>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-5">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="ckStatus">
+                            <label class="form-check-label">Trạng thái</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var frmCreate = $('#frmCreate');
+
+    $(document).ready(function () {
+        addRequired(frmCreate);
+        getRoles();
+        layChucVu();
+        layDonVi();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        create();
+    });
+    function create() {
+        if (ValidateForm(frmCreate)) {
+            return;
+        }
+        if (checkValidateUserName()) {
+            return
+        }
+        if (checkValidateSelect2(frmCreate)) {
+            return
+        }
+        if (CheckPass($("#txtPass").val())) {
+            return
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/them-moi",
+            method: "POST",
+            data: {
+                UserName: frmCreate.find('#txtUserName').val(),
+                FullName: frmCreate.find('#txtFullName').val(),
+                Email: frmCreate.find('#txtEmail').val(),
+                Status: frmCreate.find('#ckStatus').prop("checked") ? 1 : 0,
+                ListRoleId: frmCreate.find('#cbRoles').val(),
+                PostionId: frmCreate.find('#cbChucVu').val(),
+                UnitsId: frmCreate.find('#cbDonVi').val(),
+                Password: frmCreate.find('#txtPass').val(),
+                PhoneNumber: frmCreate.find('#txtPhoneNumber').val()
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData();
+                    hideContentModal()
+
+                } else {
+                    showAlert(response.message,1)
+                }
+            }
+        });
+    }
+    function checkValidateUserName() {
+        var error = false;
+        var reg_username = /^[a-zA-Z0-9]+$/;
+        if (reg_username.test($('#txtUserName').val()) == false) {
+            error = true;
+        }
+        if (error) {
+            toastr.error("Tên đăng nhập không được chưa dấu cách, tiếng việt có dấu")
+        }
+        return error;
+
+    }
+    function checkValidateSelect2(frm) {
+        var error = false
+        var select = frm.find('#cbRoles')
+        if ($(select).val().length == 0) {
+            error = true;
+        }
+
+        if (error) {
+            toastr.error("Phải chọn nhóm quyền cho tài khoản")
+        }
+        return error;
+    }
+    
+    function getRoles() {
+
+        $.ajax({
+            url: urlDomain + "/get-roles",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#cbRoles").append(newOption);
+
+                });
+                //$("#cbRoles").select2();
+            }
+            });
+    }
+    function layChucVu() {
+
+        $.ajax({
+            url: urlDomain + "/lay-chuc-vu",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#cbChucVu").append(newOption);
+
+                });
+                //$("#cbRoles").select2();
+            }
+        });
+    }
+    function layDonVi() {
+
+        $.ajax({
+            url: urlDomain + "/lay-don-vi",
+            method: "GET",
+            success: function (response) {
+                console.log(response)
+                $.each(response, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#cbDonVi").append(newOption);
+
+                });
+                //$("#cbRoles").select2();
+            }
+        });
+    }
+
+</script>

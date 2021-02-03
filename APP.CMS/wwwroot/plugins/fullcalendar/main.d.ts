@@ -61,12 +61,12 @@ declare module '@fullcalendar/core' {
     export { reducerFunc, Action, CalendarState } from '@fullcalendar/core/reducers/types';
     export { CalendarComponentProps } from '@fullcalendar/core/CalendarComponent';
     export { default as DayHeader } from '@fullcalendar/core/common/DayHeader';
-    export { computeFallbackHeaderFormat, renderDateCell } from '@fullcalendar/core/common/table-utils';
+    export { computeFallbackHeaderFormat, renderDateCell } from '@fullcalendar/core/common/table-UTILS';
     export { default as DaySeries } from '@fullcalendar/core/common/DaySeries';
     export { EventInteractionState } from '@fullcalendar/core/interactions/event-interaction-state';
     export { EventRenderRange, sliceEventStore, hasBgRendering, getElSeg, computeEventDraggable, computeEventStartResizable, computeEventEndResizable } from '@fullcalendar/core/component/event-rendering';
     export { default as DayTable, DayTableSeg, DayTableCell } from '@fullcalendar/core/common/DayTable';
-    export { default as Slicer, SlicedProps } from '@fullcalendar/core/common/slicing-utils';
+    export { default as Slicer, SlicedProps } from '@fullcalendar/core/common/slicing-UTILS';
     export { EventMutation, applyMutationToEventStore } from '@fullcalendar/core/structs/event-mutation';
     export { Constraint, ConstraintInput, AllowFunc, isPropsValid, isInteractionValid } from '@fullcalendar/core/validation';
     export { default as EventApi } from '@fullcalendar/core/api/EventApi';
@@ -2324,7 +2324,7 @@ declare module '@fullcalendar/core/common/DayHeader' {
     }
 }
 
-declare module '@fullcalendar/core/common/table-utils' {
+declare module '@fullcalendar/core/common/table-UTILS' {
     import { DateMarker } from '@fullcalendar/core/datelib/marker';
     import { DateProfile } from '@fullcalendar/core/DateProfileGenerator';
     import { ComponentContext } from '@fullcalendar/core/component/Component';
@@ -2430,7 +2430,7 @@ declare module '@fullcalendar/core/common/DayTable' {
     }
 }
 
-declare module '@fullcalendar/core/common/slicing-utils' {
+declare module '@fullcalendar/core/common/slicing-UTILS' {
     import { DateRange } from '@fullcalendar/core/datelib/date-range';
     import { EventStore } from '@fullcalendar/core/structs/event-store';
     import { EventUiHash } from '@fullcalendar/core/component/event-ui';

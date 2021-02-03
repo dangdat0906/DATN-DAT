@@ -481,7 +481,7 @@ var inputEventName = isMSIE ? 'DOMCharacterDataModified DOMSubtreeModified DOMNo
 /**
  * @class core.func
  *
- * func utils (for high-order func's arg)
+ * func UTILS (for high-order func's arg)
  *
  * @singleton
  * @alternateClassName func
@@ -893,7 +893,7 @@ function prev(array, item) {
 /**
  * @class core.list
  *
- * list utils
+ * list UTILS
  *
  * @singleton
  * @alternateClassName list

@@ -1,0 +1,161 @@
+﻿@model APP.MODELS.Menus
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmUpdate">
+                <input type="hidden" id="txtId" value="@Model.Id" />
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-2" for="txtName">Tên menu</label>
+
+                    <input type="text" required name="name" class="form-control col-sm-4" value="@Model.Name" id="txtName">
+
+                </div>
+
+                <div class="form-group row">
+                    <label required class="control-label col-sm-2" for="txtUrl">Đường dẫn</label>
+                    <input type="text" required name="url" class="form-control col-sm-8" value="@Model.Url" id="txtUrl">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="cbParentId">Danh mục cha</label>
+                    <select id="cbParentId" class="form-control col-sm-8">
+                        <option value="0">--------</option>
+                    </select>
+                    <input type="hidden" id="selectedId" value="@Model.ParentId" />
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-sm-2" for="txtDisplayOrder">Thứ tự hiển thị</label>
+                    <input type="number" value="@Model.DisplayOrder" name="displayOder" class="form-control col-sm-5" id="txtDisplayOrder">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtNote" required>Ghi chú</label>
+                    <input type="text" name="note" required class="form-control col-sm-8" id="txtNote" value="@Model.Note">
+                </div>
+                <div class="form-check row">
+
+                    <div class="form-group row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                @if (@Model.Status == 1)
+                                {
+                                    <input type="checkbox" class="form-check-input" checked id="ckStatus">
+                                }
+                                @if (Model.Status == 0)
+                                {
+                                    <input type="checkbox" class="form-check-input" id="ckStatus">
+                                }
+                                <label class="form-check-label">Trạng thái</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+
+                                @if (@Model.IsMenu)
+                                {
+
+                                    <input type="checkbox" class="form-check-input" checked id="ckIsMenu">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="form-check-input" id="ckIsMenu">
+                                }
+                                <label class="form-check-label">Hiện menu</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var frmUpdate = $("#frmUpdate")
+    $(document).ready(function () {
+        addRequired(frmUpdate)
+        setCbParentId();
+    })
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        update();
+    })
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                Id: frmUpdate.find("#txtId").val(),
+                Name: frmUpdate.find('#txtName').val(),
+                Url: frmUpdate.find('#txtUrl').val(),
+                Note: frmUpdate.find('#txtNote').val(),
+                ParentId: frmUpdate.find('#cbParentId').val(),
+                Status: frmUpdate.find("#ckStatus").prop('checked') ? 1 : 0,
+                IsMenu: frmUpdate.find("#ckIsMenu").prop('checked'),
+                DisplayOrder: frmUpdate.find("#txtDisplayOrder").val()
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData();
+                    hideContentModal()
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        })
+    }
+    function setParentId() {
+        var selectParent = $("#frmUpdate").find("#cbParentId");
+        $.ajax({
+            url: urlDomain + "/get-parent-id",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response.data, function (i, itemMenu) {
+                    if (i > 0) {
+                        if (itemMenu.value == $("#selectedId").val()) {
+                            var newOption = new Option(itemMenu.title, itemMenu.value, false, true);
+                            selectParent.append(newOption);
+                        }
+                        else {
+                            var newOption = new Option(itemMenu.title, itemMenu.value);
+                            selectParent.append(newOption);
+                        }
+                    }
+                })
+            }
+        })
+    }
+    function setCbParentId() {
+        var selectParent = $("#frmUpdate").find("#cbParentId");
+        $.ajax({
+            url: urlDomain + "/get-list-menu",
+            method: "GET",
+            success: function (response) {
+                selectParent.select2ToTree({
+                    treeData:
+                    {
+                        dataArr: response.data,
+                        valFld: "id",
+                        labelFld: "name",
+                        incFld: 'listChild'
+                    }, maximumSelectionLength: 3
+                });
+            }
+        }).then(function () {
+            var id = $("#selectedId").val()
+            selectParent.val(id).trigger("change");
+        });
+    }
+</script>

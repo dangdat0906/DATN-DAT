@@ -1,0 +1,133 @@
+﻿@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row" id="frmFilter">
+                    <div class="col-12 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input id="txtSearchUserName" type="text" class="form-control" placeholder="Tên đăng nhập">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input id="txtSearchFullName" type="text" class="form-control" placeholder="Tên người dùng">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2">
+                        <div class="form-group">
+
+                            <select id="drStatus" class="form-control">
+
+
+                                @{
+                                    var values = Enum.GetValues(typeof(StatusEnum));
+                                    Array.Reverse(values);
+                                    @foreach (var role in values)
+                                    {
+                                        <option value="@((int)role)">@Extensions.GetEnumDescription((StatusEnum)role)</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-2">
+                        <div class="form-group">
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-2 col-md-2">
+                        @{
+                            if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                            {
+                                <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
+                            }
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable" class="table-responsive p-0">
+
+
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/tai-khoan"
+    var take = 10
+    var skip = 0
+
+    $(document).ready(function () {
+        getData();
+
+        frmFilter.find("#btnSearch").on("click", function () {
+            getData();
+        });
+        frmFilter.find("#btnCreate").on("click", function () {
+            openCreate();
+        });
+
+
+    })
+    function getData() {
+        showLoading()
+        var username = frmFilter.find("#txtSearchUserName").val();
+        var fullname = frmFilter.find("#txtSearchFullName").val();
+        var status = frmFilter.find("#drStatus").val();
+        $.ajax({
+            url: urlDomain + "/get-list?userName=" + username + "&fullName=" + fullname + "&status=" + status,
+            method: "GET",
+            data: {
+                title: frmFilter.find("#txtName").val(),
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $("#dtTable").html(response);
+                hideLoading()
+            }
+        }).then(function () {
+            if (@((int)ViewData[nameof(RolesEnum.Update)]) == 0) {
+                $('#dtTable').find('.btn-update').css('display', 'none');
+                $('#dtTable').find('.checkStatus').attr('disabled', 'disabled');
+            }
+            if (@((int)ViewData[nameof(RolesEnum.Delete)]) == 0) {
+                $('#dtTable').find('.btn-delete').css('display', 'none');
+
+            }
+        });
+    }
+
+    function openCreate() {
+        $.ajax({
+            url: urlDomain + '/them-moi',
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Tạo  mới tài khoản")
+            }
+        });
+    }
+
+
+</script>
+

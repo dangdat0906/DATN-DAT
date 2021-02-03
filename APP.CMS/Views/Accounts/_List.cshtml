@@ -1,0 +1,148 @@
+﻿@model IEnumerable<APP.MODELS.Accounts>
+@using APP.UTILS
+
+<table id="dataTable" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th width="2%">STT</th>
+            <th width="15%">Tên đăng nhập</th>
+            <th width="15%">Tên người dùng</th>
+            <th width="15%">Email</th>
+            <th width="5%" class="text-center">Trạng thái</th>
+            <th width="5%" class="text-center">Thao tác</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @{ var i = 1;}
+        @foreach (var item in Model)
+        {
+
+            <tr id="row_@item.Id">
+                <td class="text-center">@i</td>
+                @{i++;}
+                <td>@item.UserName</td>
+                <td>@item.FullName</td>
+                <td>@item.Email</td>
+                <td>
+                    @if (item.Status == (int)StatusEnum.Active)
+                    {
+                        <input type="checkbox" class="checkStatus" value="@item.Id" checked />
+                    }
+                    @if (item.Status == (int)StatusEnum.Unactive)
+                    {
+                        <input type="checkbox" class="checkStatus" value="@item.Id" />
+                    }
+                </td>
+                <td style="text-align:center;width:10%;">
+                    @if (@item.Status == (byte)StatusEnum.Removed)
+                    {
+                        <a href="javascript:;" class="btn-delete" onclick="restorn(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                        <a href="javascript:;" class="btn-delete" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(".checkStatus").off("click").on('click', function (e) {
+        var id = $(this).val();
+        var status = $(this).prop('checked') ? 1 : 0;
+        $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                Id: id,
+                Status: status
+            }
+            , success: function (response) {
+
+            }
+        })
+    })
+    $(document).ready(function () {
+        $("#dataTable").DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 }
+            ],
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            }
+        });
+        
+    })
+
+
+    function openUpdate(id) {
+        $.ajax({
+            url: urlDomain + '/sua?id=' + id,
+            method: "Get",
+            success: function (response) {
+                //if (response.result) {
+                showContentModal(response, "Chỉnh sửa tài khoản")
+                //}
+                //else {
+                //     showAlert(response.message,1);
+                // }
+
+            }
+        });
+    }
+    function openDelete(id) {
+        $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                id: id,
+                status: @((byte)(StatusEnum.Removed)),
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Xóa dữ liệu thành công", 2)
+
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+    }
+    function restorn(id) {
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                id: id,
+                status: 0,
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Khôi phục dữ liệu thành công", 2)
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+    }
+</script>
+

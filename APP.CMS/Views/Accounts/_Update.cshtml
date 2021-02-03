@@ -1,0 +1,241 @@
+﻿@model APP.MODELS.Accounts
+@if (@Model != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <form role="form" id="quickForm">
+                <div id="frmUpdate">
+                    <input type="hidden" value="@Model.Id" id="txtId" />
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="txtFullName" required>Tên người dùng</label>
+                        <input type="text" required name="fullName" value="@Model.FullName" class="form-control col-sm-4" id="txtFullName">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="txtPhoneNumber" required>Số điện thoại</label>
+                        <input type="tel" required class="form-control col-sm-4 phone-format"  data-mask="999 999-9999" value="@Model.PhoneNumber" id="txtPhoneNumber">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="txtEmail" required>Email</label>
+                        <input type="text" required name="txtEmail" value="@Model.Email" class="form-control col-sm-4" id="txtEmail">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" required for="txtFullName">Chọn đơn vị</label>
+                        <select id="cbDonVi" required class="select2 col-sm-6" data-placeholder="đơn vị">
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" required for="txtFullName">Chọn chức vụ</label>
+                        <select id="cbChucVu" required class="select2 col-sm-6" data-placeholder="Chọn chức vụ">
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <label required class="col-form-label col-sm-3" for="txtUserName">Tên đăng nhập</label>
+                        <input type="text" required name="userName" value="@Model.UserName" class="form-control col-sm-4" id="txtUserName">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3" for="txtPass" required>Mật khẩu</label>
+                        <input type="password" required name="txtPass" value="@Model.Password" class="form-control col-sm-4" id="txtPass">
+                    </div>
+                    <div class="form-group row">
+                        <label required class="col-form-label col-sm-3" for="txtFullName">Chọn nhóm quyền</label>
+                        <select id="cbRoles" required class="select2 col-sm-6" multiple="multiple" data-placeholder="Chọn nhóm quyền">
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-5">
+                            <div class="form-check">
+                                @if (Model.Status == 1)
+                                {
+                                    <input type="checkbox" class="form-check-input" id="ckStatus" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="form-check-input" id="ckStatus">
+                                }
+                                <label class="form-check-label">Trạng thái</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<script>
+    var frmUpdate = $('#frmUpdate');
+    var listRolesSelected = [];
+    $(document).ready(function () {
+        addRequired(frmUpdate);
+        getRolesByAccountId();
+        layChucVu();
+        layDonVi();
+        //FormatPhone();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+
+        update();
+    });
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        if (checkValidateUserName()) {
+            return
+        }
+        if (checkValidateSelect2(frmUpdate)) {
+            return
+        }
+        if (CheckPass($("#txtPass").val())) {
+            return
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/sua",
+            method: "POST",
+            data: {
+                Id: frmUpdate.find('#txtId').val(),
+                UserName: frmUpdate.find('#txtUserName').val(),
+                FullName: frmUpdate.find('#txtFullName').val(),
+                Email: frmUpdate.find('#txtEmail').val(),
+                Status: frmUpdate.find('#ckStatus').prop("checked") ? 1 : 0,
+                ListRoleId: frmUpdate.find('#cbRoles').val(),
+                PostionId: frmUpdate.find('#cbChucVu').val(),
+                UnitsId: frmUpdate.find('#cbDonVi').val(),
+                Password: frmUpdate.find('#txtPass').val(),
+                PhoneNumber: frmUpdate.find('#txtPhoneNumber').val()
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData();
+                    hideContentModal()
+
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+    }
+
+    function checkValidateUserName() {
+        var error = false;
+        var reg_username = /^[a-zA-Z0-9]+$/;
+        if (reg_username.test($('#txtUserName').val()) == false) {
+            error = true;
+        }
+        if (error) {
+            toastr.error("Tên đăng nhập không được chưa dấu cách, tiếng việt có dấu")
+        }
+        return error;
+
+    }
+    function checkValidateSelect2(frm) {
+        var error = false
+        var select = frm.find('#cbRoles')
+        if ($(select).val().length == 0) {
+            error = true;
+        }
+
+        if (error) {
+            toastr.error("Phải chọn nhóm quyền cho tài khoản")
+        }
+        return error;
+    }
+    function FormatPhone() {
+        $(".phone-format").keyup(function () {
+            var val_old = $(this).val();
+            var val = val_old.replace(/\D/g, '');
+            var len = val.length;
+            if (len >= 1)
+                val = '(' + val.substring(0);
+            if (len >= 3)
+                val = val.substring(0, 4) + ') ' + val.substring(4);
+            if (len >= 6)
+                val = val.substring(0, 9) + '-' + val.substring(9);
+            if (val != val_old)
+                $(this).focus().val('').val(val);
+        });
+    }
+    function getRoles() {
+        $.ajax({
+            url: urlDomain + "/get-roles",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response, function (i, itemMenu) {
+                    var role = listRolesSelected.find(x => x.roleId == itemMenu.value);
+                    if (role != null) {
+                        var newOption = new Option(itemMenu.title, itemMenu.value, false, true);
+                        $("#cbRoles").append(newOption);
+                    }
+                    else {
+                        var newOption = new Option(itemMenu.title, itemMenu.value);
+                        $("#cbRoles").append(newOption);
+                    }
+
+                });
+                //$("#cbRoles").select2();
+            }
+        });
+    }
+    function getRolesByAccountId() {
+
+        $.ajax({
+            url: urlDomain + "/get-roles-by-accountId?accountId=" + frmUpdate.find('#txtId').val(),
+            method: "GET",
+            success: function (response) {
+                listRolesSelected = response
+
+
+            }
+        }).then(function () {
+            getRoles();
+        });
+    }
+    function layChucVu() {
+
+        $.ajax({
+            url: urlDomain + "/lay-chuc-vu",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#cbChucVu").append(newOption);
+
+                });
+                //$("#cbRoles").select2();
+            }
+        }).then(function () {
+            $("#cbDonVi").val(@Model.PostionId).trigger('change');
+        });
+    }
+    function layDonVi() {
+
+        $.ajax({
+            url: urlDomain + "/lay-don-vi",
+            method: "GET",
+            success: function (response) {
+                console.log(response)
+                $.each(response, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#cbDonVi").append(newOption);
+
+                });
+                //$("#cbRoles").select2();
+            }
+        }).then(function () {
+            $("#cbDonVi").val(@Model.UnitsId).trigger('change');
+        });
+    }
+</script>
+

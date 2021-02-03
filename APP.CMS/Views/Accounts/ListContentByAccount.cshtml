@@ -1,0 +1,157 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="frmFilter">
+    <div class="row">
+        <div class="col-md-4 row d-flex align-items-center">
+            <div class="col-5">
+                <label>Bài đăng từ ngày</label>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" class="form-control datepicker" autocomplete="off" id="tuNgay">
+            </div>
+
+        </div>
+        <div class="col-md-4 row d-flex align-items-center">
+            <div class="col-5">
+                <label>Đến ngày</label>
+            </div>
+            <div class="col-6 form-group">
+                <input type="text" class="form-control datepicker" autocomplete="off" id="denNgay">
+            </div>
+        </div>
+        <div class="col-md-1">
+            <button type="button" id="btnSearch" class="btn btn-primary">Lọc</button>
+        </div>
+        <div class="col-md-3 row no-print">
+            <div class="col-12">
+
+                <button type="button" id="btn-dow-word" class="btn btn-primary float-right" style="margin-right: 5px;">
+                    <i class="fas fa-download"></i> Kiết xuất word
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dtData"></div>
+<div class="row no-print">
+    <div class="col-12">
+        <button type="button" id="btn-dow-word" class="btn btn-primary float-right" style="margin-right:5px">
+            <i class="fas fa-download"></i>Tải về dạng word
+        </button>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        setDatetime1();
+        getData("");
+        $("#btnSearch").off('click').on('click', function () {
+            var tuNgay = $("#tuNgay").val();
+            getData(tuNgay);
+        });
+        $("#btn-dow-word").off('click').on('click', function () {
+            dowWord();
+        });
+    })
+    function getData(tuNgay) {
+        showLoading()
+        var denNgay = $("#denNgay").val();
+        $.ajax({
+            url: "/tai-khoan/get-list-thong-ke-bai-viet-theo-tai-khoan/?tuNgay=" + tuNgay + "&denNgay=" + denNgay,
+            method: "GET"
+            , success: function (response) {
+                $('#dtData').html(response);
+                hideLoading();
+            }
+        });
+    }
+    function setDatetime1(type) {//Set all element that have class = datepicker to daterangepicker plugin
+        $('.datepicker').daterangepicker({ // allow set single datetime
+            singleDatePicker: true,
+            timePicker: true,
+            locale: {
+                format: "DD/MM/YYYY",
+                cancelLabel: 'Xóa',
+                applyLabel: 'Lưu'
+            }
+        });
+        $('.datepicker').val('');
+        $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+    }
+    function dowWord() {
+        var html = '<div>';
+        html += '<h1 style="text-align:center">THỐNG KÊ BÀI VIẾT THEO NGƯỜI ĐĂNG</h1><br><br><br>';
+        if ($("#tuNgay").val() != '') {
+            html += '<p>Bài đăng từ ngày :' + $("#tuNgay").val() + ' Đến ngày :' + $("#denNgay").val() + '</p></div>';
+        }
+        var d = new Date();
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
+        html += $("#tbThongKe").html();
+        html += '<div style="border:none;text-align:right">'
+        html += '<p>';
+        html += '<i>Ngày ' + day + ' tháng ' + month + ' năm ' + year + '</i><br>';
+        html += '<b>Người Lập Biểu</b><br>';
+        html += '<i>(Ký gi rõ họ tên)</i><br><br><br>';
+       @{
+    var name = Html.Raw(Json.Serialize(ViewData["user"]));
+}
+        html += '<b>' + @name+'</b></p></div>';
+        $.ajax({
+            url: "/chuyen-muc/tao-word",
+            method: "POST",
+            data:
+            {
+                html: html
+            },
+            xhrFields: {
+                responseType: 'blob' // to avoid binary data being mangled on charset conversion
+            },
+            success: function (blob, status, xhr) {
+                // check for a filename
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                }
+
+                if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                    // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    var URL = window.URL || window.webkitURL;
+                    var downloadUrl = URL.createObjectURL(blob);
+
+                    if (filename) {
+                        // use HTML5 a[download] attribute to specify filename
+                        var a = document.createElement("a");
+                        // safari doesn't support this yet
+                        if (typeof a.download === 'undefined') {
+                            window.location.href = downloadUrl;
+                        } else {
+                            a.href = downloadUrl;
+                            a.download = filename;
+                            document.body.appendChild(a);
+                            a.click();
+                        }
+                    } else {
+                        window.location.href = downloadUrl;
+                    }
+
+                    setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                }
+            }
+        });
+
+    }
+</script>

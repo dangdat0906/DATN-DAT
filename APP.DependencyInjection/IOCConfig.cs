@@ -8,6 +8,8 @@ using Portal.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using APP.MANAGER;
+
 
 namespace APP.DependencyInjection
 {
@@ -23,7 +25,11 @@ namespace APP.DependencyInjection
             services.AddTransient<IDbContextFactory<APPDbContext>, APPDbContextFactory>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserManager, UserManager>();
-
+            services.AddTransient<IMenuManager, MenuManager>();
+            services.AddTransient<IAccountsManager, AccountsManager>();
+            services.AddTransient<IRolesManger, RolesManager>();
+            services.AddTransient<IRole_PermissionsManager, Role_PermissionsManager>();
+            services.AddTransient<IAccountRolesManager, AccountRolesManager>();
         }
     }
 }

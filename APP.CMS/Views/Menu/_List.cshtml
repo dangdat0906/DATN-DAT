@@ -1,0 +1,139 @@
+﻿@model IEnumerable<APP.MODELS.MenuViewModels>
+@using APP.UTILS
+
+<table id="dataTable" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Tên</th>
+            <th>Danh mục cha</th>
+            <th>Ghi chú</th>
+            @*<th>Thứ tự hiển thị</th>*@
+            <th class="text-center">Trạng thái</th>
+            <th class="text-center">Thao tác</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @{ var i = 1;}
+        @foreach (var item in Model)
+        {
+
+            <tr id="row_@item.Id">
+                <td>@i</td>
+                @{i++;}
+                <td>@item.Name</td>
+                <td>@item.ParentName</td>
+                <td>@item.Note</td>
+                @*<td>@item.DisplayOrder</td>*@
+                <td class="text-center">
+                    @if (@item.Status == (byte)StatusEnum.Active)
+                    {
+                        <input class="checkStatus" value="@item.Id" type="checkbox" checked="checked" />
+                    }
+                    @if (@item.Status == (byte)StatusEnum.Unactive)
+                    {
+                        <input class="checkStatus" value="@item.Id" type="checkbox" />
+                    }
+                </td>
+
+                <td class="text-center">
+                    @if (@item.Status == (byte)StatusEnum.Removed)
+                    {
+                        <a href="javascipt:;" class="btn-delete" onclick="restorn(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                    }
+                    else
+                    {
+                        <a href="javascipt:;" class="btn-delete" onclick="deleteItem(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                        <a class="btn-update" href="javascipt:;" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $("#dataTable").DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 },
+                { "orderable": false, "targets": 5 }
+            ],
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            }
+        });
+        
+    })
+    $(".checkStatus").off("click").on('click', function (e) {
+        var id = $(this).val();
+        console.log(id)
+        var status = $(this).prop('checked') ? 1 : 0;
+        $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                Id: id,
+                Status: status
+            }
+            , success: function (response) {
+            }
+        })
+    })
+    function openUpdate(id) {
+        $.ajax({
+            url: urlDomain + "/update?id=" + id,
+            method: "GET",
+            success(response) {
+                showContentModal(response, "Thay đổi menu");
+            }
+        })
+    }
+    function deleteItem(id) {
+            $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                id: id,
+                status: @((byte)(StatusEnum.Removed)),
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Xóa dữ liệu thành công", 2)
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        })
+    }
+    function restorn(id) {
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                id: id,
+                status: 0,
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Khoi dữ liệu thành công", 2)
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        })
+    }
+</script>

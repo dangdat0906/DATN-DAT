@@ -498,12 +498,12 @@ S2.define('jquery',[],function () {
   return _$;
 });
 
-S2.define('select2/utils',[
+S2.define('select2/UTILS',[
   'jquery'
 ], function ($) {
-  var Utils = {};
+  var UTILS = {};
 
-  Utils.Extend = function (ChildClass, SuperClass) {
+  UTILS.Extend = function (ChildClass, SuperClass) {
     var __hasProp = {}.hasOwnProperty;
 
     function BaseConstructor () {
@@ -545,7 +545,7 @@ S2.define('select2/utils',[
     return methods;
   }
 
-  Utils.Decorate = function (SuperClass, DecoratorClass) {
+  UTILS.Decorate = function (SuperClass, DecoratorClass) {
     var decoratedMethods = getMethods(DecoratorClass);
     var superMethods = getMethods(SuperClass);
 
@@ -656,9 +656,9 @@ S2.define('select2/utils',[
     }
   };
 
-  Utils.Observable = Observable;
+  UTILS.Observable = Observable;
 
-  Utils.generateChars = function (length) {
+  UTILS.generateChars = function (length) {
     var chars = '';
 
     for (var i = 0; i < length; i++) {
@@ -669,13 +669,13 @@ S2.define('select2/utils',[
     return chars;
   };
 
-  Utils.bind = function (func, context) {
+  UTILS.bind = function (func, context) {
     return function () {
       func.apply(context, arguments);
     };
   };
 
-  Utils._convertData = function (data) {
+  UTILS._convertData = function (data) {
     for (var originalKey in data) {
       var keys = originalKey.split('-');
 
@@ -709,7 +709,7 @@ S2.define('select2/utils',[
     return data;
   };
 
-  Utils.hasScroll = function (index, el) {
+  UTILS.hasScroll = function (index, el) {
     // Adapted from the function created by @ShadowScripter
     // and adapted by @BillBarry on the Stack Exchange Code Review website.
     // The original code can be found at
@@ -734,7 +734,7 @@ S2.define('select2/utils',[
       $el.innerWidth() < el.scrollWidth);
   };
 
-  Utils.escapeMarkup = function (markup) {
+  UTILS.escapeMarkup = function (markup) {
     var replaceMap = {
       '\\': '&#92;',
       '&': '&amp;',
@@ -756,7 +756,7 @@ S2.define('select2/utils',[
   };
 
   // Append an array of jQuery nodes to a given element.
-  Utils.appendMany = function ($element, $nodes) {
+  UTILS.appendMany = function ($element, $nodes) {
     // jQuery 1.7.x does not support $.fn.append() with an array
     // Fall back to a jQuery object collection using $.fn.add()
     if ($.fn.jquery.substr(0, 3) === '1.7') {
@@ -772,11 +772,11 @@ S2.define('select2/utils',[
     $element.append($nodes);
   };
 
-  // Cache objects in Utils.__cache instead of $.data (see #4346)
-  Utils.__cache = {};
+  // Cache objects in UTILS.__cache instead of $.data (see #4346)
+  UTILS.__cache = {};
 
   var id = 0;
-  Utils.GetUniqueElementId = function (element) {
+  UTILS.GetUniqueElementId = function (element) {
     // Get a unique element Id. If element has no id,
     // creates a new unique number, stores it in the id
     // attribute and returns the new id.
@@ -796,53 +796,53 @@ S2.define('select2/utils',[
     return select2Id;
   };
 
-  Utils.StoreData = function (element, name, value) {
+  UTILS.StoreData = function (element, name, value) {
     // Stores an item in the cache for a specified element.
     // name is the cache key.
-    var id = Utils.GetUniqueElementId(element);
-    if (!Utils.__cache[id]) {
-      Utils.__cache[id] = {};
+    var id = UTILS.GetUniqueElementId(element);
+    if (!UTILS.__cache[id]) {
+      UTILS.__cache[id] = {};
     }
 
-    Utils.__cache[id][name] = value;
+    UTILS.__cache[id][name] = value;
   };
 
-  Utils.GetData = function (element, name) {
+  UTILS.GetData = function (element, name) {
     // Retrieves a value from the cache by its key (name)
     // name is optional. If no name specified, return
     // all cache items for the specified element.
     // and for a specified element.
-    var id = Utils.GetUniqueElementId(element);
+    var id = UTILS.GetUniqueElementId(element);
     if (name) {
-      if (Utils.__cache[id]) {
-        if (Utils.__cache[id][name] != null) {
-          return Utils.__cache[id][name];
+      if (UTILS.__cache[id]) {
+        if (UTILS.__cache[id][name] != null) {
+          return UTILS.__cache[id][name];
         }
         return $(element).data(name); // Fallback to HTML5 data attribs.
       }
       return $(element).data(name); // Fallback to HTML5 data attribs.
     } else {
-      return Utils.__cache[id];
+      return UTILS.__cache[id];
     }
   };
 
-  Utils.RemoveData = function (element) {
+  UTILS.RemoveData = function (element) {
     // Removes all cached items for a specified element.
-    var id = Utils.GetUniqueElementId(element);
-    if (Utils.__cache[id] != null) {
-      delete Utils.__cache[id];
+    var id = UTILS.GetUniqueElementId(element);
+    if (UTILS.__cache[id] != null) {
+      delete UTILS.__cache[id];
     }
 
     element.removeAttribute('data-select2-id');
   };
 
-  return Utils;
+  return UTILS;
 });
 
 S2.define('select2/results',[
   'jquery',
-  './utils'
-], function ($, Utils) {
+  './UTILS'
+], function ($, UTILS) {
   function Results ($element, options, dataAdapter) {
     this.$element = $element;
     this.data = dataAdapter;
@@ -851,7 +851,7 @@ S2.define('select2/results',[
     Results.__super__.constructor.call(this);
   }
 
-  Utils.Extend(Results, Utils.Observable);
+  UTILS.Extend(Results, UTILS.Observable);
 
   Results.prototype.render = function () {
     var $results = $(
@@ -971,7 +971,7 @@ S2.define('select2/results',[
       $options.each(function () {
         var $option = $(this);
 
-        var item = Utils.GetData(this, 'data');
+        var item = UTILS.GetData(this, 'data');
 
         // id needs to be converted to a string when comparing
         var id = '' + item.id;
@@ -1081,7 +1081,7 @@ S2.define('select2/results',[
       this.template(data, option);
     }
 
-    Utils.StoreData(option, 'data', data);
+    UTILS.StoreData(option, 'data', data);
 
     return option;
   };
@@ -1173,7 +1173,7 @@ S2.define('select2/results',[
         return;
       }
 
-      var data = Utils.GetData($highlighted[0], 'data');
+      var data = UTILS.GetData($highlighted[0], 'data');
 
       if ($highlighted.attr('aria-selected') == 'true') {
         self.trigger('close', {});
@@ -1286,7 +1286,7 @@ S2.define('select2/results',[
       function (evt) {
       var $this = $(this);
 
-      var data = Utils.GetData(this, 'data');
+      var data = UTILS.GetData(this, 'data');
 
       if ($this.attr('aria-selected') === 'true') {
         if (self.options.get('multiple')) {
@@ -1309,7 +1309,7 @@ S2.define('select2/results',[
 
     this.$results.on('mouseenter', '.select2-results__option[aria-selected]',
       function (evt) {
-      var data = Utils.GetData(this, 'data');
+      var data = UTILS.GetData(this, 'data');
 
       self.getHighlightedResults()
           .removeClass('select2-results__option--highlighted');
@@ -1403,9 +1403,9 @@ S2.define('select2/keys',[
 
 S2.define('select2/selection/base',[
   'jquery',
-  '../utils',
+  '../UTILS',
   '../keys'
-], function ($, Utils, KEYS) {
+], function ($, UTILS, KEYS) {
   function BaseSelection ($element, options) {
     this.$element = $element;
     this.options = options;
@@ -1413,7 +1413,7 @@ S2.define('select2/selection/base',[
     BaseSelection.__super__.constructor.call(this);
   }
 
-  Utils.Extend(BaseSelection, Utils.Observable);
+  UTILS.Extend(BaseSelection, UTILS.Observable);
 
   BaseSelection.prototype.render = function () {
     var $selection = $(
@@ -1424,8 +1424,8 @@ S2.define('select2/selection/base',[
 
     this._tabindex = 0;
 
-    if (Utils.GetData(this.$element[0], 'old-tabindex') != null) {
-      this._tabindex = Utils.GetData(this.$element[0], 'old-tabindex');
+    if (UTILS.GetData(this.$element[0], 'old-tabindex') != null) {
+      this._tabindex = UTILS.GetData(this.$element[0], 'old-tabindex');
     } else if (this.$element.attr('tabindex') != null) {
       this._tabindex = this.$element.attr('tabindex');
     }
@@ -1532,7 +1532,7 @@ S2.define('select2/selection/base',[
           return;
         }
 
-        var $element = Utils.GetData(this, 'element');
+        var $element = UTILS.GetData(this, 'element');
 
         $element.select2('close');
       });
@@ -1583,14 +1583,14 @@ S2.define('select2/selection/base',[
 S2.define('select2/selection/single',[
   'jquery',
   './base',
-  '../utils',
+  '../UTILS',
   '../keys'
-], function ($, BaseSelection, Utils, KEYS) {
+], function ($, BaseSelection, UTILS, KEYS) {
   function SingleSelection () {
     SingleSelection.__super__.constructor.apply(this, arguments);
   }
 
-  Utils.Extend(SingleSelection, BaseSelection);
+  UTILS.Extend(SingleSelection, BaseSelection);
 
   SingleSelection.prototype.render = function () {
     var $selection = SingleSelection.__super__.render.call(this);
@@ -1691,13 +1691,13 @@ S2.define('select2/selection/single',[
 S2.define('select2/selection/multiple',[
   'jquery',
   './base',
-  '../utils'
-], function ($, BaseSelection, Utils) {
+  '../UTILS'
+], function ($, BaseSelection, UTILS) {
   function MultipleSelection ($element, options) {
     MultipleSelection.__super__.constructor.apply(this, arguments);
   }
 
-  Utils.Extend(MultipleSelection, BaseSelection);
+  UTILS.Extend(MultipleSelection, BaseSelection);
 
   MultipleSelection.prototype.render = function () {
     var $selection = MultipleSelection.__super__.render.call(this);
@@ -1734,7 +1734,7 @@ S2.define('select2/selection/multiple',[
         var $remove = $(this);
         var $selection = $remove.parent();
 
-        var data = Utils.GetData($selection[0], 'data');
+        var data = UTILS.GetData($selection[0], 'data');
 
         self.trigger('unselect', {
           originalEvent: evt,
@@ -1792,22 +1792,22 @@ S2.define('select2/selection/multiple',[
         $selection.attr('title', title);
       }
 
-      Utils.StoreData($selection[0], 'data', selection);
+      UTILS.StoreData($selection[0], 'data', selection);
 
       $selections.push($selection);
     }
 
     var $rendered = this.$selection.find('.select2-selection__rendered');
 
-    Utils.appendMany($rendered, $selections);
+    UTILS.appendMany($rendered, $selections);
   };
 
   return MultipleSelection;
 });
 
 S2.define('select2/selection/placeholder',[
-  '../utils'
-], function (Utils) {
+  '../UTILS'
+], function (UTILS) {
   function Placeholder (decorated, $element, options) {
     this.placeholder = this.normalizePlaceholder(options.get('placeholder'));
 
@@ -1858,8 +1858,8 @@ S2.define('select2/selection/placeholder',[
 S2.define('select2/selection/allowClear',[
   'jquery',
   '../keys',
-  '../utils'
-], function ($, KEYS, Utils) {
+  '../UTILS'
+], function ($, KEYS, UTILS) {
   function AllowClear () { }
 
   AllowClear.prototype.bind = function (decorated, container, $container) {
@@ -1901,7 +1901,7 @@ S2.define('select2/selection/allowClear',[
 
     evt.stopPropagation();
 
-    var data = Utils.GetData($clear[0], 'data');
+    var data = UTILS.GetData($clear[0], 'data');
 
     var previousVal = this.$element.val();
     this.$element.val(this.placeholder.id);
@@ -1961,7 +1961,7 @@ S2.define('select2/selection/allowClear',[
         '&times;' +
       '</span>'
     );
-    Utils.StoreData($remove[0], 'data', data);
+    UTILS.StoreData($remove[0], 'data', data);
 
     this.$selection.find('.select2-selection__rendered').prepend($remove);
   };
@@ -1971,9 +1971,9 @@ S2.define('select2/selection/allowClear',[
 
 S2.define('select2/selection/search',[
   'jquery',
-  '../utils',
+  '../UTILS',
   '../keys'
-], function ($, Utils, KEYS) {
+], function ($, UTILS, KEYS) {
   function Search (decorated, $element, options) {
     decorated.call(this, $element, options);
   }
@@ -2060,7 +2060,7 @@ S2.define('select2/selection/search',[
           .prev('.select2-selection__choice');
 
         if ($previousChoice.length > 0) {
-          var item = Utils.GetData($previousChoice[0], 'data');
+          var item = UTILS.GetData($previousChoice[0], 'data');
 
           self.searchRemoveChoice(item);
 
@@ -3144,13 +3144,13 @@ S2.define('select2/diacritics',[
 });
 
 S2.define('select2/data/base',[
-  '../utils'
-], function (Utils) {
+  '../UTILS'
+], function (UTILS) {
   function BaseAdapter ($element, options) {
     BaseAdapter.__super__.constructor.call(this);
   }
 
-  Utils.Extend(BaseAdapter, Utils.Observable);
+  UTILS.Extend(BaseAdapter, UTILS.Observable);
 
   BaseAdapter.prototype.current = function (callback) {
     throw new Error('The `current` method must be defined in child classes.');
@@ -3171,12 +3171,12 @@ S2.define('select2/data/base',[
   BaseAdapter.prototype.generateResultId = function (container, data) {
     var id = container.id + '-result-';
 
-    id += Utils.generateChars(4);
+    id += UTILS.generateChars(4);
 
     if (data.id != null) {
       id += '-' + data.id.toString();
     } else {
-      id += '-' + Utils.generateChars(4);
+      id += '-' + UTILS.generateChars(4);
     }
     return id;
   };
@@ -3186,9 +3186,9 @@ S2.define('select2/data/base',[
 
 S2.define('select2/data/select',[
   './base',
-  '../utils',
+  '../UTILS',
   'jquery'
-], function (BaseAdapter, Utils, $) {
+], function (BaseAdapter, UTILS, $) {
   function SelectAdapter ($element, options) {
     this.$element = $element;
     this.options = options;
@@ -3196,7 +3196,7 @@ S2.define('select2/data/select',[
     SelectAdapter.__super__.constructor.call(this);
   }
 
-  Utils.Extend(SelectAdapter, BaseAdapter);
+  UTILS.Extend(SelectAdapter, BaseAdapter);
 
   SelectAdapter.prototype.current = function (callback) {
     var data = [];
@@ -3305,7 +3305,7 @@ S2.define('select2/data/select',[
     // Remove anything added to child elements
     this.$element.find('*').each(function () {
       // Remove any custom data set by Select2
-      Utils.RemoveData(this);
+      UTILS.RemoveData(this);
     });
   };
 
@@ -3337,7 +3337,7 @@ S2.define('select2/data/select',[
   };
 
   SelectAdapter.prototype.addOptions = function ($options) {
-    Utils.appendMany(this.$element, $options);
+    UTILS.appendMany(this.$element, $options);
   };
 
   SelectAdapter.prototype.option = function (data) {
@@ -3378,7 +3378,7 @@ S2.define('select2/data/select',[
     normalizedData.element = option;
 
     // Override the option's data with the combined data
-    Utils.StoreData(option, 'data', normalizedData);
+    UTILS.StoreData(option, 'data', normalizedData);
 
     return $option;
   };
@@ -3386,7 +3386,7 @@ S2.define('select2/data/select',[
   SelectAdapter.prototype.item = function ($option) {
     var data = {};
 
-    data = Utils.GetData($option[0], 'data');
+    data = UTILS.GetData($option[0], 'data');
 
     if (data != null) {
       return data;
@@ -3424,7 +3424,7 @@ S2.define('select2/data/select',[
     data = this._normalizeItem(data);
     data.element = $option[0];
 
-    Utils.StoreData($option[0], 'data', data);
+    UTILS.StoreData($option[0], 'data', data);
 
     return data;
   };
@@ -3472,16 +3472,16 @@ S2.define('select2/data/select',[
 
 S2.define('select2/data/array',[
   './select',
-  '../utils',
+  '../UTILS',
   'jquery'
-], function (SelectAdapter, Utils, $) {
+], function (SelectAdapter, UTILS, $) {
   function ArrayAdapter ($element, options) {
     this._dataToConvert = options.get('data') || [];
 
     ArrayAdapter.__super__.constructor.call(this, $element, options);
   }
 
-  Utils.Extend(ArrayAdapter, SelectAdapter);
+  UTILS.Extend(ArrayAdapter, SelectAdapter);
 
   ArrayAdapter.prototype.bind = function (container, $container) {
     ArrayAdapter.__super__.bind.call(this, container, $container);
@@ -3542,7 +3542,7 @@ S2.define('select2/data/array',[
       if (item.children) {
         var $children = this.convertToOptions(item.children);
 
-        Utils.appendMany($option, $children);
+        UTILS.appendMany($option, $children);
       }
 
       $options.push($option);
@@ -3556,9 +3556,9 @@ S2.define('select2/data/array',[
 
 S2.define('select2/data/ajax',[
   './array',
-  '../utils',
+  '../UTILS',
   'jquery'
-], function (ArrayAdapter, Utils, $) {
+], function (ArrayAdapter, UTILS, $) {
   function AjaxAdapter ($element, options) {
     this.ajaxOptions = this._applyDefaults(options.get('ajax'));
 
@@ -3569,7 +3569,7 @@ S2.define('select2/data/ajax',[
     AjaxAdapter.__super__.constructor.call(this, $element, options);
   }
 
-  Utils.Extend(AjaxAdapter, ArrayAdapter);
+  UTILS.Extend(AjaxAdapter, ArrayAdapter);
 
   AjaxAdapter.prototype._applyDefaults = function (options) {
     var defaults = {
@@ -4029,8 +4029,8 @@ S2.define('select2/data/maximumSelectionLength',[
 
 S2.define('select2/dropdown',[
   'jquery',
-  './utils'
-], function ($, Utils) {
+  './UTILS'
+], function ($, UTILS) {
   function Dropdown ($element, options) {
     this.$element = $element;
     this.options = options;
@@ -4038,7 +4038,7 @@ S2.define('select2/dropdown',[
     Dropdown.__super__.constructor.call(this);
   }
 
-  Utils.Extend(Dropdown, Utils.Observable);
+  UTILS.Extend(Dropdown, UTILS.Observable);
 
   Dropdown.prototype.render = function () {
     var $dropdown = $(
@@ -4072,8 +4072,8 @@ S2.define('select2/dropdown',[
 
 S2.define('select2/dropdown/search',[
   'jquery',
-  '../utils'
-], function ($, Utils) {
+  '../UTILS'
+], function ($, UTILS) {
   function Search () { }
 
   Search.prototype.render = function (decorated) {
@@ -4324,8 +4324,8 @@ S2.define('select2/dropdown/infiniteScroll',[
 
 S2.define('select2/dropdown/attachBody',[
   'jquery',
-  '../utils'
-], function ($, Utils) {
+  '../UTILS'
+], function ($, UTILS) {
   function AttachBody (decorated, $element, options) {
     this.$dropdownParent = $(options.get('dropdownParent') || document.body);
 
@@ -4437,16 +4437,16 @@ S2.define('select2/dropdown/attachBody',[
     var resizeEvent = 'resize.select2.' + container.id;
     var orientationEvent = 'orientationchange.select2.' + container.id;
 
-    var $watchers = this.$container.parents().filter(Utils.hasScroll);
+    var $watchers = this.$container.parents().filter(UTILS.hasScroll);
     $watchers.each(function () {
-      Utils.StoreData(this, 'select2-scroll-position', {
+      UTILS.StoreData(this, 'select2-scroll-position', {
         x: $(this).scrollLeft(),
         y: $(this).scrollTop()
       });
     });
 
     $watchers.on(scrollEvent, function (ev) {
-      var position = Utils.GetData(this, 'select2-scroll-position');
+      var position = UTILS.GetData(this, 'select2-scroll-position');
       $(this).scrollTop(position.y);
     });
 
@@ -4463,7 +4463,7 @@ S2.define('select2/dropdown/attachBody',[
     var resizeEvent = 'resize.select2.' + container.id;
     var orientationEvent = 'orientationchange.select2.' + container.id;
 
-    var $watchers = this.$container.parents().filter(Utils.hasScroll);
+    var $watchers = this.$container.parents().filter(UTILS.hasScroll);
     $watchers.off(scrollEvent);
 
     $(window).off(scrollEvent + ' ' + resizeEvent + ' ' + orientationEvent);
@@ -4621,8 +4621,8 @@ S2.define('select2/dropdown/minimumResultsForSearch',[
 });
 
 S2.define('select2/dropdown/selectOnClose',[
-  '../utils'
-], function (Utils) {
+  '../UTILS'
+], function (UTILS) {
   function SelectOnClose () { }
 
   SelectOnClose.prototype.bind = function (decorated, container, $container) {
@@ -4653,7 +4653,7 @@ S2.define('select2/dropdown/selectOnClose',[
       return;
     }
 
-    var data = Utils.GetData($highlightedResults[0], 'data');
+    var data = UTILS.GetData($highlightedResults[0], 'data');
 
     // Don't re-select already selected resulte
     if (
@@ -4768,7 +4768,7 @@ S2.define('select2/defaults',[
   './selection/search',
   './selection/eventRelay',
 
-  './utils',
+  './UTILS',
   './translation',
   './diacritics',
 
@@ -4798,7 +4798,7 @@ S2.define('select2/defaults',[
              SingleSelection, MultipleSelection, Placeholder, AllowClear,
              SelectionSearch, EventRelay,
 
-             Utils, Translation, DIACRITICS,
+             UTILS, Translation, DIACRITICS,
 
              SelectData, ArrayData, AjaxData, Tags, Tokenizer,
              MinimumInputLength, MaximumInputLength, MaximumSelectionLength,
@@ -4824,32 +4824,32 @@ S2.define('select2/defaults',[
       }
 
       if (options.minimumInputLength > 0) {
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           MinimumInputLength
         );
       }
 
       if (options.maximumInputLength > 0) {
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           MaximumInputLength
         );
       }
 
       if (options.maximumSelectionLength > 0) {
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           MaximumSelectionLength
         );
       }
 
       if (options.tags) {
-        options.dataAdapter = Utils.Decorate(options.dataAdapter, Tags);
+        options.dataAdapter = UTILS.Decorate(options.dataAdapter, Tags);
       }
 
       if (options.tokenSeparators != null || options.tokenizer != null) {
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           Tokenizer
         );
@@ -4858,7 +4858,7 @@ S2.define('select2/defaults',[
       if (options.query != null) {
         var Query = require(options.amdBase + 'compat/query');
 
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           Query
         );
@@ -4867,7 +4867,7 @@ S2.define('select2/defaults',[
       if (options.initSelection != null) {
         var InitSelection = require(options.amdBase + 'compat/initSelection');
 
-        options.dataAdapter = Utils.Decorate(
+        options.dataAdapter = UTILS.Decorate(
           options.dataAdapter,
           InitSelection
         );
@@ -4878,21 +4878,21 @@ S2.define('select2/defaults',[
       options.resultsAdapter = ResultsList;
 
       if (options.ajax != null) {
-        options.resultsAdapter = Utils.Decorate(
+        options.resultsAdapter = UTILS.Decorate(
           options.resultsAdapter,
           InfiniteScroll
         );
       }
 
       if (options.placeholder != null) {
-        options.resultsAdapter = Utils.Decorate(
+        options.resultsAdapter = UTILS.Decorate(
           options.resultsAdapter,
           HidePlaceholder
         );
       }
 
       if (options.selectOnClose) {
-        options.resultsAdapter = Utils.Decorate(
+        options.resultsAdapter = UTILS.Decorate(
           options.resultsAdapter,
           SelectOnClose
         );
@@ -4903,20 +4903,20 @@ S2.define('select2/defaults',[
       if (options.multiple) {
         options.dropdownAdapter = Dropdown;
       } else {
-        var SearchableDropdown = Utils.Decorate(Dropdown, DropdownSearch);
+        var SearchableDropdown = UTILS.Decorate(Dropdown, DropdownSearch);
 
         options.dropdownAdapter = SearchableDropdown;
       }
 
       if (options.minimumResultsForSearch !== 0) {
-        options.dropdownAdapter = Utils.Decorate(
+        options.dropdownAdapter = UTILS.Decorate(
           options.dropdownAdapter,
           MinimumResultsForSearch
         );
       }
 
       if (options.closeOnSelect) {
-        options.dropdownAdapter = Utils.Decorate(
+        options.dropdownAdapter = UTILS.Decorate(
           options.dropdownAdapter,
           CloseOnSelect
         );
@@ -4929,13 +4929,13 @@ S2.define('select2/defaults',[
       ) {
         var DropdownCSS = require(options.amdBase + 'compat/dropdownCss');
 
-        options.dropdownAdapter = Utils.Decorate(
+        options.dropdownAdapter = UTILS.Decorate(
           options.dropdownAdapter,
           DropdownCSS
         );
       }
 
-      options.dropdownAdapter = Utils.Decorate(
+      options.dropdownAdapter = UTILS.Decorate(
         options.dropdownAdapter,
         AttachBody
       );
@@ -4950,21 +4950,21 @@ S2.define('select2/defaults',[
 
       // Add the placeholder mixin if a placeholder was specified
       if (options.placeholder != null) {
-        options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter = UTILS.Decorate(
           options.selectionAdapter,
           Placeholder
         );
       }
 
       if (options.allowClear) {
-        options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter = UTILS.Decorate(
           options.selectionAdapter,
           AllowClear
         );
       }
 
       if (options.multiple) {
-        options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter = UTILS.Decorate(
           options.selectionAdapter,
           SelectionSearch
         );
@@ -4977,13 +4977,13 @@ S2.define('select2/defaults',[
       ) {
         var ContainerCSS = require(options.amdBase + 'compat/containerCss');
 
-        options.selectionAdapter = Utils.Decorate(
+        options.selectionAdapter = UTILS.Decorate(
           options.selectionAdapter,
           ContainerCSS
         );
       }
 
-      options.selectionAdapter = Utils.Decorate(
+      options.selectionAdapter = UTILS.Decorate(
         options.selectionAdapter,
         EventRelay
       );
@@ -5077,7 +5077,7 @@ S2.define('select2/defaults',[
       closeOnSelect: true,
       debug: false,
       dropdownAutoWidth: false,
-      escapeMarkup: Utils.escapeMarkup,
+      escapeMarkup: UTILS.escapeMarkup,
       language: {},
       matcher: matcher,
       minimumInputLength: 0,
@@ -5203,7 +5203,7 @@ S2.define('select2/defaults',[
     var data = {};
     data[camelKey] = value;
 
-    var convertedData = Utils._convertData(data);
+    var convertedData = UTILS._convertData(data);
 
     $.extend(true, this.defaults, convertedData);
   };
@@ -5217,8 +5217,8 @@ S2.define('select2/options',[
   'require',
   'jquery',
   './defaults',
-  './utils'
-], function (require, $, Defaults, Utils) {
+  './UTILS'
+], function (require, $, Defaults, UTILS) {
   function Options (options, $element) {
     this.options = options;
 
@@ -5235,7 +5235,7 @@ S2.define('select2/options',[
     if ($element && $element.is('input')) {
       var InputCompat = require(this.get('amdBase') + 'compat/inputData');
 
-      this.options.dataAdapter = Utils.Decorate(
+      this.options.dataAdapter = UTILS.Decorate(
         this.options.dataAdapter,
         InputCompat
       );
@@ -5266,7 +5266,7 @@ S2.define('select2/options',[
     $e.prop('disabled', this.options.disabled);
     $e.prop('multiple', this.options.multiple);
 
-    if (Utils.GetData($e[0], 'select2Tags')) {
+    if (UTILS.GetData($e[0], 'select2Tags')) {
       if (this.options.debug && window.console && console.warn) {
         console.warn(
           'Select2: The `data-select2-tags` attribute has been changed to ' +
@@ -5275,11 +5275,11 @@ S2.define('select2/options',[
         );
       }
 
-      Utils.StoreData($e[0], 'data', Utils.GetData($e[0], 'select2Tags'));
-      Utils.StoreData($e[0], 'tags', true);
+      UTILS.StoreData($e[0], 'data', UTILS.GetData($e[0], 'select2Tags'));
+      UTILS.StoreData($e[0], 'tags', true);
     }
 
-    if (Utils.GetData($e[0], 'ajaxUrl')) {
+    if (UTILS.GetData($e[0], 'ajaxUrl')) {
       if (this.options.debug && window.console && console.warn) {
         console.warn(
           'Select2: The `data-ajax-url` attribute has been changed to ' +
@@ -5288,8 +5288,8 @@ S2.define('select2/options',[
         );
       }
 
-      $e.attr('ajax--url', Utils.GetData($e[0], 'ajaxUrl'));
-      Utils.StoreData($e[0], 'ajax-Url', Utils.GetData($e[0], 'ajaxUrl'));
+      $e.attr('ajax--url', UTILS.GetData($e[0], 'ajaxUrl'));
+      UTILS.StoreData($e[0], 'ajax-Url', UTILS.GetData($e[0], 'ajaxUrl'));
     }
 
     var dataset = {};
@@ -5309,7 +5309,7 @@ S2.define('select2/options',[
 
         // Get the data contents from the consistent source
         // This is more than likely the jQuery data helper
-        var dataValue = Utils.GetData($e[0], dataName);
+        var dataValue = UTILS.GetData($e[0], dataName);
 
         // camelCase the attribute name to match the spec
         var camelDataName = dataName.replace(/-([a-z])/g, upperCaseLetter);
@@ -5326,9 +5326,9 @@ S2.define('select2/options',[
     }
 
     // Prefer our internal data cache if it exists
-    var data = $.extend(true, {}, Utils.GetData($e[0]), dataset);
+    var data = $.extend(true, {}, UTILS.GetData($e[0]), dataset);
 
-    data = Utils._convertData(data);
+    data = UTILS._convertData(data);
 
     for (var key in data) {
       if ($.inArray(key, excludedData) > -1) {
@@ -5359,12 +5359,12 @@ S2.define('select2/options',[
 S2.define('select2/core',[
   'jquery',
   './options',
-  './utils',
+  './UTILS',
   './keys'
-], function ($, Options, Utils, KEYS) {
+], function ($, Options, UTILS, KEYS) {
   var Select2 = function ($element, options) {
-    if (Utils.GetData($element[0], 'select2') != null) {
-      Utils.GetData($element[0], 'select2').destroy();
+    if (UTILS.GetData($element[0], 'select2') != null) {
+      UTILS.GetData($element[0], 'select2').destroy();
     }
 
     this.$element = $element;
@@ -5380,7 +5380,7 @@ S2.define('select2/core',[
     // Set up the tabindex
 
     var tabindex = $element.attr('tabindex') || 0;
-    Utils.StoreData($element[0], 'old-tabindex', tabindex);
+    UTILS.StoreData($element[0], 'old-tabindex', tabindex);
     $element.attr('tabindex', '-1');
 
     // Set up containers and adapters
@@ -5441,13 +5441,13 @@ S2.define('select2/core',[
     // Synchronize any monitored attributes
     this._syncAttributes();
 
-    Utils.StoreData($element[0], 'select2', this);
+    UTILS.StoreData($element[0], 'select2', this);
 
     // Ensure backwards compatibility with $element.data('select2').
     $element.data('select2', this);
   };
 
-  Utils.Extend(Select2, Utils.Observable);
+  UTILS.Extend(Select2, UTILS.Observable);
 
   Select2.prototype._generateId = function ($element) {
     var id = '';
@@ -5455,9 +5455,9 @@ S2.define('select2/core',[
     if ($element.attr('id') != null) {
       id = $element.attr('id');
     } else if ($element.attr('name') != null) {
-      id = $element.attr('name') + '-' + Utils.generateChars(2);
+      id = $element.attr('name') + '-' + UTILS.generateChars(2);
     } else {
-      id = Utils.generateChars(4);
+      id = UTILS.generateChars(4);
     }
 
     id = id.replace(/(:|\.|\[|\]|,)/g, '');
@@ -5552,8 +5552,8 @@ S2.define('select2/core',[
       self.trigger('focus', evt);
     });
 
-    this._syncA = Utils.bind(this._syncAttributes, this);
-    this._syncS = Utils.bind(this._syncSubtree, this);
+    this._syncA = UTILS.bind(this._syncAttributes, this);
+    this._syncS = UTILS.bind(this._syncSubtree, this);
 
     if (this.$element[0].attachEvent) {
       this.$element[0].attachEvent('onpropertychange', this._syncA);
@@ -5981,11 +5981,11 @@ S2.define('select2/core',[
 
     this.$element.off('.select2');
     this.$element.attr('tabindex',
-    Utils.GetData(this.$element[0], 'old-tabindex'));
+    UTILS.GetData(this.$element[0], 'old-tabindex'));
 
     this.$element.removeClass('select2-hidden-accessible');
     this.$element.attr('aria-hidden', 'false');
-    Utils.RemoveData(this.$element[0]);
+    UTILS.RemoveData(this.$element[0]);
     this.$element.removeData('select2');
 
     this.dataAdapter.destroy();
@@ -6013,7 +6013,7 @@ S2.define('select2/core',[
 
     this.$container.addClass('select2-container--' + this.options.get('theme'));
 
-    Utils.StoreData($container[0], 'element', this.$element);
+    UTILS.StoreData($container[0], 'element', this.$element);
 
     return $container;
   };
@@ -6034,8 +6034,8 @@ S2.define('jquery.select2',[
 
   './select2/core',
   './select2/defaults',
-  './select2/utils'
-], function ($, _, Select2, Defaults, Utils) {
+  './select2/UTILS'
+], function ($, _, Select2, Defaults, UTILS) {
   if ($.fn.select2 == null) {
     // All methods that should return the element
     var thisMethods = ['open', 'close', 'destroy'];
@@ -6056,7 +6056,7 @@ S2.define('jquery.select2',[
         var args = Array.prototype.slice.call(arguments, 1);
 
         this.each(function () {
-          var instance = Utils.GetData(this, 'select2');
+          var instance = UTILS.GetData(this, 'select2');
 
           if (instance == null && window.console && console.error) {
             console.error(
