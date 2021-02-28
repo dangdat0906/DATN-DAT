@@ -26,15 +26,7 @@ namespace APP.MODELS
         [Column("ExpiredToken")]
         public DateTime? ExpiredToken { get; set; }
         [Column("Status")]
-        public byte Status { get; set; }
-        [Column("CountLoginFail")]
-        public int? CountLoginFail { get; set; }
-        [Column("LastLogin")]
-        public DateTime? LastLogin { get; set; }
-        [Column("LastChangePass")]
-        public DateTime? LastChangePass { get; set; }
-        [Column("IsFirstLogin")]
-        public bool? IsFirstLogin { get; set; }
+        public byte Status { get; set; }      
         public DateTime? CreatedDate { get; set; }
         [Column("UpdatedDate")]
         public DateTime? UpdatedDate { get; set; }
@@ -46,8 +38,8 @@ namespace APP.MODELS
         public string PhoneNumber { get; set; }
         public long? PostionId { get; set; }
         [NotMapped]
-        public string NewPass { get; set; }
-        [NotMapped]
+        //public string NewPass { get; set; }
+        //[NotMapped]
         public List<long> ListRoleId { get; set; }
         [NotMapped]
         public List<Role_Permissions> Role_Permissions { get; set; }

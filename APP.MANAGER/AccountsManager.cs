@@ -156,38 +156,46 @@ namespace APP.MANAGER
 
         public async Task<Accounts> Login(string userName, string password)
         {
-            password = MD5.ToMD5(password);
-            var data = await _unitOfWork.AccountsRepository.Get(x => x.UserName.Equals(userName)
-                                                                && x.Password.Equals(password)
-                                                                && x.Status == (byte)StatusEnum.Active);
-            if (data == null)
+            try
             {
-
-                throw new Exception("Tài khoản hoặc mật khẩu không đúng");
-            }
-            else
-            {
-                if (data.IsFirstLogin == null)
+                password = MD5.ToMD5(password);
+                var data = await _unitOfWork.AccountsRepository.Get(x => x.UserName.Equals(userName)
+                                                                    && x.Password.Equals(password)
+                                                                    && x.Status == (byte)StatusEnum.Active);
+                if (data == null)
                 {
-                    data.IsFirstLogin = true;
+
+                    throw new Exception("Tài khoản hoặc mật khẩu không đúng");
                 }
-
-
-                var listRolePermission = await GetRole_PermissionByAccountId(data.Id);
-                data.Role_Permissions = listRolePermission;
-                var listMenu = (await _unitOfWork.MenuRepository.FindBy(x => true)).ToList();
-                var listMenuOfAccount = new List<Menus>();
-                foreach (var item in listMenu)
+                else
                 {
-                    var menu = listRolePermission.Find(x => x.MenuId == item.Id);
-                    if (menu != null)
+                    //if (data.IsFirstLogin == null)
+                    //{
+                    //    data.IsFirstLogin = true;
+                    //}
+
+
+                    var listRolePermission = await GetRole_PermissionByAccountId(data.Id);
+                    data.Role_Permissions = listRolePermission;
+                    var listMenu = (await _unitOfWork.MenuRepository.FindBy(x => true)).ToList();
+                    var listMenuOfAccount = new List<Menus>();
+                    foreach (var item in listMenu)
                     {
-                        listMenuOfAccount.Add(item);
+                        var menu = listRolePermission.Find(x => x.MenuId == item.Id);
+                        if (menu != null)
+                        {
+                            listMenuOfAccount.Add(item);
+                        }
                     }
+                    data.ListMenu = listMenuOfAccount;
+                    return data;
                 }
-                data.ListMenu = listMenuOfAccount;
-                return data;
             }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
 
 
         }
@@ -202,7 +210,7 @@ namespace APP.MANAGER
             }
             else
             {
-                data.IsFirstLogin = false;
+                //data.IsFirstLogin = false;
                 newPassword = MD5.ToMD5(newPassword);
                 data.Password = newPassword;
                 await _unitOfWork.AccountsRepository.Update(data);

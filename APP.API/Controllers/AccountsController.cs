@@ -253,20 +253,20 @@ namespace APP.API.Controllers
             Console.WriteLine(token);
             return token;
         }
-        [HttpPost("doi-mat-khau")]
-        public async Task<IActionResult> ChangePass([FromBody] Accounts inputModel)
-        {
-            try
-            {
+        //[HttpPost("doi-mat-khau")]
+        //public async Task<IActionResult> ChangePass([FromBody] Accounts inputModel)
+        //{
+        //    try
+        //    {
 
-                var data = await _accountsManager.ChangePass(inputModel.UserName, inputModel.Password, inputModel.NewPass);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //        var data = await _accountsManager.ChangePass(inputModel.UserName, inputModel.Password, inputModel.NewPass);
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
         [HttpGet("get-roles-by-acountid")]
         public async Task<IActionResult> GetRolesByAccountId(long accountId)
         {
