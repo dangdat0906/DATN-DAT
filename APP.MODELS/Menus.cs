@@ -26,14 +26,12 @@ namespace APP.MODELS
         public DateTime? CreatedDate { get; set; }
         [Column("UpdatedDate")]
         public DateTime? UpdatedDate { get; set; }
-        [Column("CreatedBy")]
-        public long? CreatedBy { get; set; }
-        [Column("UpdatedBy")]
-        public long? UpdatedBy { get; set; }
+        //[Column("CreatedBy")]
+        //public long? CreatedBy { get; set; }
+        //[Column("UpdatedBy")]
+        //public long? UpdatedBy { get; set; }
         [Column("IsMenu")]
         public bool IsMenu { get; set; }
-        [Column("LangCode")]
-        public string LangCode { get; set; }
         [Column("DisplayOrder")]
         public int? DisplayOrder { get; set; }
         [NotMapped]

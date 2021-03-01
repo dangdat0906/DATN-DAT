@@ -23,20 +23,20 @@ namespace APP.CMS.Controllers
             this._domain = _config["APIDomain"].ToString();
             _httpContextAccessor = httpContextAccessor;
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("danh-sach")]
         public IActionResult Index()
         {
             var permission = UTILS.SessionExtensions.Get<List<Role_Permissions>>(_session, UTILS.SessionExtensions.SesscionPermission);
             var path = _httpContextAccessor.HttpContext.Request.Path.Value;
             var currentPagePermission = permission.Where(c => c.MenuUrl.ToLower() == path.ToLower()).ToList();
-            ViewData[nameof(RolesEnum.Create)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Create))) > 0 ? 1 : 0;
-            ViewData[nameof(RolesEnum.Update)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Update))) > 0 ? 1 : 0;
-            ViewData[nameof(RolesEnum.Delete)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Delete))) > 0 ? 1 : 0;
+            //ViewData[nameof(RolesEnum.Create)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Create))) > 0 ? 1 : 0;
+            //ViewData[nameof(RolesEnum.Update)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Update))) > 0 ? 1 : 0;
+            //ViewData[nameof(RolesEnum.Delete)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Delete))) > 0 ? 1 : 0;
             ViewBag.Title = "Danh sách nhóm quyền";
             return View();
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("get-list")]
         public async Task<IActionResult> GetList(string name, int status, int pageSize = 0, int pageNumber = 10)
         {
@@ -58,7 +58,7 @@ namespace APP.CMS.Controllers
             return View("_Update", data);
         }
 
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpPost("create-or-update")]
         public async Task<IActionResult> CreateOrUpdate(Roles inputModel)
         {
@@ -143,7 +143,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpPost("update-status")]
         public async Task<IActionResult> UpdateStatus(Roles inputModel)
         {

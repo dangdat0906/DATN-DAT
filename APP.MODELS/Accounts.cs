@@ -30,10 +30,10 @@ namespace APP.MODELS
         public DateTime? CreatedDate { get; set; }
         [Column("UpdatedDate")]
         public DateTime? UpdatedDate { get; set; }
-        [Column("CreatedBy")]
-        public long? CreatedBy { get; set; }
-        [Column("UpdatedBy")]
-        public long? UpdatedBy { get; set; }
+        //[Column("CreatedBy")]
+        //public long? CreatedBy { get; set; }
+        //[Column("UpdatedBy")]
+        //public long? UpdatedBy { get; set; }
         public long? UnitsId { get; set; }
         public string PhoneNumber { get; set; }
         public long? PostionId { get; set; }

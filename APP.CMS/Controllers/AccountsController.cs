@@ -125,20 +125,20 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = "Tài khoản hoăc mật khẩu không chính xác" });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("danh-sach")]
         public async Task<IActionResult> Index()
         {
             var permission = UTILS.SessionExtensions.Get<List<Role_Permissions>>(_session, UTILS.SessionExtensions.SesscionPermission);
             var path = _httpContextAccessor.HttpContext.Request.Path.Value;
-            var currentPagePermission = permission.Where(c => c.MenuUrl.ToLower() == path.ToLower()).ToList();
-            ViewData[nameof(RolesEnum.Create)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Create))) > 0 ? 1 : 0;
-            ViewData[nameof(RolesEnum.Update)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Update))) > 0 ? 1 : 0;
-            ViewData[nameof(RolesEnum.Delete)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Delete))) > 0 ? 1 : 0;
+            //var currentPagePermission = permission.Where(c => c.MenuUrl.ToLower() == path.ToLower()).ToList();
+            //ViewData[nameof(RolesEnum.Create)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Create))) > 0 ? 1 : 0;
+            //ViewData[nameof(RolesEnum.Update)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Update))) > 0 ? 1 : 0;
+            //ViewData[nameof(RolesEnum.Delete)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Delete))) > 0 ? 1 : 0;
             ViewBag.Title = "Danh sách tài khoản";
             return View();
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("get-list")]
         public async Task<IActionResult> GetList(string userName, string fullName, int status, int pageSize = 0, int pageNumber = 10)
         {
@@ -207,7 +207,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("lay-don-vi")]
         public async Task<IActionResult> LayDonVi()
         {
@@ -221,7 +221,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("lay-chuc-vu")]
         public async Task<IActionResult> LayChucVu()
         {
@@ -235,7 +235,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("get-list-thong-ke-bai-viet-theo-tai-khoan")]
         public async Task<IActionResult> GetContentByAccountCreate(string tuNgay = "", string denNgay = "")
         {
@@ -250,7 +250,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("thong-ke-bai-viet-theo-tai-khoan")]
         public async Task<IActionResult> ListContentByAccount()
         {
@@ -259,7 +259,7 @@ namespace APP.CMS.Controllers
             ViewBag.Title = "Thống kê bài viết theo người tạo";
             return View();
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("get-roles-by-accountId")]
         public async Task<IActionResult> GetRolesByAccountId(long accountId)
         {
@@ -295,7 +295,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpPost("update-status")]
         public async Task<IActionResult> UpdateStatus(Accounts inputModel)
         {
