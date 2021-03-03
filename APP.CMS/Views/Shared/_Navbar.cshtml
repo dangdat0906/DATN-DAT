@@ -1,24 +1,91 @@
-﻿<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+﻿@using APP.UTILS
+@using APP.MODELS
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+
+    //var langcode = APP.UTILS.SessionExtensions.Get<string>(session, APP.UTILS.SessionExtensions.SesscionLanguages);
+    var account = APP.UTILS.SessionExtensions.Get<Accounts>(session, APP.UTILS.SessionExtensions.SessionAccount);
+}
+
+<nav class="main-header navbar navbar-expand-lg navbar-white navbar-primary">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars fa-lg" style="color:#0b325d"></i></a>
         </li>
 
     </ul>
+    <div class="navbar-img text-center text-primary">
+        <span class="nav-title">HỆ THỐNG QUẢN TRỊ NỘI DUNG TRANG THÔNG TIN</span>
+    </div>
     <ul class="navbar-nav ml-auto">
-       
+        @*<li class="nav-item" style="margin-right:10px">
+            <input type="hidden" id="langcode" value="@langcode">
+            <select class="nav-link" id="selectLanguage">
+            </select>
+        </li>*@
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="fas fa-user-circle"></i>               
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <i class="fas fa-user fa-lg"></i>
+                @*<strong>@account.UserName</strong>*@
+                <span class="glyphicon glyphicon-chevron-down"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span class="dropdown-item dropdown-header">Tài khoản</span>
                 <div class="dropdown-divider"></div>
                 <a href="/tai-khoan/doi-mat-khau" class="dropdown-item">
-                    <i class="fas fa-key"></i> Đổi mật khẩu                
+                    <i class="fas fa-key"></i> Đổi mật khẩu
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="/tai-khoan/dang-xuat" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
                 </a>
             </div>
         </li>
     </ul>
 </nav>
+<script>
+    $(document).ready(function () {
+        //getLanguage();
+
+    })
+    var language = [];
+    function getLanguage() {
+        $.ajax({
+            url: "/ngon-ngu" + "/get-language",
+            method: "GET",
+            success: function (response) {
+                language = response;
+            }
+        }).then(function () {
+            $.each(language, function (i, itemMenu) {
+                if (itemMenu.code == "VIE") {
+                    var newOption = new Option(itemMenu.name, itemMenu.code, false, true);
+                    $("#selectLanguage").append(newOption);
+                }
+                else {
+                    var newOption = new Option(itemMenu.name, itemMenu.code);
+                    $("#selectLanguage").append(newOption);
+                }
+            });
+
+            if ($("#langcode").val() != "") {
+                $("#selectLanguage").val($("#langcode").val())
+            }
+            $("#selectLanguage").change(function () {
+                $.ajax({
+                    url: "/ngon-ngu" + "/doi-ngon-ngu",
+                    method: "POST",
+                    data: {
+                        Code: $("#selectLanguage").val()
+                    }
+                    , success: function (response) {
+                        location.reload()
+                    }
+                })
+            })
+        })
+    }
+</script>

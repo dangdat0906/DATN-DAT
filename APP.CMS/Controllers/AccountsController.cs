@@ -145,7 +145,7 @@ namespace APP.CMS.Controllers
             var data = await HttpHelper.GetData<List<Accounts>>($"{_domain}/api/tai-khoan/get-list", $"userName={userName}&fullName={fullName}&status={status}");
             return PartialView("_List", data);
         }
-        [CustomAuthen(nameof(RolesEnum.Create))]
+        //[CustomAuthen(nameof(RolesEnum.Create))]
         [HttpGet("them-moi")]
         public async Task<IActionResult> Create()
         {
@@ -153,14 +153,14 @@ namespace APP.CMS.Controllers
             return PartialView("_Create");
         }
 
-        [CustomAuthen(nameof(RolesEnum.Update))]
+        //[CustomAuthen(nameof(RolesEnum.Update))]
         [HttpGet("sua")]
         public async Task<IActionResult> Update(long id)
         {
             var data = await HttpHelper.GetData<Accounts>($"{_domain}/api/tai-khoan/find-by-id", $"id={id}");
             return PartialView("_Update", data);
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpPost("them-moi")]
         public async Task<IActionResult> Create(Accounts inputModel)
         {
@@ -176,7 +176,7 @@ namespace APP.CMS.Controllers
             }
 
         }
-        [CustomAuthen]
+       //[CustomAuthen]
         [HttpPost("sua")]
         public async Task<IActionResult> Update(Accounts inputModel)
         {
@@ -193,7 +193,7 @@ namespace APP.CMS.Controllers
             }
 
         }
-        [CustomAuthen]
+        //[CustomAuthen]
         [HttpGet("get-roles")]
         public async Task<IActionResult> GetRoles()
         {

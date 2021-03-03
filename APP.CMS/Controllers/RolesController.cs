@@ -43,14 +43,14 @@ namespace APP.CMS.Controllers
             var data = await HttpHelper.GetData<List<Roles>>($"{_domain}/api/nhom-quyen/get-list", $"name={name}&status={status}");
             return PartialView("_List", data);
         }
-        [CustomAuthen(nameof(RolesEnum.Create))]
+        //[CustomAuthen(nameof(RolesEnum.Create))]
         [HttpGet("them-moi")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Title = "Thêm mới nhóm quyền";
             return View("_Create");
         }
-        [CustomAuthen(nameof(RolesEnum.Update))]
+        //[CustomAuthen(nameof(RolesEnum.Update))]
         [HttpGet("sua")]
         public async Task<IActionResult> Update(long id)
         {
@@ -121,7 +121,7 @@ namespace APP.CMS.Controllers
             }
             return Json(new { Result = false, data = data });
         }
-        [CustomAuthen(nameof(RolesEnum.Delete))]
+       //[CustomAuthen(nameof(RolesEnum.Delete))]
         [HttpPost("delete-or-restore")]
         public async Task<IActionResult> Delete(Roles inputmodel)
         {

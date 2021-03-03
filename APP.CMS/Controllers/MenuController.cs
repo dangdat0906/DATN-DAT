@@ -45,13 +45,13 @@ namespace APP.CMS.Controllers
             var data = await HttpHelper.GetData<List<MenuViewModels>>($"{_domain}/api/menu/get-list",$"name={name}&parentId={parentId}&status={status}");
             return PartialView("_List", data);
         }
-        [CustomAuthen(nameof(RolesEnum.Create))]
+        //[CustomAuthen(nameof(RolesEnum.Create))]
         [HttpGet("create")]
         public async Task<IActionResult> Create()
         {
             return PartialView("_Create");
         }
-       [CustomAuthen(nameof(RolesEnum.Update))]
+       //[CustomAuthen(nameof(RolesEnum.Update))]
         [HttpGet("update")]
         public async Task<IActionResult> Update(long id)
         {
@@ -110,7 +110,7 @@ namespace APP.CMS.Controllers
                 return Json(new { Message = ex.Message });
             }
         }
-        [CustomAuthen(nameof(RolesEnum.Delete))]
+        //[CustomAuthen(nameof(RolesEnum.Delete))]
         [HttpPost("delete-or-restore")]
         public async Task<IActionResult> Delete(Menus inputmodel)
         {
