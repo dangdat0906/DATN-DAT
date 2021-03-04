@@ -55,7 +55,7 @@ namespace APP.API.Controllers
                     throw new Exception($"Tên nhóm quyền {MessageConst.EXIST}");
                 }
                 inputModel.Name = Extensions.StringStandar(inputModel.Name, 1);
-                inputModel.CreatedDate = DateTime.Now;
+                //inputModel.CreatedDate = DateTime.Now;
                 Roles role = await _rolesManger.Create(inputModel);
                 if (inputModel.Role_Permissions != null)
                 {
@@ -93,8 +93,8 @@ namespace APP.API.Controllers
                 {
                     throw new Exception($"Tên nhóm quyền {MessageConst.EXIST}");
                 }
-                inputModel.CreatedDate = data.CreatedDate;
-                inputModel.UpdatedDate = DateTime.Now;
+                //inputModel.CreatedDate = data.CreatedDate;
+                //inputModel.UpdatedDate = DateTime.Now;
                 await _rolesManger.Update(inputModel);
                 if (inputModel.Role_Permissions != null)
                 {

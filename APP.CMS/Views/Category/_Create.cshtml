@@ -1,0 +1,369 @@
+﻿@using Portal.Utils
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmCreate">
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-3" for="txtName">Tên chuyên mục</label>
+                    <input type="text" required name="name" class="form-control col-sm-3" id="txtName">
+                    <label required class="control-label col-sm-3  text-right" for="txtCode">Mã</label>
+                    <input type="text" required name="code" class="form-control col-sm-3" id="txtCode">
+
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="cbParentId">Danh mục cha</label>
+
+                    <select id="cbParentId" class="form-control col-sm-3">
+                        <option value="0">--------------</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="cbListContentType">Kiểu hiển thị</label>
+                    <select id="cbListContentType" class="form-control col-sm-3">
+                        <option value="@((int)ListContentTypeEnum.Doc)">@Extensions.GetEnumDescription(ListContentTypeEnum.Doc)</option>
+                        <option value="@((int)ListContentTypeEnum.Ngang)">@Extensions.GetEnumDescription(ListContentTypeEnum.Ngang)</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtNote" required>Ghi chú</label>
+                    <input type="text" name="note" required class="form-control col-sm-8" id="txtNote">
+                </div>
+                <div class="form-group row">
+
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtMenuDisplay" required>Tên hiển thị</label>
+                    <input type="text" name="menuDisplay" required class="form-control col-sm-8" id="txtMenuDisplay">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtGroupDisplay" required>Tên hiển thị dạng nhóm</label>
+                    <input type="text" name="displayGroup" required class="form-control col-sm-8" id="txtGroupDisplay">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3" for="txtDisplayOrder">Thứ tự hiển thị</label>
+                    <input type="number" name="displayOrder" class="form-control col-sm-3" id="txtDisplayOrder">
+
+                </div>
+                <div class="form-group row">
+
+                </div>
+                <div class="form-group row">
+                    @{
+                        if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                        {
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-2">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="ckStatus">
+                                    <label for="ckStatus" class="form-check-label">Trạng thái</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="ckIsMenu">
+                                    <label for="ckIsMenu" class="form-check-label">Hiển thị trên thanh danh mục</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="ckOnHome">
+                                    <label for="ckOnHome" class="form-check-label">Hiển thị trên trang chủ</label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-2">
+                                <div class="form-check">
+                                    <input type="checkbox" disabled class="form-check-input" id="ckStatus">
+                                    <label class="form-check-label">Trạng thái</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input type="checkbox" disabled class="form-check-input" id="ckIsMenu">
+                                    <label class="form-check-label">Hiển thị trên thanh danh mục</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    <input type="checkbox" disabled class="form-check-input" id="ckOnHome">
+                                    <label class="form-check-label">Hiển thị trên trang chủ</label>
+                                </div>
+                            </div>
+                        }
+
+
+                    }
+
+                </div>
+                @{
+                    if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                    {
+                        <div id="divDisplayOnHome" style="display:none">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-3" for="drDisplayOnhome">Kiểu hiển thị(trang chủ)</label>
+                                <div class="col-sm-9 row">
+                                    <select id="drDisplayOnhome" class="col-sm-3 form-control">
+                                        <option value="@((int)DisplayCateOnhomeEnum.Column)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Column)</option>
+                                        <option value="@((int)DisplayCateOnhomeEnum.Row)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row)</option>
+                                        <option value="@((int)DisplayCateOnhomeEnum.Mix)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Mix)</option>
+                                        <option value="@((int)DisplayCateOnhomeEnum.Row5050)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row5050)</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                }
+
+
+
+                @*<div class="form-group row">
+            <label class="col-form-label col-sm-3">Cấu hình chuyên mục</label>
+            <a href="javascript:;" onclick="openCreateConfig()"><i class="fas fa-plus-circle fa-2x"></i></a>
+        </div>*@
+                @*<div style="margin-top:30px">
+            <table id="tableConfig" class="table table-bordered table-hover table-striped nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-center" >STT</th>
+                        <th>Kiểu hiển thị</th>
+                        <th>Chiều hiển thị</th>
+                        <th class="text-right">Số bản tin</th>
+                        <th class="text-center">Có ảnh</th>
+                        <th class="text-center">Có tóm tắt</th>
+                        <th class="text-center">Phần mở rộng</th>
+                        <th>Phía</th>
+                        <th class="text-center">Thao tác</th>
+
+                    </tr>
+
+                </thead>
+                <tbody id="tableConfigBody">
+                </tbody>
+            </table>
+        </div>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="btn" style="margin-top:40px">
+    <button type="button" id="btnCreate" class="btn btn-primary">Lưu</button>
+    <button type="button" id="btbExit" class="btn btn-danger pull-left">Trở lại</button>
+</div>
+<script>
+    var frmCreate = $("#frmCreate")
+    var urlDomain = "/chuyen-muc";
+    var config = [];
+    var type = [];
+    var displayType = [];
+    var position = [];
+    $(document).ready(function () {
+        addRequired(frmCreate);
+        setParentId();
+        getType();
+        getDisplayType();
+        getPosition();
+        setDisplayOnHome()
+        
+    });
+    function setDisplayOnHome() {
+        $("#frmCreate").find('#divDisplayOnHome').css('display', 'none')
+        $("#frmCreate").find('#ckOnHome').change(function () {
+            if ($(this).is(":checked")) {
+                $("#frmCreate").find('#divDisplayOnHome').css('display', 'block')
+            }
+            else {
+                $("#frmCreate").find('#divDisplayOnHome').css('display', 'none')
+            }
+        })
+    }
+    
+    $('#btn').find('#btnCreate').off("click").on('click', function (e) {
+        e.preventDefault();
+        create();
+
+    });
+    $('#btn').find('#btbExit').off("click").on('click', function (e) {
+        e.preventDefault();
+        location.href = urlDomain + '/danh-sach';
+
+    });
+    frmCreate.find("#txtName").off('keyup').on('keyup', function () {
+        var name = $("#txtName").val();
+        var code = removeAccents2(name);
+        $("#txtCode").val(code);
+    });
+    function create() {
+        if (ValidateForm(frmCreate)) {
+            return;
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                inputModel: {
+                    Name: frmCreate.find('#txtName').val(),
+                    Code: frmCreate.find('#txtCode').val(),
+                    Note: frmCreate.find('#txtNote').val(),
+                    ParentId: frmCreate.find('#cbParentId').val(),
+                    LangCode: "VIE",
+                    MenuDisplay: frmCreate.find('#txtMenuDisplay').val(),
+                    GroupDisplay: frmCreate.find('#txtGroupDisplay').val(),
+                    DisplayOrder: frmCreate.find('#txtDisplayOrder').val(),
+                    Status: frmCreate.find('#ckStatus').prop('checked') ? 1 : 0,
+                    IsMenu: frmCreate.find('#ckIsMenu').prop('checked'),
+                    OnHome: frmCreate.find('#ckOnHome').prop('checked'),
+                    ListContentType: frmCreate.find('#cbListContentType').val(),
+                    DisplayOnHomeType: frmCreate.find('#drDisplayOnhome').val()
+                },
+                configs: config
+
+            }
+
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    showAlert(response.message, 2)
+                    location.href = urlDomain + '/danh-sach';
+
+                } else {
+                    showAlert(response.message)
+                }
+            }, error: function (data) {
+                console.debug(data);
+            }
+        })
+    }
+    function setParentId() {
+        var selectParent = $("#frmCreate").find("#cbParentId");
+        $.ajax({
+            url: urlDomain + "/get-parent-id",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response.data, function (i, item) {
+                    if (i > 0) {
+                        var newOption = new Option(item.title, item.value);
+                        selectParent.append(newOption);
+                    }
+                })
+            }
+        })
+        // selectParent.select2();
+        selectParent.select2({
+            theme: "bootstrap4"
+        });
+    }
+
+    //function openCreateConfig() {
+    //    $.ajax({
+    //        url: urlDomain + "/create-config",
+    //        method: "Get",
+    //        success: function (response) {
+    //            showContentModal(response, "Thêm mới cấu hình cho chuyên mục");
+
+    //        }
+    //    })
+    //}
+
+    //function setDataTable() {
+    //    console.log(config);
+    //    var tableConfigBody = $("#tableConfigBody");
+    //    tableConfigBody.html("");
+    //    if (config != null) {
+    //        for (var i = 0; i < config.length; i++) {
+    //            var row = "<tr>" +
+    //                '<td class="text-center">' + (i + 1) + '</td >';
+
+    //            var configType = type.find(x => x.value == config[i].type);
+
+    //            row += '<td>' + configType.title + ' </td>';
+    //            var configDisplayType = displayType.find(x => x.value == config[i].displayType);
+    //            row += '<td>' + configDisplayType.title + '</td>';
+
+
+    //            row += '<td class="text-right">' + config[i].contentNumber + '</td><td class="text-center">';
+    //            if (config[i].titleImage) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            } else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+
+    //            row += '</td><td class="text-center">';
+    //            if (config[i].summary) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            }
+    //            else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+    //            row += '</td><td class="text-center">';
+    //            if (config[i].extend) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            }
+    //            else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+    //            var configPosition = position.find(x => x.value == config[i].position);
+    //            if (config[i].position != null) {
+    //                var configPosition = position.find(x => x.value == config[i].position);
+    //                row += '</td><td>' + configPosition.title + '</td>';
+    //            }
+    //            else {
+    //                row += '</td><td> </td>';
+    //            }
+
+
+    //            row += '<td class="text-center"><a href="javascipt:;" onclick="DeleteRow(' + i + ')"><i class="fas fa-trash-alt"></i></a></td></tr>';
+
+
+    //            tableConfigBody.append(row);
+    //        }
+    //    }
+
+    //}
+    //function DeleteRow(i) {
+    //    config.splice(i, 1);
+    //    setDataTable();
+    //}
+    function getType() {
+        $.ajax({
+            url: urlDomain + "/displaytype-lookup",
+            method: "GET",
+            success: function (response) {
+                type = response.data;
+
+            }
+        })
+
+    }
+    function getDisplayType() {
+
+        $.ajax({
+            url: urlDomain + "/displaytypeLook-lookup",
+            method: "GET",
+            success: function (response) {
+
+                displayType = response.data;
+            }
+        })
+
+    }
+    function getPosition() {
+
+        $.ajax({
+            url: urlDomain + "/position-lookup",
+            method: "GET",
+            success: function (response) {
+                position = response.data;
+            }
+        })
+
+    }
+</script>

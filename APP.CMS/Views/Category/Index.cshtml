@@ -1,43 +1,39 @@
-﻿@using APP.UTILS
+﻿@using Portal.Utils
 @{
-
+    
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header border-0">
+            <div class="card-header border-0" style="height:60px">
                 <div class="row" id="frmFilter">
-                    <div class="col-12 col-sm-3 col-md-3">
+                    <div class="col-3">
                         <div class="form-group">
-                            <input id="txtSearchUserName" type="text" class="form-control" placeholder="Tên đăng nhập">
+                            <input id="txtSearchName" type="text" class="form-control" placeholder="Tên chuyên mục">
                         </div>
                     </div>
-                    <div class="col-12 col-sm-3 col-md-3">
+                    <div class="col-3">
                         <div class="form-group">
-                            <input id="txtSearchFullName" type="text" class="form-control" placeholder="Tên người dùng">
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-2 col-md-2">
-                        <div class="form-group">
-
-                            <select id="drStatus" class="form-control">
-
-
-                                @{
-                                    var values = Enum.GetValues(typeof(StatusEnum));
-                                    Array.Reverse(values);
-                                    @foreach (var role in values)
-                                    {
-                                        <option value="@((int)role)">@Extensions.GetEnumDescription((StatusEnum)role)</option>
-
-                                    }
-                                }
+                            <select id="drParent" class="form-control">
+                                @*<option value="0">Tất cả danh mục</option>*@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6 col-sm-2 col-md-2">
+
+                    <div class="col-2">
+                        <div class="form-group">
+
+                            <select id="drStatus" class="form-control">
+                                <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                                <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                                <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                                <option value="@((int)StatusEnum.Removed)">@Extensions.GetEnumDescription(StatusEnum.Removed)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2">
                         <div class="form-group">
 
                             <div class="row">
@@ -47,14 +43,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-sm-2 col-md-2">
+                    <div class="col-2">
                         @{
                             if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
                             {
                                 <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
                             }
                         }
-
                     </div>
                 </div>
 
@@ -73,12 +68,14 @@
 <script>
 
     var frmFilter = $('#frmFilter');
-    var urlDomain = "/tai-khoan"
+    var urlDomain = "/chuyen-muc"
     var take = 10
     var skip = 0
 
     $(document).ready(function () {
         getData();
+
+        setParent();
 
         frmFilter.find("#btnSearch").on("click", function () {
             getData();
@@ -87,15 +84,16 @@
             openCreate();
         });
 
-
     })
     function getData() {
         showLoading()
-        var username = frmFilter.find("#txtSearchUserName").val();
-        var fullname = frmFilter.find("#txtSearchFullName").val();
+        var name = frmFilter.find("#txtSearchName").val();
+        var parentId = frmFilter.find("#drParent").val();
         var status = frmFilter.find("#drStatus").val();
+
+
         $.ajax({
-            url: urlDomain + "/get-list?userName=" + username + "&fullName=" + fullname + "&status=" + status,
+            url: urlDomain + "/get-list?name=" + name + "&parentId=" + parentId + "&status=" + status,
             method: "GET",
             data: {
                 title: frmFilter.find("#txtName").val(),
@@ -115,19 +113,30 @@
                 $('#dtTable').find('.btn-delete').css('display', 'none');
 
             }
-        });
+        })
     }
 
     function openCreate() {
+        location.href = urlDomain + '/them-moi';
+    }
+    function setParent() {
+
         $.ajax({
-            url: urlDomain + '/them-moi',
-            method: "Get",
+            url: urlDomain + "/get-parent-id",
+            method: "GET",
             success: function (response) {
-                showContentModal(response, "Tạo  mới tài khoản")
+
+                $.each(response.data, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    $("#drParent").append(newOption);
+
+                })
+                frmFilter.find("#drParent").select2({
+                    theme: "bootstrap4"
+                });
+
             }
-        });
+        })
     }
 
-
 </script>
-

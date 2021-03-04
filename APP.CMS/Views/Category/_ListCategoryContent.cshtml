@@ -1,0 +1,119 @@
+﻿@model List<Portal.Models.Categories>
+@using Portal.Utils
+
+<div class="table-responsive" id="tbThongKe" style="overflow-x:scroll;">
+    <table id="dataTable" class="table table-bordered table-hover table-striped nowrap"
+           width="100%">
+        <thead>
+            <tr>
+                <th style="text-align:center;width:10%"><b>STT</b></th>
+                <th style="text-align:center;width:50%"><b>Tên</b></th>
+                <th style="text-align:center;width:10%"><b>Tổng số bài viết </b></th>
+                <th style="text-align:center;width:10%"><b>Số bài đã xóa</b></th>
+                <th style="text-align:center;width:10%"><b>Số bài chờ duyệt</b></th>
+                <th style="text-align:center;width:10%"><b>Số bài đã duyệt</b></th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @if (Model != null)
+            {
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    var item = Model[i];
+                    var contentDelete = item.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Delete).Count();
+                    var contentUnactive = item.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Approving).Count();
+                    var contentActive = item.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Approved).Count();
+                    <tr id="row_@item.Id">
+                        <td style="text-align:center;width:10%">@(i+1)</td>
+
+                        <td style="width:10%">@item.Name </td>
+                        <td style="text-align:center;width:10%">@item.Contents.Count</td>
+                        <td style="text-align:center;width:10%">@contentDelete</td>
+                        <td style="text-align:center;width:10%">
+                            @contentUnactive
+                        </td>
+                        <td style="text-align:center;width:10%">
+                            @contentActive
+                        </td>
+                    </tr>
+                    
+                    if (Model[i].ListChild != null)
+                    {
+                        var stt = 1;
+                        foreach (var category in Model[i].ListChild)
+                        {
+                            var contentDeleteChild = category.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Delete).Count();
+                            var contentUnactiveChild = category.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Approving).Count();
+                            var contentActiveChild = category.Contents.Where(x => x.Status == (byte)ContentStatusEnum.Approved).Count();
+
+                            <tr id="row_@category.Id">
+                                <td style="text-align:center;width:10%">@(i + 1).@stt</td>
+                                @{stt++;
+                                }
+                                <td style="width:50%">@category.Name </td>
+                                <td style="text-align:center;width:10%">@category.Contents.Count</td>
+                                <td style="text-align:center;width:10%">@contentDeleteChild</td>
+                                <td style="text-align:center;width:10%">
+                                    @contentUnactiveChild
+                                </td>
+                                <td style="text-align:center;width:10%">
+                                    @contentActiveChild
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(".checkStatus").off("click").on('click', function (e) {
+        var id = $(this).val();
+        console.log(id)
+        var status = $(this).prop('checked') ? 1 : 0;
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                Id: id,
+                Status: status
+            }
+            , success: function (response) {
+
+            }
+        })
+    })
+    $(document).ready(function () {
+        $("#dataTable").DataTable({
+
+            "paging": false,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 }
+            ],
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            }
+        });
+
+    });
+
+
+
+
+</script>
+

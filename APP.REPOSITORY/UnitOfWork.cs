@@ -20,6 +20,7 @@ namespace APP.REPOSITORY
         public IRole_PermissionsRepository Role_PermissionsRepository { get; }
         public IAccountsRepository AccountsRepository { get; }
         public IAccountRolesRepository AccountRolesRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -35,6 +36,7 @@ namespace APP.REPOSITORY
             Role_PermissionsRepository = new Role_PermissionsRepository(_dbContext);
             AccountsRepository = new AccountsRepository(_dbContext);
             AccountRolesRepository = new AccountRolesRepository(_dbContext);
+            CategoryRepository = new CategoryRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -66,6 +68,7 @@ namespace APP.REPOSITORY
         public IRole_PermissionsRepository Role_PermissionsRepository { get; }
         public IAccountsRepository AccountsRepository { get; }
         public IAccountRolesRepository AccountRolesRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)

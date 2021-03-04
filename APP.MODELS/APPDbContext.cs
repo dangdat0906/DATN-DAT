@@ -27,5 +27,6 @@ namespace APP.MODELS
         public DbSet<Role_Permissions> Role_Permissions { get; set; }
         public DbSet<Accounts> Accounts { get; set; }
         public DbSet<AccountRoles> AccountRoles { get; set; }
+        public DbSet<Categories> Categories { get; set; }
     }
 }

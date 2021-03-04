@@ -1,0 +1,140 @@
+﻿@using Portal.Utils
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmCreateConfig">
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="cbType">Dạng hiển thi</label>
+                    <select id="cbType" class="form-control col-sm-3">
+                    </select>
+                    <label class="col-form-label col-sm-2" for="cbDisplayType">Chiều hiển thi</label>
+                    <select id="cbDisplayType" class="form-control col-sm-3">
+                    </select>
+
+                </div>
+
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-2" for="txtContentNumber">Số bản tin muốn hiển thị</label>
+                    <input required type="number" id="txtContentNumber" class="form-control col-sm-3" />
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="ckTitleImage">
+                            <label class="form-check-label">Dạng có ảnh</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="ckSummary">
+                            <label class="form-check-label">Dạng có tóm tắt</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="ckExtend">
+                            <label class="form-check-label">Thêm phần mở rộng</label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10" style="display:none" id="extend">
+                        <label class="col-form-label col-sm-5" for="cbPosition">Vị trí hiển thị của phần mở rộng</label>
+                        <select id="cbPosition" class="form-control col-sm-2">
+                        </select>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var frmCreateConfig = $("#frmCreateConfig")
+    var urlDomain = "/chuyen-muc"
+    $(document).ready(function () {
+        addRequired(frmCreateConfig);
+        setSelectDisplayType();
+        setSelectType();
+        setSelectPosition();
+
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        createConfig();
+
+    })
+    frmCreateConfig.find("#ckExtend").change(function () {
+        if (this.checked) {
+
+            $('#extend').css('display', 'block');
+
+        }
+        else {
+            $('#extend').css('display', 'none');
+        }
+
+    });
+    function createConfig() {
+        if (ValidateForm(frmCreateConfig)) {
+            return;
+        }
+        var data = {
+            
+            type: frmCreateConfig.find("#cbType").val(),
+            displayType: frmCreateConfig.find("#cbDisplayType").val(),
+            contentNumber: frmCreateConfig.find("#txtContentNumber").val(),
+            titleImage: frmCreateConfig.find("#ckTitleImage").prop("checked"),
+            summary: frmCreateConfig.find("#ckSummary").prop("checked"),
+            extend: frmCreateConfig.find("#ckExtend").prop("checked"),
+            position: frmCreateConfig.find("#ckExtend").prop("checked") ? frmCreateConfig.find("#cbPosition").val() : null
+        }
+        var existData = config.find(x => x.type == data.type && x.displayType == data.displayType && x.contentNumber == data.contentNumber &&
+            x.titleImage == data.titleImage && x.summary == data.summary && x.extend == data.extend && x.position == data.position);
+        if (existData == null) {
+            config.push(data);
+            setDataTable();
+            hideContentModal();
+        }
+        else {
+            showAlert("Cấu hình đã tồn tại")
+        }
+        
+    }
+    function setSelectType() {
+        var selectType = frmCreateConfig.find("#cbType");
+
+        $.each(type, function (i, item) {
+            var newOption = new Option(item.title, item.value);
+            selectType.append(newOption);
+        });
+    }
+    function setSelectDisplayType() {
+        var selectDisplayType = frmCreateConfig.find("#cbDisplayType");
+        $.each(displayType, function (i, item) {
+            var newOption = new Option(item.title, item.value);
+            selectDisplayType.append(newOption);
+        })
+
+    }
+    function setSelectPosition() {
+        var selectPosition = frmCreateConfig.find("#cbPosition");
+
+        $.each(position, function (i, item) {
+            var newOption = new Option(item.title, item.value);
+            selectPosition.append(newOption);
+        });
+    }
+
+</script>

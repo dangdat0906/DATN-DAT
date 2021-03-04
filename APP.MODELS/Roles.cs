@@ -18,14 +18,14 @@ namespace APP.MODELS
         public String Note { get; set; }
         [Column("Status")]
         public byte Status { get; set; }
-        [Column("CreatedDate")]      
-        public DateTime? CreatedDate { get; set; }
-        [Column("UpdatedDate")]
-        public DateTime? UpdatedDate { get; set; }
-        [Column("CreatedBy")]
-        public long? CreatedBy { get; set; }
-        [Column("UpdatedBy")]
-        public long? UpdatedBy { get; set; }
+        //[Column("CreatedDate")]      
+        //public DateTime? CreatedDate { get; set; }
+        //[Column("UpdatedDate")]
+        //public DateTime? UpdatedDate { get; set; }
+        //[Column("CreatedBy")]
+        //public long? CreatedBy { get; set; }
+        //[Column("UpdatedBy")]
+        //public long? UpdatedBy { get; set; }
         [NotMapped]
         public List<Role_Permissions> Role_Permissions { get; set; }
 

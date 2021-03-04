@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-6 col-sm-2 col-md-2">
                         @{
-                            //if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                            if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
                             {
                                 <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
                             }
@@ -105,11 +105,11 @@
                 hideLoading()
             }
         }).then(function () {
-            @*if (@((int)ViewData[nameof(RolesEnum.Update)]) == 0)*@ {
+            if (@((int)ViewData[nameof(RolesEnum.Update)]) == 0) {
                 $('#dtTable').find('.btn-update').css('display', 'none');
                 $('#dtTable').find('.checkStatus').attr('disabled', 'disabled');
             }
-            @*if (@((int)ViewData[nameof(RolesEnum.Delete)]) == 0)*@ {
+            if (@((int)ViewData[nameof(RolesEnum.Delete)]) == 0) {
                 $('#dtTable').find('.btn-delete').css('display', 'none');
                
             }

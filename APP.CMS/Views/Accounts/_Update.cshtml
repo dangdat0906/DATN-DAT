@@ -11,7 +11,7 @@
                         <input type="text" required name="fullName" value="@Model.FullName" class="form-control col-sm-4" id="txtFullName">
                     </div>
                     <div class="form-group row">
-                        <label class="col-form-label col-sm-3" for="txtPhoneNumber" required>Số điện thoại</label>
+                        <label class="col-form-label col-sm-3" for="txtPhoneNumber" required >Số điện thoại</label>
                         <input type="tel" required class="form-control col-sm-4 phone-format"  data-mask="999 999-9999" value="@Model.PhoneNumber" id="txtPhoneNumber">
                     </div>
                     <div class="form-group row">
@@ -92,9 +92,9 @@
         if (checkValidateSelect2(frmUpdate)) {
             return
         }
-        if (CheckPass($("#txtPass").val())) {
-            return
-        }
+        //if (CheckPass($("#txtPass").val())) {
+        //    return
+        //}
         showLoading();
         $.ajax({
             url: urlDomain + "/sua",

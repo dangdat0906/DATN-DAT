@@ -1,0 +1,160 @@
+﻿@model List<Portal.Models.CategoriesViewModel>
+@using Portal.Utils
+
+<div class="table-responsive" style="overflow-x:scroll;">
+    <table id="dataTable" class="table table-bordered table-hover table-striped nowrap"
+           width="100%">
+        <thead>
+            <tr>
+                <th class="text-right" style="width:10%">STT</th>
+                <th class="w-30">Tên</th>
+                <th class="w-30">Danh mục cha</th>
+                <th class="text-center w-10">Thứ tự</th>
+                <th class="text-center w-10">Trạng thái</th>
+                <th class="text-center w-10">Thao tác</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                var item = Model[i];
+                <tr id="row_@item.Id">
+                    <td class="text-right w-10">@(i+1)</td>
+                    <td class="w-30">@item.Name (@item.ContentCategoryCount)</td>
+                    <td class="w-30" >@item.ParentName</td>
+                    <td class="w-10 text-center" >@item.DisplayOrder</td>
+                    <td class="text-center w-10">
+                        @{
+                            if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                            {
+                                @if (@item.Status == (byte)StatusEnum.Active)
+                                {
+                                    <input class="checkStatus" value="@item.Id" type="checkbox" checked="checked" />
+                                }
+                                @if (@item.Status == (byte)StatusEnum.Unactive)
+                                {
+                                    <input class="checkStatus" value="@item.Id" type="checkbox" />
+                                }
+                            }
+                            else
+                            {
+                                @if (@item.Status == (byte)StatusEnum.Active)
+                                {
+                                    <input class="checkStatus" disabled value="@item.Id" type="checkbox" checked="checked" />
+                                }
+                                @if (@item.Status == (byte)StatusEnum.Unactive)
+                                {
+                                    <input class="checkStatus" disabled value="@item.Id" type="checkbox" />
+                                }
+                            }
+                        }
+                    </td>
+                    <td class="text-center w-10">
+                        @if (@item.Status == (byte)StatusEnum.Removed)
+                        {
+                            <a href="javascript:;" class="btn-delete" onclick="restorn(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                        }
+                        else
+                        {
+                            <a href="javascript:;" class="btn-delete" onclick="deleteItem(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                            <a class="btn-update" href="/chuyen-muc/sua?id=@item.Id"><i class="fas fa-edit"></i></a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(".checkStatus").off("click").on('click', function (e) {
+        var id = $(this).val();
+        console.log(id)
+        var status = $(this).prop('checked') ? 1 : 0;
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                Id: id,
+                Status: status
+            }
+            , success: function (response) {
+
+            }
+        })
+    })
+    $(document).ready(function () {
+        $("#dataTable").DataTable({
+
+            "paging": true,
+            "lengthChange": false,
+            "pageLength": 20,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 2 },
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 },
+                { "orderable": false, "targets": 5 }
+            ],
+            "language": {
+                "emptyTable": "Không có dữ liệu"
+            }
+        });
+
+    });
+
+     function deleteItem(id) {
+
+            $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                id: id,
+                status: @((byte)(StatusEnum.Removed)),
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Xóa dữ liệu thành công", 2)
+
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+
+    }
+    function restorn(id) {
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                id: id,
+                status: 0,
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Khoi dữ liệu thành công", 2)
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+
+    }
+
+
+
+</script>
+

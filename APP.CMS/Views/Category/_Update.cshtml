@@ -1,0 +1,453 @@
+﻿@model Portal.Models.Categories
+@using Portal.Utils
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <form role="form" id="quickForm">
+            <div id="frmUpdate">
+                <input type="hidden" id="txtId" value="@Model.Id" />
+                <input type="hidden" id="txtLang" value="@Model.LangCode" />
+                <div class="form-group row">
+                    <label required class="col-form-label col-sm-2" for="txtName">Tên menu</label>
+                    <input type="text" required name="name" class="form-control col-sm-3" id="txtName" value="@Model.Name">
+                    <label required class="control-label col-sm-2  text-right" for="txtCode">Mã</label>
+                    <input type="text" required name="code" class="form-control col-sm-3" id="txtCode" value="@Model.Code">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="cbParentId">Danh mục cha</label>
+                    <select id="cbParentId" class="form-control col-sm-3">
+                        <option value="0">--------</option>
+                    </select>
+                    <input type="hidden" value="@Model.ParentId" id="parentId" />
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="cbListContentType">Kiểu hiển thị</label>
+                    <select id="cbListContentType" class="form-control col-sm-3">
+                        <option value="@((int)ListContentTypeEnum.Doc)">@Extensions.GetEnumDescription(ListContentTypeEnum.Doc)</option>
+                        <option value="@((int)ListContentTypeEnum.Ngang)">@Extensions.GetEnumDescription(ListContentTypeEnum.Ngang)</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtNote" required>Ghi chú</label>
+                    <input type="text" name="note" required class="form-control col-sm-8" id="txtNote" value="@Model.Note">
+                </div>
+                <div class="form-group row">
+
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtMenuDisplay" required>Tên hiển thi menu</label>
+                    <input type="text" name="menuDisplay" required class="form-control col-sm-8" id="txtMenuDisplay" value="@Model.MenuDisplay">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtGroupDisplay" required>Tên hiển thị group</label>
+                    <input type="text" name="displayGroup" required class="form-control col-sm-8" id="txtGroupDisplay" value="@Model.GroupDisplay">
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2" for="txtDisplayOrder">Thứ tự hiển thị</label>
+                    <input type="number" name="displayOrder" class="form-control col-sm-3" id="txtDisplayOrder" value="@Model.DisplayOrder">
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3"></div>
+                    @{
+                        if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                        {
+                            <div class="col-sm-2">
+                                <div class="form-check">
+                                    @if (Model.Status == 1)
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="ckStatus" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="ckStatus">
+                                    }
+                                    <label class="form-check-label">Trạng thái</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    @if (Model.IsMenu == true)
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="ckIsMenu" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="ckIsMenu">
+                                    }
+                                    <label class="form-check-label">Hiển thị trên thanh danh mục</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    @if (Model.OnHome == true)
+                                    {
+
+                                        <input type="checkbox" class="form-check-input" checked id="ckOnHome">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="form-check-input" id="ckOnHome">
+                                    }
+                                    <label class="form-check-label">Hiển thị trên trang chủ</label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-sm-2">
+                                <div class="form-check">
+                                    @if (Model.Status == 1)
+                                    {
+                                        <input type="checkbox" disabled class="form-check-input" id="ckStatus" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" disabled class="form-check-input" id="ckStatus">
+                                    }
+                                    <label class="form-check-label">Trạng thái</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    @if (Model.IsMenu == true)
+                                    {
+                                        <input type="checkbox" disabled class="form-check-input" id="ckIsMenu" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" disabled class="form-check-input" id="ckIsMenu">
+                                    }
+                                    <label class="form-check-label">Hiển thị trên thanh danh mục</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-check">
+                                    @if (Model.OnHome == true)
+                                    {
+
+                                        <input type="checkbox" disabled class="form-check-input" checked id="ckOnHome">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" disabled class="form-check-input" id="ckOnHome">
+                                    }
+                                    <label class="form-check-label">Hiển thị trên trang chủ</label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                @{
+                    if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                    {
+                        if (Model.OnHome == true)
+                        {
+                            <div id="divDisplayOnHome" style="display:block">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-3" for="drDisplayOnhome">Kiểu hiển thị(trang chủ)</label>
+                                    <div class="col-sm-9 row">
+                                        <select id="drDisplayOnhome" class="col-sm-3 form-control">
+                                            <option value="@((int)DisplayCateOnhomeEnum.Column)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Column)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Row)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Mix)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Mix)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Row5050)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row5050)</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="divDisplayOnHome" style="display:none">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-3" for="drDisplayOnhome">Kiểu hiển thị(trang chủ)</label>
+                                    <div class="col-sm-9 row">
+                                        <select id="drDisplayOnhome" class="col-sm-3 form-control">
+                                            <option value="@((int)DisplayCateOnhomeEnum.Column)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Column)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Row)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Mix)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Mix)</option>
+                                            <option value="@((int)DisplayCateOnhomeEnum.Row5050)">@Extensions.GetEnumDescription(DisplayCateOnhomeEnum.Row5050)</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+                }
+
+
+                @*<div class="form-group row">
+                        <label class="col-form-label col-sm-2" required>Cấu hình chuyên mục</label>
+                        <a href="javascript:;" onclick="openCreateConfig()"><i class="fas fa-plus-circle fa-2x"></i></a>
+
+                    </div>*@
+                @*<table id="tableConfig" class="table table-bordered table-hover table-striped nowrap" style="margin-top:30px">
+                        <thead>
+                            <tr>
+                                <th class="text-center">STT</th>
+                                <th>Kiểu hiển thị</th>
+                                <th>Chiều hiển thị</th>
+                                <th>Số bản tin</th>
+                                <th>Có ảnh</th>
+                                <th>Có tóm tắt</th>
+                                <th>Phần mở rộng</th>
+                                <th>Phía</th>
+                                <th class="text-center">Thao tác</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody id="tableConfigBody">
+                        </tbody>
+                    </table>*@
+            </div>
+        </form>
+    </div>
+</div>
+<div id="btn" style="margin-top:40px">
+    <button type="button" id="btbExit" class="btn btn-danger pull-left" data-dismiss="modal">Trở lại</button>
+    <button type="button" id="btnUpdate" class="btn btn-primary">Lưu</button>
+</div>
+<script>
+    var urlDomain = "/chuyen-muc";
+    var frmUpdate = $("#frmUpdate")
+    var config = [];
+    var type = [];
+    var displayType = [];
+    var position = [];
+    $(document).ready(function () {
+        addRequired(frmUpdate);
+        getType();
+        getDisplayType();
+        getPosition();
+        //getConfig();
+        setParentId();
+        setDisplayOnHome()
+        //setDataTable();
+        frmUpdate.find('#cbListContentType').val(@(Model.ListContentType));
+
+    });
+    $('#btn').find('#btnUpdate').off("click").on('click', function (e) {
+        e.preventDefault();
+        update();
+
+    })
+    frmUpdate.find("#txtName").off('keyup').on('keyup', function () {
+        var name = $("#txtName").val();
+        var code = removeAccents2(name);
+        $("#txtCode").val(code);
+    });
+    $('#btn').find('#btbExit').off("click").on('click', function (e) {
+        e.preventDefault();
+        location.href = urlDomain + '/danh-sach';
+
+    });
+    function setDisplayOnHome() {
+        if ('@Model.DisplayOnHomeType.HasValue' == 'True') {
+            $("#frmUpdate").find('#drDisplayOnhome').val(@Model.DisplayOnHomeType).trigger('change')
+        }
+        $("#frmUpdate").find('#ckOnHome').change(function () {
+            if ($(this).is(":checked")) {
+                $("#frmUpdate").find('#divDisplayOnHome').css('display', 'block')
+            }
+            else {
+                $("#frmUpdate").find('#divDisplayOnHome').css('display', 'none')
+            }
+        })
+    }
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                inputModel: {
+                    Id: frmUpdate.find('#txtId').val(),
+                    Name: frmUpdate.find('#txtName').val(),
+                    Code: frmUpdate.find('#txtCode').val(),
+                    Note: frmUpdate.find('#txtNote').val(),
+                    ParentId: frmUpdate.find('#cbParentId').val(),
+                    LangCode: frmUpdate.find('#txtLang').val(),
+                    MenuDisplay: frmUpdate.find('#txtMenuDisplay').val(),
+                    GroupDisplay: frmUpdate.find('#txtGroupDisplay').val(),
+                    DisplayOrder: frmUpdate.find('#txtDisplayOrder').val(),
+                    Status: frmUpdate.find('#ckStatus').prop('checked') ? 1 : 0,
+                    IsMenu: frmUpdate.find('#ckIsMenu').prop('checked'),
+                    OnHome: frmUpdate.find('#ckOnHome').prop('checked'),
+                    ListContentType: frmUpdate.find('#cbListContentType').val(),
+                    DisplayOnHomeType: frmUpdate.find('#drDisplayOnhome').val()
+                },
+                configs: config
+
+
+            }
+
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    showAlert(response.message, 2)
+                    location.href = urlDomain + "/danh-sach"
+
+                } else {
+                    showAlert(response.message)
+                }
+            }, error: function (data) {
+                console.debug(data);
+            }
+        })
+    }
+    //function openCreateConfig() {
+    //    $.ajax({
+    //        url: urlDomain + "/create-config",
+    //        method: "Get",
+    //        success: function (response) {
+    //            showContentModal(response, "Thêm mới cấu cho chuyên mục");
+
+    //        }
+    //    })
+    //}
+    function setParentId() {
+        var selectParent = frmUpdate.find("#cbParentId");
+        $.ajax({
+            url: urlDomain + "/get-parent-id",
+            method: "GET",
+            success: function (response) {
+
+                $.each(response.data, function (i, item) {
+                    if (i > 0) {
+                        if (item.value == $("#parentId").val()) {
+                            var newOption = new Option(item.title, item.value, false, true);
+                            selectParent.append(newOption);
+                        }
+                        else {
+                            var newOption = new Option(item.title, item.value);
+                            selectParent.append(newOption);
+                        }
+                    }
+                });
+            }
+        })
+        selectParent.select2();
+
+    }
+    //function setDataTable() {
+    //    console.log(config);
+
+    //    var tableConfigBody = $("#tableConfigBody");
+    //    tableConfigBody.html("");
+    //    if (config != null) {
+    //        for (var i = 0; i < config.length; i++) {
+
+    //            var row = "<tr>" +
+    //                '<td class="text-center">' + (i + 1) + '</td >';
+
+    //            var configType = type.find(x => x.value == config[i].type);
+
+    //            row += '<td>' + configType.title + ' </td>';
+    //            var configDisplayType = displayType.find(x => x.value == config[i].displayType);
+    //            row += '<td>' + configDisplayType.title + '</td>';
+
+
+    //            row += '<td class="text-right">' + config[i].contentNumber + '</td><td class="text-center">';
+    //            if (config[i].titleImage) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            } else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+
+    //            row += '</td><td class="text-center">';
+    //            if (config[i].summary) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            }
+    //            else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+    //            row += '</td><td class="text-center">';
+    //            if (config[i].extend) {
+    //                row += '<input type="checkbox" checked disabled />';
+    //            }
+    //            else {
+    //                row += '<input type="checkbox"  disabled />';
+    //            }
+    //            var configPosition = position.find(x => x.value == config[i].position);
+    //            if (config[i].position != null) {
+    //                var configPosition = position.find(x => x.value == config[i].position);
+    //                row += '</td><td>' + configPosition.title + '</td>';
+    //            }
+    //            else {
+    //                row += '</td><td> </td>';
+    //            }
+
+
+    //            row += '<td class="text-center"><a href="javascipt:;" onclick="DeleteRow(' + i + ')"><i class="fas fa-trash-alt"></i></a></td></tr>';
+
+
+    //            tableConfigBody.append(row);
+    //        }
+    //    }
+
+    //}
+    //function DeleteRow(i) {
+    //    config.splice(i, 1);
+    //    setDataTable();
+    //}
+    function getType() {
+        $.ajax({
+            url: urlDomain + "/displaytype-lookup",
+            method: "GET",
+            success: function (response) {
+                type = response.data;
+
+            }
+        })
+
+    }
+    function getDisplayType() {
+
+        $.ajax({
+            url: urlDomain + "/displaytypeLook-lookup",
+            method: "GET",
+            success: function (response) {
+
+                displayType = response.data;
+            }
+        })
+
+    }
+    function getPosition() {
+
+        $.ajax({
+            url: urlDomain + "/position-lookup",
+            method: "GET",
+            success: function (response) {
+                position = response.data;
+            }
+        })
+
+    }
+
+    //function getConfig() {
+
+    //    $.ajax({
+    //        url: urlDomain + "/get-config?categoryid=" + frmUpdate.find('#txtId').val(),
+    //        method: "GET",
+    //        success: function (response) {
+    //            config = response.data;
+    //            setDataTable();
+    //        }
+    //    });
+
+    //}
+
+
+</script>

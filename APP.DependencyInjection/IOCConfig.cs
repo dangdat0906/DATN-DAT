@@ -30,6 +30,7 @@ namespace APP.DependencyInjection
             services.AddTransient<IRolesManger, RolesManager>();
             services.AddTransient<IRole_PermissionsManager, Role_PermissionsManager>();
             services.AddTransient<IAccountRolesManager, AccountRolesManager>();
+            services.AddTransient<ICategoryManager, CategoryManager>();
         }
     }
 }
