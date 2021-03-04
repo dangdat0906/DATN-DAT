@@ -28,5 +28,6 @@ namespace APP.MODELS
         public DbSet<Accounts> Accounts { get; set; }
         public DbSet<AccountRoles> AccountRoles { get; set; }
         public DbSet<Categories> Categories { get; set; }
+        public DbSet<Contents> Contents { get; set; }
     }
 }
