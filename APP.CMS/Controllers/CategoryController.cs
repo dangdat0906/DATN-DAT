@@ -51,7 +51,7 @@ namespace APP.CMS.Controllers
             var permission = UTILS.SessionExtensions.Get<List<Role_Permissions>>(_session, UTILS.SessionExtensions.SesscionPermission);
             var currentPagePermission = permission.Where(c => c.MenuUrl.ToLower().Contains(controllerName.ToLower())).ToList();
             ViewData[nameof(RolesEnum.Approval)] = currentPagePermission.Count(c => c.ActionCode == (nameof(RolesEnum.Approval))) > 0 ? 1 : 0;
-            var data = await HttpHelper.GetData<List<CategoriesViewModel>>($"{_domain}/api/chuyen-muc/get-list", $"name={name}&parentId={parentId}&status={status}&langcode={langcode}");
+            var data = await HttpHelper.GetData<List<CategoriesViewModel>>($"{_domain}/api/chuyen-muc/get-list", $"name={name}&parentId={parentId}&status={status}");
             return PartialView("_List", data);
         }
 
@@ -81,23 +81,18 @@ namespace APP.CMS.Controllers
         }
         [CustomAuthen]
         [HttpPost("create-or-update")]
-        public async Task<IActionResult> CreateOrUpdate(Categories inputModel, List<ConfigCategories> configs)
+        public async Task<IActionResult> CreateOrUpdate(Categories inputModel, List<Categories> configs)
         {
             try
             {
-                var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
                 if (inputModel.Id == 0)
                 {
-                    inputModel.Config = configs;
-                    inputModel.LangCode = langcode;
                     var data = await HttpHelper.PostData<Categories>(inputModel, $"{_domain}/api/chuyen-muc/create");
                     CreateFolder(data.Code);
                     return Json(new { Result = true, Message = "Thêm mới dữ liệu thành công!" });
                 }
                 else
                 {
-                    inputModel.Config = configs;
-                    inputModel.LangCode = langcode;
                     var data = await HttpHelper.PostData<Categories>(inputModel, $"{_domain}/api/chuyen-muc/update");
                     //RenameFolder(data.Code, inputModel.Code);
                     return Json(new { Result = true, Message = "Cập nhật dữ liệu thành công" });
@@ -134,8 +129,7 @@ namespace APP.CMS.Controllers
         {
             try
             {
-                var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
-                var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/chuyen-muc/look-up",$"langCode={langcode}");
+                var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/chuyen-muc/look-up");
 
                 data.Insert(0, new LookupModels() { Value = 0, Title = "Tất cả" });
                 return Json(new { Data = data });
@@ -152,20 +146,20 @@ namespace APP.CMS.Controllers
             return PartialView("_CreateConfig");
         }
 
-        [HttpPost("create-config")]
-        public async Task<IActionResult> CreateConfig(ConfigCategories inputModel)
-        {
-            try
-            {
-                await HttpHelper.PostData<ConfigCategories>(inputModel, $"{_domain}/api/config-category/create");
-                return Json(new { Result = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Message = ex.Message });
-            }
+        //[HttpPost("create-config")]
+        //public async Task<IActionResult> CreateConfig(ConfigCategories inputModel)
+        //{
+        //    try
+        //    {
+        //        await HttpHelper.PostData<ConfigCategories>(inputModel, $"{_domain}/api/config-category/create");
+        //        return Json(new { Result = true });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { Message = ex.Message });
+        //    }
 
-        }
+        //}
         [HttpGet("displaytypeLook-lookup")]
         public async Task<IActionResult> DisplayTypeLook_Lookup()
         {
@@ -211,19 +205,19 @@ namespace APP.CMS.Controllers
             }
             return Json(new { Result = false, data = data });
         }
-        [HttpGet("get-config")]
-        public async Task<IActionResult> GetConfig(long categoryId)
-        {
-            try
-            {
-                var data = await HttpHelper.GetData<List<ConfigCategories>>($"{_domain}/api/config-category/find-by-category-id", $"id={categoryId}");
-                return Json(new { Result = true, data = data });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { Result = false, Message = ex.Message });
-            }
-        }
+        //[HttpGet("get-config")]
+        //public async Task<IActionResult> GetConfig(long categoryId)
+        //{
+        //    try
+        //    {
+        //        var data = await HttpHelper.GetData<List<ConfigCategories>>($"{_domain}/api/config-category/find-by-category-id", $"id={categoryId}");
+        //        return Json(new { Result = true, data = data });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { Result = false, Message = ex.Message });
+        //    }
+        //}
         [CustomAuthen]
         [HttpPost("delete-or-restore")]
         public async Task<IActionResult> Delete(Categories inputmodel)
