@@ -1,0 +1,261 @@
+﻿@using APP.UTILS
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <label class="col-sm-2">Chọn thư mục</label>
+                <label class="col-sm-2">Chọn loại</label>
+            </div>
+            <div class="row" id="frmFilterMedia">
+                <div class="col-sm-2">
+                    <div class="input-group col-10">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control float-right datepicker" id="txtSearch">
+            </div>
+                    <select id="dlCategory" class="form-control" data-placeholder="Chọn Folder" style="width: 100%;"></select>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select id="drStatus" class="form-control">             
+                            <option selected value="@((int)MediaTypeEnum.Image)">@Extensions.GetEnumDescription(MediaTypeEnum.Image)</option>
+                            <option value="@((int)MediaTypeEnum.Video)">@Extensions.GetEnumDescription(MediaTypeEnum.Video)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="col-sm-6 d-flex flex-row-reverse row">
+                    <div class="form-group ml-1">
+                        <button id="btnCreateImg" class="btn btn-success">Thêm ảnh</button>
+                    </div>
+                    <div class="form-group ml-1">
+                        <button id="btnCreateVideo" class="btn btn-success">Thêm Video</button>
+                    </div>
+                    <div class="form-group ml-1">
+                        <button id="btnDelete" style="display:none" class="btn btn-danger">Xóa</button>
+                    </div>
+                    <div class="form-group ml-1">
+                        <button id="btnChoose" style="display:none" class="btn btn-success">Thêm vào bài</button>
+                    </div>
+                    <div class="form-group ml-1">
+                        <button id="btnSelect" class="btn btn-primary">Chọn</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="dataTable" class="card-body">
+
+        </div>
+    </div>
+</div>
+<script>
+    var urlDomainMedia = "/da-phuong-tien";
+    var take = 10;
+    var skip = 0;
+    $(document).ready(function () {
+        setFolderMedia()
+        //setIndexSelect2();
+        //getData(1, 1, "", 1)
+        searchingMedia();
+        //$('#frmFilterMedia').find('#btnCreateImg').on('click', function () {
+        //    openCreateImg();
+        //}); $('#frmFilterMedia').find('#btnCreateVideo').on('click', function () {
+        //    openCreateVideo();
+        //});
+        $('#frmFilterMedia').find('#btnSelect').on('click', function () {
+            if ($('#dataTable').find('.listcheckbox').css('display') == "none") {
+                $('#dataTable').find('.listcheckbox').css('display', 'block')
+                //$('#frmFilterMedia').find('#btnDelete').css('display', 'block')
+                $('#frmFilterMedia').find('#btnChoose').css('display', 'block')
+            } else {
+                $('#dataTable').find('.listcheckbox').css('display', 'none')
+                //$('#frmFilterMedia').find('#btnDelete').css('display', 'none')
+                $('#frmFilterMedia').find('#btnChoose').css('display', 'none')
+            }
+        })
+        $('#frmFilterMedia').find('#btnDelete').on('click', function () {
+            var listId = [];
+            $('#dataTable').find('input[type="checkbox"]').each(function () {
+                if ($(this).is(":checked")) {
+                    listId.push($(this).val());
+                }
+                else {
+                    //$('#frmFilterMedia').find('#btnDelete').css('display', 'none')
+                    $('#frmFilterMedia').find('#btnChoose').css('display', 'none')
+                    $('#dataTable').find('.listcheckbox').css('display', 'none')
+                }
+            })
+            if (listId.length > 0) {
+                openDelete(listId);
+            }
+        })
+        $('#frmFilterMedia').find('#btnChoose').on('click', function () {
+            var listUrlImg = [];
+            var listUrlVideo = [];
+            
+            $('#dataTable').find('.listimg').each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).attr('data-type') == "img") {
+                        listUrlImg.push($(this).attr('data-url'));
+                    }
+                }
+                else {
+                    //$('#frmFilterMedia').find('#btnDelete').css('display', 'none')
+                    $('#frmFilterMedia').find('#btnChoose').css('display', 'none')
+                    $('#dataTable').find('.listcheckbox').css('display', 'none')
+                }
+            })
+            $('#dataTable').find('.listvideo').each(function () {
+                if ($(this).is(":checked")) {
+                    if ($(this).attr('data-type') == "video") {
+                        listUrlVideo.push($(this).attr('data-url'));
+                    }  
+                }
+                else {
+                    //$('#frmFilterMedia').find('#btnDelete').css('display', 'none')
+                    $('#frmFilterMedia').find('#btnChoose').css('display', 'none')
+                    $('#dataTable').find('.listcheckbox').css('display', 'none')
+                }
+            })
+            if (listUrlImg.length > 0) {
+                insertImgToContent(listUrlImg);
+            }
+            if (listUrlVideo.length > 0) {
+                insertVideoToContent(listUrlVideo)
+                //List_Video_Url(listUrlVideo);
+            }
+        })
+
+    })
+    function searchingMedia() {
+        $('#frmFilterMedia').find('#btnSearch').off('click').on('click', function () {
+            var folder = normalVNese($('#frmFilterMedia').find('#dlCategory option:selected').text())
+            var type = $('#frmFilterMedia').find('#drStatus').val()
+            getData(1,type, folder, 1)
+        })
+
+    }
+    function insertImgToContent(listUrlImg) {
+        for (var i = 0; i < listUrlImg.length; i++) {
+            $("#txtContent").summernote("insertImage", location.origin + '/' + listUrlImg[i], '');
+        }
+    }
+    function insertVideoToContent(listUrlVideo) {
+        for (var i = 0; i < listUrlVideo.length; i++) {
+            var div = document.createElement('div');
+            div.classList.add('embed-container');
+            var iframe = document.createElement('iframe');
+            iframe.src = listUrlVideo[i];
+            iframe.setAttribute('frameborder', 0);
+            iframe.setAttribute('width', '640');
+            iframe.setAttribute('height', '360');
+            iframe.setAttribute('allowfullscreen', true);
+            div.appendChild(iframe);
+            $("#txtContent").summernote("insertNode", div);
+            
+        }
+        return listUrlVideo;
+    }
+    function openDelete(listId) {
+        $.ajax({
+            url: urlDomainMedia + "/form-delete",
+            method: "Get",
+            success: function (response) {
+                showDeleteModal(response)
+            }
+        }).then(function () {
+            $('#modal-delete').find('#btnDelete').off('click').on('click', function (e) {
+                e.preventDefault;
+                $.ajax({
+                    url: urlDomainMedia + "/delete",
+                    method: "Post",
+                    data: { listId: listId }
+                    ,
+                    success: function (response) {
+                        if (response.result) {
+                            // datasource = response.data
+                            showAlert(response.message, 2)
+                            getData("", 1, 1)
+                            hideDeleteModal()
+                        } else {
+                            showAlert(response.message)
+                        }
+
+                    }
+                })
+            })
+        })
+
+    }
+    function openCreateImg() {
+        $.ajax({
+            url: urlDomainMedia + "/createImg",
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Thêm Ảnh")
+            }
+        })
+    }
+    function openCreateVideo() {
+        $.ajax({
+            url: urlDomainMedia + "/createVideo",
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Thêm Video")
+            }
+        })
+    }
+    function getData(status,type, folder, pageNumber) {
+        showLoading()
+        $.ajax({
+            url: urlDomain + "/get-list-media?status=" + status + "&type=" + type +"&folder="+folder+ "&pageNumber=" + pageNumber + "&pageSize=",
+            method: "GET",
+            data: {
+                url: $('#frmFilterMedia').find('#txtName').val(),
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                if (response.result == false) {
+                    showAlert(response.Message)
+                }
+                else {
+                    $('#dataTable').html(response);
+                    hideLoading()
+                }
+
+            }
+        }).then(function () {
+            setPageNumberActive(pageNumber);
+        })
+    }
+    function setIndexSelect2() {
+        $('#frmFilterMedia').find('#dlCategory').select2()
+        setFolder()
+    }
+    function setPageNumberActive(pageNumber) {
+        $('#dataTable').find('#pagination').find('#' + pageNumber).addClass('active')
+    }
+    function setFolderMedia() {
+        $.ajax({
+            url: urlDomainMedia + "/category-getlistchild",
+            method: "GET",
+            success: function (response) {
+                    //if(user.role = )
+                    $('#frmFilterMedia').find("#dlCategory")
+                        .select2ToTree({
+                            treeData: { dataArr: response.data, valFld: "id", labelFld: "name", incFld: "listChild" }
+                            , maximumSelectionLength: 30
+                        });
+            }
+        })
+    }
+</script>
+

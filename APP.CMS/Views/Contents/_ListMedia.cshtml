@@ -1,0 +1,49 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@model IPagedList<APP.MODELS.Medias>
+@using APP.UTILS
+
+<div>
+    <div id="listImg" class="filter-container p-0 row">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var item = Model[i];
+            if (item.Type == (int)MediaTypeEnum.Image)
+            {
+                <div class="filtr-item col-sm-2 mb-1" id="dvImg" data-datetime="@item.CreatedDate" data-toggle="lightbox" data-sort="white sample">
+                    <input type="checkbox" style="display:none" data-url="@item.Url" data-type="img" value="@item.Id" class="custom-checkbox mb-1 listimg listcheckbox" />
+                    <a href="javascript:;" data-title="sample 1 - white">
+                        <img src="@item.Url" class="img-fluid mb-2" alt="white sample" />
+                    </a>
+                </div>
+            }
+            if (item.Type == (int)MediaTypeEnum.Video)
+            {
+                @*<div class="filtr-item col-sm-4 mb-1" id="dvImg" data-datetime="@item.CreatedDate" data-toggle="lightbox" data-sort="white sample">
+                        <input type="checkbox" style="display:none" value="@item.Id" class="custom-checkbox mb-1 listcheckbox" />
+                            <video class="w-auto h-auto" controls>
+                                <source src="@item.Url" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                    </div>*@
+                <div class="filtr-item col-sm-4 mb-1" id="dvImg" data-datetime="@item.CreatedDate" data-toggle="lightbox" data-sort="white sample">
+                    <input type="checkbox" style="display:none" data-url="@item.Url" data-type="video" value="@item.Id" class="custom-checkbox mb-1 listvideo listcheckbox" />
+                    <iframe class="w-auto h-auto" allowfullscreen src="@item.Url">
+                    </iframe>
+                </div>
+
+            }
+        }
+    </div>
+
+    <ul id="pagination" class="pagination">
+        @{
+            var countNumber = (int)ViewBag.dataCount;
+            for (int i = 0; i < countNumber; i++)
+            {
+                <li id="@(i+1)" class="page-item"><a onclick="openPageItem(@(i+1))" class="page-link" href="javascipt:;">@(i+1)</a></li>
+            }
+        }
+    </ul>
+</div>
+

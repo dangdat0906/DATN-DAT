@@ -1,0 +1,535 @@
+﻿@model APP.MODELS.Contents
+@using APP.UTILS
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+    <div id="frmEdit" class="form-group">
+        <input type="hidden" value="@Model.Id" id="hdId" />
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label required class="col-form-label">Tiêu đề</label>
+            </div>
+            <div class="col-sm-10">
+                <input type="text" required class="form-control" id="txtTitle" placeholder="Tên tiêu đề" value="@Model.Title">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label required for="dlContentType" class="col-form-label">Thể loại tin</label>
+            </div>
+            <div class="col-sm-4">
+                <select required id="dlContentType" class="form-control" style="width: 100%;"></select>
+            </div>
+            <div class="col-sm-2 text-right">
+                <label required for="dlContentType" class="col-form-label">Nguồn tin</label>
+            </div>
+            <div class="col-sm-4">
+                <select required id="dlNewsSource" class="form-control" style="width: 100%;"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label required class="col-form-label">Chuyên mục</label>
+            </div>
+            <div class="col-sm-4">
+                <select required id="dlCategoryContent" multiple data-placeholder="Chọn chuyên mục" style="width: 100%;"></select>
+            </div>
+            <div class="col-sm-2 text-right">
+                <label required class="col-form-label">Tác giả</label>
+            </div>
+            <div class="col-sm-4">
+                <select required id="dlAuthor" class="select2 form-control" style="width: 100%;"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label for="txtUrl" class="col-form-label">Đường dẫn(Url)</label>
+            </div>
+            <div class="col-sm-10">
+                <!-- /btn-group -->
+                <input type="text" placeholder="Đường dẫn bài viết" id="txtUrl" class="form-control col-sm-8" value="@Model.Url">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label for="txtImageUrl" class="col-form-label">Ảnh tiêu đề</label>
+            </div>
+            <div id="divTitleImg" class="col-sm-2">
+                <img src="@Model.TitleImage" class="h-100 w-100" />
+            </div>
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" value="@Model.TitleImage" id="files">
+                        <label class="custom-file-label" for="exampleInputFile">Chọn file</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label>Tiêu điểm</label>
+            </div>
+            @{
+                if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                {
+                    <div class="row align-items-center col-sm-10">
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="ckbShowOnTop">
+                                <label class="form-check-label" for="ckbShowOnTop">Đưa lên đầu(Trái)</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="ckbShowOnRightTop">
+                                <label class="form-check-label" for="ckbShowOnRightTop">Đưa lên đầu(Phải)</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row align-items-center col-sm-10">
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input type="checkbox" disabled class="form-check-input" id="ckbShowOnTop">
+                                <label class="form-check-label" for="ckbShowOnTop">Đưa lên đầu(Trái)</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-check">
+                                <input type="checkbox" disabled class="form-check-input" id="ckbShowOnRightTop">
+                                <label class="form-check-label" for="ckbShowOnRightTop">Đưa lên đầu(Phải)</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label class="col-form-label" required for="dtPublishedDate">Ngày đăng tải</label>
+            </div>
+            <div class="col-sm-10">
+                <div class="input-group col-sm-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                    <input type="text" autocomplete="off" required placeholder="Ngày đăng tải" value="@Model.PublishDate?.ToString("dd/MM/yyyy HH:mm:ss")" class="form-control float-right datepicker" id="dtPublishedDate">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label class="col-form-label" for="txtSource">Nguồn/Tác giả</label>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="txtSource" placeholder="Nguồn/Tác giả" value="@Model.Source">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label class="col-form-label" for="txtSummary">Trích dẫn</label>
+            </div>
+            <div class="col-sm-10">
+                <textarea style="height:100px" class="form-control" id="txtSummary"> @Model.Summary</textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label class="col-form-label">Nhóm tin/Hastag</label>
+            </div>
+            <div class="col-sm-10 row">
+                <div class="col-sm-5">
+                    <select id="dlGroup" class="select2 form-control" multiple="multiple" data-placeholder="Chọn nhóm tin/HasTag" style="width: 100%;">
+                    </select>
+                </div>
+                <a href="javascript:;" class="my-auto" id="btnCreateGroup"><i class="fas fa-plus-circle"></i></a>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label class="col-form-label" for="txtContent">Nội dung</label>
+            </div>
+            <div class="col-sm-10">
+                <textarea class="textarea" id="txtContent"> @Model.Content</textarea>
+            </div>
+        </div>
+        <div class="form-group d-flex justify-content-center row">
+            <button id="btnSaveContent" class="btn btn-success ml-1">Lưu</button>
+            <button id="btnClose" class="btn btn-danger ml-1">Trở về</button>
+        </div>
+    </div>
+<script>
+
+
+    var frmEdit = $('#frmEdit');
+    var urlDomain = "/bai-viet";
+    var contentId = frmEdit.find('#hdId').val()
+    $(document).ready(function () {
+        addRequired(frmEdit);
+        $('.select2').select2();
+        bsCustomFileInput.init();
+        setButton();
+        setDatetime();
+        @*$('#frmEdit').find('#dtPublishedDate').val('@Model.PublishDate?.ToString("dd/MM/yyyy HH:mm:ss")')*@
+        setTextArea();
+        setTitleImage(); //set Title Image if exist or not
+        setTophot(); // all element of Tophot
+        setContentGroup();
+        setContent_Category();
+        //setContentType();
+        setType();
+        setNewsSource();
+        //setAuthor();
+    });
+    function setType() {
+        $('#frmEdit').find('#dlContentType').select2()
+        $.ajax({
+            url: urlDomain + "/contenttype-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                        var newOption = new Option(item.title, item.value, false, true);
+                    $('#frmEdit').find("#dlContentType").append(newOption);
+                })
+            }
+        }).then(function () {
+            $('#frmEdit').find("#dlContentType").val(@((int)Model.ContentType.Value)).trigger('change');
+        })
+    }
+    function setButton() {
+        $('#frmEdit').find('#btnSaveContent').off("click").on('click', function (e) {
+            e.preventDefault();
+            UploadtitleImage();
+        });
+        //Btn Đóng
+        $('#frmEdit').find('#btnClose').off("click").on('click', function (e) {
+            e.preventDefault();
+            returnIndex();
+        });
+        //Btn Duyệt
+        $('#frmEdit').find('#btnApprove').off("click").on('click', function (e) {
+            e.preventDefault();
+            //approveContent(); set ContentStt = 3
+        });
+        //Btn Hủy
+        $('#frmEdit').find('#btnReject').off("click").on('click', function (e) {
+            e.preventDefault();
+            //RejectContent(); // set ContentStt = 1
+        });
+        //Btn Tạo url
+        //$('#frmUpdate').find('#btnViewTitleImage').off('click').on('click', function (e) {
+        //    e.preventDefault();
+        //    openViewTileImage();
+        //})
+        //Btn tạo nhóm tin
+        $('#frmEdit').find('#btnCreateGroup').off("click").on("click", function (e) {
+            e.preventDefault();
+            createGroup_frmEdit();
+        })
+        $('#frmEdit').find('#txtTitle').on('blur', function (e) {
+            CreateUrl();
+        });
+    }
+    function update(imageUrl, imgWidth, imgHeight) {
+        if (ValidateForm(frmEdit)) {
+            return;
+        }
+        showLoading();
+        var dateString = $('#frmEdit').find('#dtPublishedDate').val().replaceAll('/', '-');
+        var publishedDate = moment(convertToDateTime(dateString)).format('YYYY-MM-DD HH:mm:ss');
+        //var publishedDate = moment($('#frmEdit').find('#dtPublishedDate')).format("YYYY/MM/DD HH:mm:ss");
+        $.ajax({
+            url: urlDomain + "/update",
+            method: "POST",
+            data: {
+                Id: frmEdit.find('#hdId').val(),
+                Title: $('#frmEdit').find('#txtTitle').val(),
+                Summary: $('#frmEdit').find('#txtSummary').val(),
+                Content: $('#frmEdit').find('#txtContent').val(),
+                Url: $('#frmEdit').find('#txtUrl').val(),
+                Source: $('#frmEdit').find('#txtSource').val(),
+                Status: @((int)ContentStatusEnum.Approved),
+                PublishDate: publishedDate,
+                TitleImage: imageUrl,
+                ContentType: $('#frmEdit').find('#dlContentType').val(),
+                ShowOnTop: $('#frmEdit').find('#ckbShowOnTop').prop("checked") ? true : false,
+                ShowOnRightTop: $('#frmEdit').find('#ckbShowOnRightTop').prop("checked") ? true : false,
+                GroupID: $('#frmEdit').find('#dlGroup').val(),
+                CategoryId: $('#frmEdit').find('#dlCategoryContent').val(),
+                TitleImgWidth: imgWidth,
+                TitleImgHeight: imgHeight,
+                NewsSource: $('#frmEdit').find('#dlNewsSource').val(),
+                AuthorId: $('#frmEdit').find("#dlAuthor").val()
+                //Reasons
+                //RemovedDate
+                //PublishDate
+                //LangCode :
+                //UpdatedBy :
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    hideContentModal()
+                    setTimeout(function () { returnIndex(); howLoading(); }, 1500);
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+    }
+    function returnIndex() {
+        $(location).attr('href', urlDomain + "/danh-sach");
+    }
+    function setGroup() {
+        $.ajax({
+            url: urlDomain + "/group-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                    //if(user.role = )
+                    var newOption = new Option(item.title, item.value);
+                    $('#frmEdit').find("#dlGroup").append(newOption);
+                })
+            }
+        })
+    }
+    function setContentGroup() {
+        $.ajax({
+            url: urlDomain + "/group-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                    //if(user.role = )
+                    var newOption = new Option(item.title, item.value);
+                    $('#frmEdit').find("#dlGroup").append(newOption);
+                })
+            }
+        }).then(function () {
+            $.ajax({
+                url: urlDomain + "/get-list-content-group/?contentId=" + contentId,
+                method: "GET",
+                success: function (respone) {
+                    $("#frmEdit").find("#dlGroup").val(respone.data).trigger('change');
+                }
+            });
+        })
+    }
+    function UploadtitleImage() {
+        var fileUpload = frmEdit.find('#files').get(0);
+        var files = fileUpload.files;
+        if (files.length > 0) {
+            var fileData = new FormData();
+            var filePath = fileUpload.value; //validation file
+            var allowedExtensions =
+                /(\.jpg|\.jpeg|\.png|\.gif|\tiff|\raw|\psd)$/i;
+            if (!allowedExtensions.exec(filePath)) {
+                showAlert('Không đúng định dạng ảnh');
+                fileUpload.value = '';
+                return false;
+            }
+            var obj = {
+                "Type" : @(MediaTypeEnum.Image),
+                "Folder": "TitleImage"
+            }
+            for (var i = 0; i < files.length; i++) {
+                fileData.append("files", files[i]);
+                fileData.append("obj", JSON.stringify(obj));
+            }
+            $.ajax({
+                url: "/da-phuong-tien" + "/create-or-update",
+                method: "POST",
+                data: fileData,
+                processData: false,
+                contentType: false
+                , success: function (response) {
+                    hideLoading()
+                    if (response.result) {
+                        imageUrl = response.url
+                        imgWidth = response.width;
+                        imgHeight = response.height;
+                    }
+                }
+            }).then(function (response) {
+                if(response.result){
+                    update(imageUrl, imgWidth, imgHeight)
+                }
+            });
+        }
+        //Ko có file đẩy lên
+        else {
+            update($('#frmEdit').find('#divTitleImg').find('img').attr('src'),"","")
+        }
+    }
+    function setContent_Category() {
+        $.ajax({
+            url: urlDomain + "/category-getlistchild",
+            method: "GET",
+            success: function (response) {
+                $('#frmEdit').find("#dlCategoryContent")
+                    .select2ToTree({ treeData: { dataArr: response.data, valFld: "id", labelFld: "name", incFld: "listChild" }, maximumSelectionLength: 30 });
+            }
+        }).then(function () {
+            $.ajax({
+                url: urlDomain + "/get-list-content-category?contentId=" + contentId,
+                method: "GET",
+                success: function (respone) {
+                    $('#frmEdit').find('#dlCategoryContent').val(respone.data).trigger('change');
+                }
+            })
+        })
+    }
+        function setNewsSource() {
+        $.ajax({
+            url: urlDomain + "/news-sources",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                    var newOption = new Option(item.title, item.value);
+                    $('#frmEdit').find("#dlNewsSource").append(newOption);
+                })
+            }
+        }).then(function () {
+            $('#frmEdit').find("#dlNewsSource").val(@(Model.NewsSource))
+            var newsSourceId = $('#frmEdit').find("#dlNewsSource").val();
+            $.ajax({
+                url: "/tac-gia" + "/lookup?newsSourceId=" + newsSourceId,
+                method: "GET",
+                success: function (response) {
+                    $('#frmEdit').find("#dlAuthor").empty();
+                    $.each(response.data, function (i, item) {
+                        var newOption = new Option(item.title, item.value);
+                        $('#frmEdit').find("#dlAuthor").append(newOption);
+                    })
+                },
+                complete: function () {
+                    $('#frmEdit').find("#dlAuthor").val(@Model.AuthorId).trigger('change');
+                }
+            })
+        })
+    }
+    function createGroup_frmEdit() {
+        $.ajax({
+            url: urlDomain + "/tao-moi-group",
+            method: "GET",
+            success: function (response) {
+                showContentModal(response, "Nhóm tin")
+            }
+        });
+        //$.ajax({
+        //    url: urlDomain + "/get-list-content-category/?contentId=" + contentId,
+        //    method: "GET",
+        //    success: function (respone) {
+        //        $("#frmUpdate").find("#dlCategory").val(respone.data).trigger('change');
+        //    }
+        //});
+        }
+    function setContentType() {
+        var selected = $("#frmEdit").find("#drContentType");
+        $.ajax({
+            url: urlDomain + "/contenttype-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, itemMenu) {
+                    var newOption = new Option(itemMenu.title, itemMenu.value);
+                    selected.append(newOption);
+                })
+                hdContentType = $('#frmEdit').find('#hdContentType').val();
+                frmEdit.find('#drContentType').val(hdContentType).trigger('change');
+            }
+        });
+    }
+    function setTophot() {
+        if ('@(Model.ShowOnTop)' == "True") {
+            frmEdit.find('#ckbShowOnTop').prop('checked',true)
+        }
+        if ('@(Model.ShowOnRightTop)' == "True") {
+            frmEdit.find('#ckbShowOnRightTop').prop('checked',true)
+        }
+        if ('@Model.PublishDate.HasValue' == "False") {
+            frmEdit.find('#dtPublishedDate').val('')
+        }
+        }
+    function setTitleImage() {
+            if ('@Model.TitleImage' == "") {
+                $('#frmEdit').find('#divTitleImg').css('display','none')
+            }
+        }
+    function CreateUrl() {
+        var date = new Date()
+        var random = ""
+        var hh = (date.getHours() < 10 ? '0' : '') + date.getHours();
+        var mn = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+        var sc = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+        random = hh + mn + sc
+        if (frmEdit.find('#txtTitle').val().length > 0) {
+            frmEdit.find('#txtUrl').val(removeAccents(frmEdit.find('#txtTitle').val() + "-" + random));
+        }
+        else {
+            frmEdit.find('#txtUrl').val('')
+        }
+    }
+    function BrowserServer() {
+        var title = "Thư viện";
+        $.ajax({
+            url: urlDomain + "/thu-vien-media",
+            method: "Get",
+            success: function (response) {
+                showMediaModal(response, title)
+            }
+        })
+    }
+    function UploadImage(file) { //Upload file image from summernote arena to our server then insert image to textarea by image url
+        if ($('#frmEdit').find("#dlCategoryContent").val().length < 1) {
+            showAlert('Chưa chọn chuyên mục')
+            return;
+        }
+        console.log(file)
+        var obj = {
+            "Type": @((int)MediaTypeEnum.Image),
+            "Folder": normalVNese($('#frmEdit').find("#dlCategoryContent option:selected").first().text())
+        }
+        var formData = new FormData();
+            formData.append("files", file);
+            formData.append("obj", JSON.stringify(obj))
+            $.ajax({
+                url: "/da-phuong-tien" + "/create-or-update",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    //editor.insertImage(welEditable, res.url);
+                    $("#txtContent").summernote("insertImage", location.origin + '/' + response.url, '');
+                }
+            });
+    }
+    function setAuthor(newsSourceId = 0) {
+        $.ajax({
+            url: "/tac-gia" + "/lookup?newsSourceId=" + newsSourceId,
+            method: "GET",
+            success: function (response) {
+                $('#frmEdit').find("#dlAuthor").empty();
+                $.each(response.data, function (i, item) {
+                    var newOption = new Option(item.title, item.value);
+                    $('#frmEdit').find("#dlAuthor").append(newOption);
+                })
+            }
+        })
+    }
+    $('#frmEdit').find("#dlNewsSource").on('change', function () {
+        var newsSourceId = 0;
+        newsSourceId = this.value;
+        setAuthor(newsSourceId)
+    })
+    
+</script>
+

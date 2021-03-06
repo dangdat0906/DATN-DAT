@@ -1,0 +1,172 @@
+﻿@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0" style="height:60px">
+                <div class="row" id="frmFilter">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input id="txtTitle" type="text" class="form-control" placeholder="Tìm kiếm bài viết">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">                     
+                            <select id="dlCategory"  style="width: 100%;">
+                                <option>Tất cả chuyên mục</option>
+                            </select>    
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <select id="drStatus" class="form-control">
+                                @{
+                                    if ((int)ViewData[nameof(RolesEnum.Create)] == 1
+                                    && (int)ViewData[nameof(RolesEnum.Update)] == 1
+                                    && (int)ViewData[nameof(RolesEnum.Delete)] == 1
+                                    && (int)ViewData[nameof(RolesEnum.Approval)] == 1
+                                    )
+                                    {
+                                        <option value="@((int)ContentStatusEnum.Approving)">@Extensions.GetEnumDescription(ContentStatusEnum.Approving)</option>
+                                        <option value="@((int)ContentStatusEnum.Approved)">@Extensions.GetEnumDescription(ContentStatusEnum.Approved)</option>
+                                        <option value="@((int)ContentStatusEnum.Delete)">@Extensions.GetEnumDescription(ContentStatusEnum.Delete)</option>
+
+                                    }
+                                    else if ((int)ViewData[nameof(RolesEnum.Create)] == 1
+                                    && (int)ViewData[nameof(RolesEnum.Update)] == 1
+                                                            )
+                                    {
+                                        <option value="@((int)ContentStatusEnum.Approving)">@Extensions.GetEnumDescription(ContentStatusEnum.Approving)</option>
+                                        <option value="@((int)ContentStatusEnum.Approved)">@Extensions.GetEnumDescription(ContentStatusEnum.Approved)</option>
+
+                                    }
+                                    else if ((int)ViewData[nameof(RolesEnum.Approval)] == 1
+                                    )
+                                    {
+                                        <option value="@((int)ContentStatusEnum.Approving)">@Extensions.GetEnumDescription(ContentStatusEnum.Approving)</option>
+                                        <option value="@((int)ContentStatusEnum.Approved)">@Extensions.GetEnumDescription(ContentStatusEnum.Approved)</option>
+                                        <option value="@((int)ContentStatusEnum.Delete)">@Extensions.GetEnumDescription(ContentStatusEnum.Delete)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        @{
+                            if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                            {
+                                <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/bai-viet";
+    var take = 10;
+    var skip = 0;
+    $(document).ready(function () {
+        setCategorySearch();
+        getData("",1);
+        searching();
+        //setStatus();
+    });
+    frmFilter.find('#btnCreate').off('click').on('click', function (e) {
+        e.preventDefault();
+        openCreate();
+    });
+    function searching() {
+        frmFilter.find("#btnSearch").on('click', function () {
+            var name = frmFilter.find("#txtTitle").val();
+            var status = frmFilter.find("#drStatus").val()
+            getData(name,status);
+        });
+    }
+    function getData(name,status) {
+        showLoading()
+        $.ajax({
+            url: urlDomain + "/get-list/?title=" + name + "&status=" + status + "&categoryid=" + $('#dlCategory').val(),
+            method: "GET",
+            data: {
+                title: frmFilter.find('#txtTitle').val(),
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $('#dtTable').html(response);
+                hideLoading()
+            }
+        }).then(function () {
+            if (@((int)ViewData[nameof(RolesEnum.Update)]) == 0) {
+                $('#dtTable').find('.btn-update').css('display', 'none');
+                $('#dtTable').find('.checkStatus').attr('disabled', 'disabled');
+            }
+            if (@((int)ViewData[nameof(RolesEnum.Delete)]) == 0) {
+                $('#dtTable').find('btn-delete').css('display', 'none');
+
+            }
+        });
+    }
+    function setCategorySearch() {
+        $('#dlCategory').select2();
+        $.ajax({
+            url: urlDomain + "/category-getlistchild",
+            method: "GET",
+            success: function (response) {      
+                $("#dlCategory").select2ToTree({
+                    treeData: { dataArr: response.data, valFld: "id", labelFld: "name", incFld: "listChild" },
+                    maximumSelectionLength: 30
+                });
+            }
+        })
+    }
+    function openCreate() {
+        $(location).attr('href', urlDomain + "/tao-moi");
+    }
+    function openChooseType() {
+        $.ajax({
+            url: urlDomain + "/loai-bai-viet",
+            method: "GET",
+            success: function (response) {
+                showContentModal(response, "Chọn loại bài viết")
+            }
+        })
+    }
+    @*function setStatus() {
+        $.ajax({
+            url: urlDomain + "/status-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                    //if(user.role = )
+                    if (item.value == 1) {
+                        var newOption = new Option(item.title, item.value, false, true);
+                        frmFilter.find("#drStatus").append(newOption);
+                    }
+                    else {
+                        var newOption = new Option(item.title, item.value);
+                        frmFilter.find("#drStatus").append(newOption);
+                        if (@((int)ViewData[nameof(RolesEnum.Update)]) == )
+                    }
+
+                })
+            }
+        })
+    }*@
+</script>
+

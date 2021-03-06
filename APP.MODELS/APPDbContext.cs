@@ -33,5 +33,10 @@ namespace APP.MODELS
         public DbSet<NewsSources> NewsSources { get; set; }
         public DbSet<Groups> Groups { get; set; }
         public DbSet<Types> Types { get; set; }
+        public DbSet<Content_Categories> Content_Categories { get; set; }
+        public DbSet<ContentTypes> ContentTypes { get; set; }
+        public DbSet<Content_Groups> Content_Groups { get; set; }
+        public DbSet<TitleImages> TitleImages { get; set; }
+        public DbSet<Medias> Medias { get; set; }
     }
 }

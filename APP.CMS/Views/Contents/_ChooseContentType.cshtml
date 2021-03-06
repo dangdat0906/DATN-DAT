@@ -1,0 +1,38 @@
+﻿<div id="frmContentType" class="form-horizontal">
+        <div class="form-group row">
+            <div class="col-sm-2">
+                <label for="dlContentType" class="col-form-label">Chọn loại bài viết</label>
+            </div>
+            <div class="col-sm-5">
+                <select id="dlContentType" class="form-control" style="width: 100%;"></select>
+            </div>
+        </div>
+</div>
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+        setType();
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        openCreate();
+    });
+    function openCreate() {
+        $(location).attr('href', urlDomain + "/tao-moi?loaibaiviet=" + $('#frmContentType').find('#dlContentType').val());
+    }
+    function setType() {
+        $('#frmContentType').find('#dlContentType').select2()
+        $.ajax({
+            url: urlDomain + "/contenttype-lookup",
+            method: "GET",
+            success: function (response) {
+                $.each(response.data, function (i, item) {
+                        var newOption = new Option(item.title, item.value, false, true);
+                        $('#frmContentType').find("#dlContentType").append(newOption);
+                })
+            }
+        }).then(function () {
+            $('#frmContentType').find("#dlContentType").val(@((int)ContentTypeEnum.Normal)).trigger('change');
+        })
+    }
+</script>

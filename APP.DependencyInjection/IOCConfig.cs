@@ -34,6 +34,7 @@ namespace APP.DependencyInjection
             services.AddTransient<IGroupsManager, GroupsManager>();
             services.AddTransient<INewsSourcesManager, NewsSourcesManager>();
             services.AddTransient<ITypesManager, TypesManager>();
+            services.AddTransient<IContentsManager, ContentsManager>();
         }
     }
 }

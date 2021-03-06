@@ -1,0 +1,60 @@
+﻿@using APP.UTILS
+<div id="frmCreateGroup" class="form-horizontal">
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2" required>Tên nhóm tin</label>
+            <div class="col-sm-4">
+                <input type="text" required class="form-control" id="txtName" placeholder="Tên nhóm tin">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Ghi chú</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="txtNote" placeholder="Ghi chú">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var frmCreateGroup = $('#frmCreateGroup');
+    var urlDomain = "/bai-viet";
+    $(document).ready(function () {
+        addRequired(frmCreateGroup);
+        frmCreateGroup.find('lbStatus').on('click', function () {
+            frmCreateGroup.find('ckbStatus').prop('checked') = !frmCreateGroup.find('ckbStatus').prop('checked')
+        })
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        createGroup();
+    });
+    function createGroup() {
+        if (ValidateForm(frmCreateGroup)) {
+            return;
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-group",
+            method: "POST",
+            data: {
+                Name: frmCreateGroup.find('#txtName').val(),
+                Note: frmCreateGroup.find('#txtNote').val(),
+                Status: @((int)StatusEnum.Active)
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    setGroup()
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    hideContentModal()
+
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+    }
+</script>

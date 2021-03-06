@@ -1,0 +1,255 @@
+﻿@model List<APP.MODELS.Contents>
+@using APP.UTILS
+@{
+    if ((int)ViewData[nameof(RolesEnum.Create)] == 1
+        && (int)ViewData[nameof(RolesEnum.Update)] == 1
+        && (int)ViewData[nameof(RolesEnum.Approval)] == 1
+        && (int)ViewData[nameof(RolesEnum.Delete)] == 1
+        )
+        //full
+    {
+        <table style="width:100%;height:100%;" id="tblDisplay" class=" table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th style="text-align:center;width:2%;">STT</th>
+                    <th style="width:58%">Tên bài viết</th>
+                    <th style="text-align:center;width:15%">Ngày gửi/phê duyệt</th>
+                    <th style="text-align:center;width:15%">Trạng thái</th>
+                    <th style="text-align:center;width:10%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                //@foreach (var item in Model)
+                {
+                    var item = Model[i];
+                    <tr id="row_@item.Id">
+                        <td style="text-align:center;width:2%;">@(i+1)</td>
+                        <td style="width:58%;">@item.Title</td>
+                        @if (item.Status == (int)ContentStatusEnum.Approving)
+                        {
+                            <td style="width:15%">@item.CreatedDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        }
+                        @if (item.Status == (int)ContentStatusEnum.Approved || item.Status == (int)ContentStatusEnum.Delete)
+                        {
+                            <td style="width:15%">@item.UpdateDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        }
+                        <td style="text-align:center;width:15%;">
+                            @Extensions.GetEnumDescription((ContentStatusEnum)item.Status)
+                        </td>
+                        <td style="text-align:center;width:10%;">
+                            @if (item.Status == (int)ContentStatusEnum.Approving)
+                            {
+                                <a href="/bai-viet/cap-nhat?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Cập nhật" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                                <a href="/bai-viet/phe-duyet?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Phê duyệt" onclick="openApprove(@item.Id)"><i class="fas fa-clipboard-check"></i></a>
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Xóa" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                            }
+                            @if (item.Status == (int)ContentStatusEnum.Approved)
+                            {
+                                <a href="/bai-viet/sua?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Sửa" onclick="openEdit(@item.Id)"><i class="fas fa-edit"></i></a>
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Xóa" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                            }
+                            @if (item.Status == (int)ContentStatusEnum.Delete)
+                            {
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Khôi phục" onclick="openRestore(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else if ((int)ViewData[nameof(RolesEnum.Create)] == 1
+        && (int)ViewData[nameof(RolesEnum.Update)] == 1
+        )
+        //nhap tin
+    {
+        <table style="width:100%;height:100%;" id="tblDisplay" class=" table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th style="text-align:center;width:2%;">STT</th>
+                    <th style="width:58%">Tên bài viết</th>
+                    <th style="text-align:center;width:15%">Ngày tạo</th>
+                    <th style="text-align:center;width:15%">Trạng thái</th>
+                    <th style="text-align:center;width:10%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                //@foreach (var item in Model)
+                {
+                    var item = Model[i];
+                    <tr id="row_@item.Id">
+                        <td style="text-align:center;width:2%;">@(i+1)</td>
+                        <td style="width:58%;">@item.Title</td>
+                        <td style="width:15%">@item.CreatedDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td style="text-align:center;width:15%;">
+                            @Extensions.GetEnumDescription((ContentStatusEnum)item.Status)
+                        </td>
+                        <td style="text-align:center;width:10%;">
+                            @if (item.Status == (int)ContentStatusEnum.Approving)
+                            {
+                                <a href="/bai-viet/cap-nhat?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Cập nhật" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                            }
+                            @*@if (item.Status == (int)ContentStatusEnum.Approving)
+                                {
+                                   <a class="btn-update" data-toggle="tooltip" data-placement="top" title="Cập nhật" href="javascript:;" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                                   <a href="javascipt:;" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                                }*@
+
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if ((int)ViewData[nameof(RolesEnum.Approval)] == 1
+        && (int)ViewData[nameof(RolesEnum.Delete)] == 1
+        )
+    {
+        <table style="width:100%;height:100%;" id="tblDisplay" class=" table table-bordered table-hover table-striped">
+            <thead>
+                <tr>
+                    <th style="text-align:center;width:2%;">STT</th>
+                    <th style="width:58%">Tên bài viết</th>
+                    <th style="text-align:center;width:15%">Ngày gửi/phê duyệt</th>
+                    <th style="text-align:center;width:15%">Trạng thái</th>
+                    <th style="text-align:center;width:10%">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                //@foreach (var item in Model)
+                {
+                    var item = Model[i];
+                    <tr id="row_@item.Id">
+                        <td style="text-align:center;width:2%;">@(i+1)</td>
+                        <td style="width:58%;">@item.Title</td>
+                        @if (item.Status == (int)ContentStatusEnum.Approving)
+                        {
+                            <td style="width:15%">@item.CreatedDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        }
+                        @if (item.Status == (int)ContentStatusEnum.Approved || item.Status == (int)ContentStatusEnum.Delete)
+                        {
+                            <td style="width:15%">@item.UpdateDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        }
+                        <td style="text-align:center;width:15%;">
+                            @Extensions.GetEnumDescription((ContentStatusEnum)item.Status)
+                        </td>
+                        <td style="text-align:center;width:10%;">
+                            @if (item.Status == (int)ContentStatusEnum.Approving)
+                            {
+                                <a href="/bai-viet/phe-duyet?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Phê duyệt" onclick="openApprove(@item.Id)"><i class="fas fa-clipboard-check"></i></a>
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Xóa" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                            }
+                            @if (item.Status == (int)ContentStatusEnum.Approved)
+                            {
+                                <a href="/bai-viet/sua?id=@item.Id" data-toggle="tooltip" data-placement="top" title="Sửa" onclick="openEdit(@item.Id)"><i class="fas fa-edit"></i></a>
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Xóa" onclick="openDelete(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                            }
+                            @if (item.Status == (int)ContentStatusEnum.Delete)
+                            {
+                                <a href="javascript:;" data-toggle="tooltip" data-placement="top" title="Khôi phục" onclick="openRestore(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+
+
+
+<script>
+    var urlDomain = "/bai-viet";
+    var tblDisplay = $('#tblDisplay');
+    $(document).ready(function () {
+        //setStatus();
+        setDataTable();
+    });
+    function setDataTable() {
+        tblDisplay.DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 3 },
+                { "orderable": false, "targets": 4 },
+            ],
+            "language": {
+                "emptyTable": "Không tìm thấy dữ liệu"
+            }
+        });
+    }
+    function openUpdate(id) {
+        $(location).attr('href', urlDomain + "/cap-nhat?id=" + id);
+    }
+    function openDelete(id) {
+        $.ajax({
+            url: urlDomain + "/update-status?id="+id+"&status="+ @((int)ContentStatusEnum.Delete),
+            method: "get",
+            success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert(response.message, 2)
+                }
+                else {
+                    showAlert(response.message)
+                }
+            }
+
+        })
+    }
+    function openRestore(id) {
+        $.ajax({
+            url: urlDomain + "/update-status?id="+id+"&status=" +@((int)ContentStatusEnum.Approving),
+            method: "get",
+            data: {
+                id: id
+            },
+            success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert(response.message, 2)
+
+                }
+                else {
+                    showAlert(response.message)
+                }
+            }
+
+        })
+    }
+    function openApprove(id) {
+        $(location).attr('href', urlDomain + "/phe-duyet?id=" + id);
+    }
+    function openEdit(id) {
+        $(location).attr('href', urlDomain + "/sua?id=" + id);
+
+    }
+        //sửa sau khi duyệt
+    @*function openReject(id) {
+        $.ajax({
+            url: urlDomain + "/update-status?id="+id+"&status="+ @((int)ContentStatusEnum.Rejected),
+            method: "get",
+            success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert(response.message, 2)
+                }
+                else {
+                    showAlert(response.message)
+                }
+            }
+        })
+    }*@
+</script>

@@ -30,6 +30,13 @@ namespace APP.UTILS
 
     }
 }
+public enum MediaTypeEnum
+{
+    [Description("Ảnh")]
+    Image = 1,
+    [Description("Video")]
+    Video = 2
+}
 public enum ContentTypeEnum
 {
     [Description("Bài viết thường")]

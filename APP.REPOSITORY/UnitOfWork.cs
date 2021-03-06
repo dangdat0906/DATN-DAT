@@ -27,6 +27,10 @@ namespace APP.REPOSITORY
         public IGroupsRepository GroupsRepository { get; }
         public INewsSourcesRepository NewsSourcesRepository { get; }
         public ITypesRepository TypesRepository { get; }
+        public IContentTypesRepository ContentTypesRepository { get; }
+        public IContent_GroupsRepository Content_GroupsRepository { get; }
+        public ITitleImagesRepository TitleImagesRepository { get; }
+        public IMediasRepository MediasRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -48,6 +52,10 @@ namespace APP.REPOSITORY
             GroupsRepository = new GroupsRepository(_dbContext);
             NewsSourcesRepository = new NewsSourcesRepository(_dbContext);
             TypesRepository = new TypesRepository(_dbContext);
+            ContentTypesRepository = new ContentTypesRepository(_dbContext);
+            Content_GroupsRepository = new Content_GroupsRepository(_dbContext);
+            TitleImagesRepository = new TitleImagesRepository(_dbContext);
+            MediasRepository = new MediasRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -86,6 +94,10 @@ namespace APP.REPOSITORY
         public IGroupsRepository GroupsRepository { get; }
         public INewsSourcesRepository NewsSourcesRepository { get; }
         public ITypesRepository TypesRepository { get; }
+        public IContentTypesRepository ContentTypesRepository { get; }
+        public IContent_GroupsRepository Content_GroupsRepository { get; }
+        public ITitleImagesRepository TitleImagesRepository { get; }
+        public IMediasRepository MediasRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)
