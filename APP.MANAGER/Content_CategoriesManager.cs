@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using Portal.Models;
-using Portal.Repository;
+using APP.MODELS;
+using APP.REPOSITORY;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Portal.Manager
+namespace APP.MANAGER
 {
     public interface IContent_CategoriesManager
     {

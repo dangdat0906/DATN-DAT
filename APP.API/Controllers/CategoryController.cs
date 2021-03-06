@@ -40,12 +40,12 @@ namespace Portal.API.Controllers
             }
         }
         [HttpGet("get-list-parent")]
-        public async Task<IActionResult> GetListParent(string langCode = "VIE")
+        public async Task<IActionResult> GetListParent()
         {
             try
             {
 
-                var data = await _categoryManager.GetListParent(langCode);
+                var data = await _categoryManager.GetListParent();
                 if (data == null)
                 {
                     throw new Exception(MessageConst.DATA_NOT_FOUND);
@@ -102,7 +102,7 @@ namespace Portal.API.Controllers
                 List<Categories> result = new List<Categories>();
                 foreach (var item in data)
                 {
-                    if (item.IsMenu == true && item.Status == (int)StatusEnum.Active && item.LangCode.Equals(langCode))
+                    if (item.IsMenu == true && item.Status == (int)StatusEnum.Active )
                     {
                         result.Add(item);
                     }
@@ -292,19 +292,19 @@ namespace Portal.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet("get-statistical")]
-        public async Task<IActionResult> Get_statistical(string langcode)
-        {
-            try
-            {
-                var data = await _categoryManager.GetStatistical(langcode);
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //[HttpGet("get-statistical")]
+        //public async Task<IActionResult> Get_statistical()
+        //{
+        //    try
+        //    {
+        //        var data = await _categoryManager.GetStatistical(langcode);
+        //        return Ok(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
         [HttpGet("thong-ke-bai-viet-theo-danh-muc")]
         public async Task<IActionResult> GetCategoryContent(string tuNgay = "", string denNgay = "")
         {

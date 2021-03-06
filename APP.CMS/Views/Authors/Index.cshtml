@@ -1,0 +1,71 @@
+﻿@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <div class="row" id="frmFilter">
+                    <div class="col-12 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <input id="txtName" type="text" class="form-control" placeholder="Tìm kiếm tác giả">
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <select id="drNewsSources" class="form-control">
+                                <option value="0" style="text-align:center">------Cơ quan------</option>
+                                @{
+                                    var listNewsSources = ViewData["listNewsSources"] as List<APP.CMS.Models.LookupModels>;
+                                    foreach (var item in listNewsSources)
+                                    {
+                                        <option value="@item.Value">@item.Title</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <select id="drStatus" class="form-control">
+                                <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                                <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                                <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                                <option value="@((int)StatusEnum.Removed)">@Extensions.GetEnumDescription(StatusEnum.Removed)</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-6">
+                        <div class="form-group">
+                            <button id="btnSearch" onclick="index.search()" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-6">
+                        <div class="form-group">
+                            @{
+                                if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                                {
+                                    <button id="btnCreate" onclick="index.openCreate()" style="float:right" class="btn btn-success">Thêm mới</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script src="~/dist/js/Author/Index.js"></script>
+<script>
+    $(document).ready(function () {
+        index.init();
+    });
+</script>

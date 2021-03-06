@@ -1,0 +1,95 @@
+﻿@using APP.UTILS 
+<div id="frmCreate" class="form-horizontal">
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2" required>Tên nhóm tin</label>
+            <div class="col-sm-4">
+                <input type="text" required class="form-control" id="txtName" placeholder="Tên nhóm tin">
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Ghi chú</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="txtNote" placeholder="Ghi chú">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label id="lbStatus" class="col-sm-2">Trạng thái</label>
+            <div class="col-sm-4">
+                @{
+                    if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                    {
+                        <input id="ckbStatus" type="checkbox" class="custom-control">
+                    }
+                    else
+                    {
+                        <input id="ckbStatus" disabled type="checkbox" class="custom-control">
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var frmCreate = $('#frmCreate');
+    $(document).ready(function () {
+        addRequired(frmCreate);
+        frmCreate.find('lbStatus').on('click', function () {
+            frmCreate.find('ckbStatus').prop('checked') = !frmCreate.find('ckbStatus').prop('checked')
+        })
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        create();
+    });
+    function create() {
+        if (ValidateForm(frmCreate)) {
+            return;
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                Name: frmCreate.find('#txtName').val(),
+                Note: frmCreate.find('#txtNote').val(),
+                Status: frmCreate.find('#ckbStatus').prop("checked") ? 1 : 0
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData("",-1);
+                    hideContentModal()
+
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+        function getData(name,status) {
+            showLoading()
+            $.ajax({
+                url: urlDomain + "/get-list/?name=" + name + "&status=" + status,
+                method: "GET",
+                data: {
+                    title: frmFilter.find('#txtName').val(),
+                    take: take,
+                    skip: skip
+                }
+                , success: function (response) {
+                    $('#dtTable').html(response);
+                    hideLoading()
+                }
+            });
+        }
+    }
+</script>
+
+

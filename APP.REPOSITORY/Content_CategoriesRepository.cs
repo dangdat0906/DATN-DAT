@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Portal.Data;
-using Portal.Models;
+using APP.MODELS;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Portal.Repository
+namespace APP.REPOSITORY
 {
     public interface IContent_CategoriesRepository : IRepository<Content_Categories>
     {

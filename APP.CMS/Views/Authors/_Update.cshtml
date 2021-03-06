@@ -1,0 +1,66 @@
+﻿@model APP.MODELS.Authors
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row">
+    <div class="col-md-12">
+        <div id="frmUpdate">
+            <input type="hidden" id="txtId" value="@Model.Id" />
+            <div class="form-group row">
+                <label required class="col-form-label col-sm-2" for="txtName">Tên tác giả</label>
+
+                <input type="text" required name="name" class="form-control col-sm-8" value="@Model.Name" id="txtName">
+            </div>
+            <div class="form-group row">
+                <label required class="col-form-label col-sm-2" for="cbParentId">Cơ quan</label>
+                <select required id="drNewsSources" class="form-control col-sm-8">
+                    <option>--------</option>
+                    @{
+                        var listNewsSources = ViewData["listNewsSources"] as List<APP.CMS.Models.LookupModels>;
+                        foreach (var item in listNewsSources)
+                        {
+                            if ((long)item.Value == Model.NewsSourcesId)
+                            {
+                                <option selected value="@item.Value">@item.Title</option>
+                            }
+                            <option value="@item.Value">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-2" for="txtNote" >Ghi chú</label>
+                <input type="text" name="note"  class="form-control col-sm-8" id="txtNote" value="@Model.Note">
+            </div>
+            <div class="form-check row">
+                <div class="form-group row">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <div class="form-check">
+                            @if (@Model.Status == 1)
+                            {
+                                <input type="checkbox" class="form-check-input" checked id="ckStatus">
+                            }
+                            @if (Model.Status == 0)
+                            {
+                                <input type="checkbox" class="form-check-input" id="ckStatus">
+                            }
+                            <label class="form-check-label">Trạng thái</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/dist/js/Author/Index.js"></script>
+<script src="~/dist/js/Author/Create_Update.js"></script>
+<script>
+    $(document).ready(function () {
+        addRequired($('#frmUpdate'));
+    })
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        create.update();
+    })
+</script>

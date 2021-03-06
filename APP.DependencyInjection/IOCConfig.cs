@@ -8,7 +8,6 @@ using Portal.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using APP.MANAGER;
 
 
 namespace APP.DependencyInjection
@@ -31,6 +30,10 @@ namespace APP.DependencyInjection
             services.AddTransient<IRole_PermissionsManager, Role_PermissionsManager>();
             services.AddTransient<IAccountRolesManager, AccountRolesManager>();
             services.AddTransient<ICategoryManager, CategoryManager>();
+            services.AddTransient<IAuthorManager, AuthorManager>();
+            services.AddTransient<IGroupsManager, GroupsManager>();
+            services.AddTransient<INewsSourcesManager, NewsSourcesManager>();
+            services.AddTransient<ITypesManager, TypesManager>();
         }
     }
 }

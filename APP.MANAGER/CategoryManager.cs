@@ -27,9 +27,9 @@ namespace APP.MANAGER
         Task<List<Categories>> GetListChild(string langCode = "VIE");
         Task<List<Categories>> GetChild(long parentId);
         Task Delete(long id);
-        Task<List<LookViewModels>> GetStatistical(string langcode);
+        //Task<List<LookViewModels>> GetStatistical(string langcode);
         Task<List<Categories>> CategoryContentTotal(string tuNgay = "", string denNgay = "");
-        Task<List<Categories>> GetListParent(string langCode = "VIE");
+        Task<List<Categories>> GetListParent();
         Task<List<Categories>> GetListHomeEng(string langCode = "ENG");
     }
     public class CategoryManager : ICategoryManager
@@ -113,7 +113,6 @@ namespace APP.MANAGER
                         Name = item.Name,
                         Note = item.Note,
                         ParentId = item.ParentId,
-                        LangCode = item.LangCode,
                         Status = item.Status,
                         ParentName = parentName,
                         MenuDisplay = item.MenuDisplay,
@@ -128,7 +127,7 @@ namespace APP.MANAGER
 
                 }
 
-                var returnResult = result.Where(x => (x.ParentId == parentId || parentId == 0) && x.LangCode.Trim().ToLower() == langcode.Trim().ToLower()).ToList();
+                var returnResult = result.Where(x => (x.ParentId == parentId || parentId == 0)).ToList();
                 return returnResult;
             }
             catch (Exception ex)
@@ -153,7 +152,7 @@ namespace APP.MANAGER
         {
             try
             {
-                var data = (await _unitOfWork.CategoryRepository.FindBy(x => x.ParentId == 0 && x.Status == (int)StatusEnum.Active && x.LangCode == langCode)).ToList();
+                var data = (await _unitOfWork.CategoryRepository.FindBy(x => x.ParentId == 0 && x.Status == (int)StatusEnum.Active )).ToList();
                 if (data.Count > 0)
                 {
                     foreach (var item in data)
@@ -174,7 +173,7 @@ namespace APP.MANAGER
         {
             try
             {
-                return (await _unitOfWork.CategoryRepository.FindBy(x => x.Status == (int)StatusEnum.Active && x.LangCode == langCode)).OrderBy(c => c.DisplayOrder).ToList();
+                return (await _unitOfWork.CategoryRepository.FindBy(x => x.Status == (int)StatusEnum.Active)).OrderBy(c => c.DisplayOrder).ToList();
             }
             catch (Exception ex)
             {
@@ -183,7 +182,7 @@ namespace APP.MANAGER
         }
         public async Task<List<Categories>> GetListHomeEng(string langCode = "ENG")
         {
-            return (await _unitOfWork.CategoryRepository.FindBy(c => c.LangCode == langCode && c.OnHome == true && c.Status == (int)StatusEnum.Active)).OrderBy(c => c.DisplayOrder).ToList();
+            return (await _unitOfWork.CategoryRepository.FindBy(c => c.Status == (int)StatusEnum.Active)).OrderBy(c => c.DisplayOrder).ToList();
         }
         public async Task Update(Categories inputModel)
         {
@@ -217,47 +216,47 @@ namespace APP.MANAGER
             return await _unitOfWork.CategoryRepository.Get(x => x.Code.Equals(code));
         }
 
-        public async Task<List<LookViewModels>> GetStatistical(string langcode)
-        {
-            try
-            {
-                var data = (await _unitOfWork.CategoryRepository.FindBy(x => x.LangCode == langcode)).ToList();
+        //public async Task<List<LookViewModels>> GetStatistical(string langcode)
+        //{
+        //    try
+        //    {
+        //        var data = (await _unitOfWork.CategoryRepository.FindBy(x => x.LangCode == langcode)).ToList();
 
-                var listApproved = data.Where(x => x.Status == (byte)ContentStatusEnum.Approved).ToList();
-                var lisApproving = data.Where(x => x.Status == (byte)ContentStatusEnum.Approving).ToList();
-                var listDelete = data.Where(x => x.Status == (byte)ContentStatusEnum.Delete).ToList();
-                List<LookViewModels> list = new List<LookViewModels>();
-                LookViewModels approved = new LookViewModels()
-                {
-                    Value = listApproved.Count,
-                    Title = "Đang hiển thị"
-                };
-                LookViewModels approving = new LookViewModels()
-                {
-                    Value = lisApproving.Count,
-                    Title = "Không hiển thị"
-                };
-                LookViewModels delete = new LookViewModels()
-                {
-                    Value = listDelete.Count,
-                    Title = "Đã xóa"
-                };
-                LookViewModels all = new LookViewModels()
-                {
-                    Value = data.Count,
-                    Title = "Tổng số danh mục"
-                };
-                list.Add(approved);
-                list.Add(approving);
-                list.Add(delete);
-                list.Add(all);
-                return list;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        var listApproved = data.Where(x => x.Status == (byte)ContentStatusEnum.Approved).ToList();
+        //        var lisApproving = data.Where(x => x.Status == (byte)ContentStatusEnum.Approving).ToList();
+        //        var listDelete = data.Where(x => x.Status == (byte)ContentStatusEnum.Delete).ToList();
+        //        List<LookViewModels> list = new List<LookViewModels>();
+        //        LookViewModels approved = new LookViewModels()
+        //        {
+        //            Value = listApproved.Count,
+        //            Title = "Đang hiển thị"
+        //        };
+        //        LookViewModels approving = new LookViewModels()
+        //        {
+        //            Value = lisApproving.Count,
+        //            Title = "Không hiển thị"
+        //        };
+        //        LookViewModels delete = new LookViewModels()
+        //        {
+        //            Value = listDelete.Count,
+        //            Title = "Đã xóa"
+        //        };
+        //        LookViewModels all = new LookViewModels()
+        //        {
+        //            Value = data.Count,
+        //            Title = "Tổng số danh mục"
+        //        };
+        //        list.Add(approved);
+        //        list.Add(approving);
+        //        list.Add(delete);
+        //        list.Add(all);
+        //        return list;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
         public async Task<List<Categories>> CategoryContentTotal(string tuNgay = "", string denNgay = "")
         {
@@ -332,11 +331,11 @@ namespace APP.MANAGER
             return null;
         }
 
-        public async Task<List<Categories>> GetListParent(string langCode = "VIE")
+        public async Task<List<Categories>> GetListParent()
         {
             try
             {
-                return (await _unitOfWork.CategoryRepository.FindBy(x => x.Status == (int)StatusEnum.Active && x.ParentId == 0 &&x.LangCode == langCode)).OrderBy(c => c.DisplayOrder ).ToList();
+                return (await _unitOfWork.CategoryRepository.FindBy(x => x.Status == (int)StatusEnum.Active && x.ParentId == 0)).OrderBy(c => c.DisplayOrder ).ToList();
             }
             catch (Exception ex)
             {

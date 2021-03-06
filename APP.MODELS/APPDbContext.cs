@@ -29,5 +29,9 @@ namespace APP.MODELS
         public DbSet<AccountRoles> AccountRoles { get; set; }
         public DbSet<Categories> Categories { get; set; }
         public DbSet<Contents> Contents { get; set; }
+        public DbSet<Authors> Authors { get; set; }
+        public DbSet<NewsSources> NewsSources { get; set; }
+        public DbSet<Groups> Groups { get; set; }
+        public DbSet<Types> Types { get; set; }
     }
 }

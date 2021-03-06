@@ -29,8 +29,6 @@ namespace APP.MODELS
         public long? ParentId { get; set; }
         //[Required]
         //[MaxLength(50)]
-        [Column("LangCode")]
-        public string LangCode { get; set; }
         //[Required]
         [Column("Status")]
         public byte? Status { get; set; }
@@ -38,11 +36,6 @@ namespace APP.MODELS
         public DateTime? CreatedDate { get; set; }
         [Column("UpdatedDate")]
         public DateTime? UpdatedDate { get; set; }
-        [Column("CreatedBy")]
-        public long? CreatedBy { get; set; }
-        [Column("UpdatedBy")]
-        public long? UpdatedBy { get; set; }
-
         [Column("MenuDisplay")]
         //[MaxLength(250)]
         public string MenuDisplay { get; set; }

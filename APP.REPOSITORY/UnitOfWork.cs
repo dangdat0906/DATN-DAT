@@ -21,6 +21,12 @@ namespace APP.REPOSITORY
         public IAccountsRepository AccountsRepository { get; }
         public IAccountRolesRepository AccountRolesRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
+        public IContent_CategoriesRepository Content_CategoriesRepository { get; }
+        public IContentsRepository ContentsRepository { get; }
+        public IAuthorsRepository AuthorsRepository { get; }
+        public IGroupsRepository GroupsRepository { get; }
+        public INewsSourcesRepository NewsSourcesRepository { get; }
+        public ITypesRepository TypesRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -37,6 +43,11 @@ namespace APP.REPOSITORY
             AccountsRepository = new AccountsRepository(_dbContext);
             AccountRolesRepository = new AccountRolesRepository(_dbContext);
             CategoryRepository = new CategoryRepository(_dbContext);
+            Content_CategoriesRepository = new Content_CategoriesRepository(_dbContext);
+            AuthorsRepository = new AuthorsRepository(_dbContext);
+            GroupsRepository = new GroupsRepository(_dbContext);
+            NewsSourcesRepository = new NewsSourcesRepository(_dbContext);
+            TypesRepository = new TypesRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -69,6 +80,12 @@ namespace APP.REPOSITORY
         public IAccountsRepository AccountsRepository { get; }
         public IAccountRolesRepository AccountRolesRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
+        public IContent_CategoriesRepository Content_CategoriesRepository { get; }
+        public IContentsRepository ContentsRepository { get; }
+        public IAuthorsRepository AuthorsRepository { get; }
+        public IGroupsRepository GroupsRepository { get; }
+        public INewsSourcesRepository NewsSourcesRepository { get; }
+        public ITypesRepository TypesRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)

@@ -1,5 +1,5 @@
-﻿@model Portal.Models.Categories
-@using Portal.Utils
+﻿@model APP.MODELS.Categories
+@using APP.UTILS
 @{
 
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,7 +9,6 @@
         <form role="form" id="quickForm">
             <div id="frmUpdate">
                 <input type="hidden" id="txtId" value="@Model.Id" />
-                <input type="hidden" id="txtLang" value="@Model.LangCode" />
                 <div class="form-group row">
                     <label required class="col-form-label col-sm-2" for="txtName">Tên menu</label>
                     <input type="text" required name="name" class="form-control col-sm-3" id="txtName" value="@Model.Name">
