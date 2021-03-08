@@ -437,6 +437,21 @@
         newsSourceId = this.value;
         setAuthor(newsSourceId)
     })
+    function setDatetimeForCreateContent(type) {//Set all element that have class = datepicker to daterangepicker plugin
+        $('.datepicker').daterangepicker({ // allow set single datetime
+            singleDatePicker: true,
+            startDate: new Date(),
+            timePicker: true,
+            locale: {
+                format: "DD/MM/YYYY HH:mm:ss",
+                cancelLabel: 'Xóa',
+                applyLabel: 'Lưu'
+            }
+        });
+        $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+    }
 
 
 </script>

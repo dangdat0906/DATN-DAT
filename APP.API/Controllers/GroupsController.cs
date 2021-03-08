@@ -201,5 +201,18 @@ namespace APP.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpGet("look-up")]
+        public async Task<IActionResult> LookUp()
+        {
+            try
+            {
+                var data = await _groupsManager.Look_up();
+                return Ok(data.Select(x => new { Value = x.Id, Title = x.Name }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

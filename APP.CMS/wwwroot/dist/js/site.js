@@ -20,6 +20,12 @@
             if ($(this).val() === null) {
                 $(this).addClass('error');
                 error = true;
+            }
+            if ($(this).attr('multiple')) {
+                if ($(this).val() == 0) {
+                    $(this).addClass('error');
+                    error = true;
+                }
 
             }
         }
@@ -185,6 +191,14 @@ function stringToSlug(str) {
 
     return str;
 }
+function normalVNese(str) {
+    var from = "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ",
+        to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+    for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(RegExp(from[i], "gi"), to[i]);
+    }
+    return str;
+}
 function setDatetime(type) {//Set all element that have class = datepicker to daterangepicker plugin
     $('.datepicker').daterangepicker({ // allow set single datetime
         singleDatePicker: true,
@@ -199,12 +213,85 @@ function setDatetime(type) {//Set all element that have class = datepicker to da
         $(this).val('');
     });
 }
+function setDatetimeForCreateContent(type) {//Set all element that have class = datepicker to daterangepicker plugin
+    $('.datepicker').daterangepicker({ // allow set single datetime
+        singleDatePicker: true,
+        startDate: new Date(),
+        timePicker: true,
+        locale: {
+            format: "DD/MM/YYYY HH:mm:ss",
+            cancelLabel: 'Xóa',
+            applyLabel: 'Lưu'
+        }
+    });
+    $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+}
+function setDatetimeForNhuanButCreate() {
+    $('.datepicker').daterangepicker({ // allow set single datetime
+        singleDatePicker: true,
+        startDate: new Date(),
+        timePicker: true,
+        locale: {
+            format: "MM/YYYY",
+            cancelLabel: 'Xóa',
+            applyLabel: 'Lưu'
+        }
+    });
+    $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+}
+function setDatetimeForNhuanBut() {
+    $('.datepicker').daterangepicker({ // allow set single datetime
+        singleDatePicker: true,
+        timePicker: true,
+        locale: {
+            format: "MM/YYYY",
+            cancelLabel: 'Xóa',
+            applyLabel: 'Lưu'
+        }
+    });
+    $('.datepicker').on('cancel.daterangepicker', function (ev, picker) {
+        $(this).val('');
+    });
+}
+
 function setTextArea() { //Set all element that have class = textarea to summernote plugin
-    $('.textarea').summernote({
+    var BrowserButton = function (context) {
+        var ui = $.summernote.ui;
+        // create button
+        var button = ui.button({
+            contents: '<i class="fas fa-server"></i> Thư viện',
+            tooltip: 'browser',
+            click: function () {
+                // invoke insertText method with 'hello' on editor module.
+                BrowserServer();
+            }
+        });
+        return button.render();   // return button as jquery object
+    }
+    $('#txtContent').summernote({
         placeholder: 'Nội dung bài viết',
         tabsize: 2,
         lang: 'vi-VN',
-        height: 1000,
+        height: 400,
+        fontSizes: ['12', '14', '16', '18', '24', '36', '48'],
+        toolbar: [
+            ['fontname', ['fontname']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['insert', ['picture', 'video', 'link', 'table', 'hr']],
+            ['misc', ['fullscreen', 'codeview', 'undo', 'redo', 'help']],
+            ['mybutton', ['browser']]
+        ],
+        buttons: {
+            browser: BrowserButton
+        },
         callbacks: {
             onImageUpload: function (files) {
                 for (let i = 0; i < files.length; i++) {
@@ -215,19 +302,32 @@ function setTextArea() { //Set all element that have class = textarea to summern
     });
 
 }
-function UploadImage(file) { //Upload file image from summernote arena to our server then insert image to textarea by image url
-
-    var formData = new FormData();
-    formData.append("files", file);
-    $.ajax({
-        url: "/da-phuong-tien" + "/create-or-update",
-        method: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            //editor.insertImage(welEditable, res.url);
-            $(".textarea").summernote("insertImage", location.origin + '/' + response.url, '');
-        }
-    });
+function convertToDateTime(input) {
+    //Convert string DD/MM/YYYY HH:mm:ss to dateObject
+    input = input.replaceAll('/', '-')
+    var reggie = /(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
+    var dateArray = reggie.exec(input);
+    var dateObject = new Date(
+        (+dateArray[3]), //year
+        (+dateArray[2]) - 1, //month Careful, month starts at 0!
+        (+dateArray[1]), //day
+        (+dateArray[4]), // Hours
+        (+dateArray[5]), //Minute
+        (+dateArray[6]) //second
+    );
+    return dateObject;
 }
+function convertToDateTimeForThongKe(input) {
+    //Convert string DD/MM/YYYY to dateObject
+    input = input.replaceAll('/', '-')
+    var reggie = /(\d{2})-(\d{4})/;
+    var dateArray = reggie.exec(input);
+    var dateObject = new Date(
+        (+dateArray[2]), //year
+        (+dateArray[1]) - 1, //month Careful, month starts at 0!
+    );
+    return dateObject;
+}
+
+
+

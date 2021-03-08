@@ -88,7 +88,7 @@ namespace APP.CMS.Controllers
                 if (inputModel.Id == 0)
                 {
                     var data = await HttpHelper.PostData<Categories>(inputModel, $"{_domain}/api/chuyen-muc/create");
-                    CreateFolder(data.Code);
+                    //CreateFolder(data.Code);
                     return Json(new { Result = true, Message = "Thêm mới dữ liệu thành công!" });
                 }
                 else
@@ -104,15 +104,15 @@ namespace APP.CMS.Controllers
                 return Json(new { Result = false, Message = ex.Message });
             }
         }
-        public void CreateFolder(string categoryName)
-        {
+        //public void CreateFolder(string categoryName)
+        //{
 
-            var folder = $"{this._hostingEnvironment.WebRootPath}/{_config["Medias"].ToString()}/{categoryName}";
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-        }
+        //    var folder = $"{this._hostingEnvironment.WebRootPath}/{_config["Medias"].ToString()}/{categoryName}";
+        //    if (!Directory.Exists(folder))
+        //    {
+        //        Directory.CreateDirectory(folder);
+        //    }
+        //}
         public void RenameFolder(string categoryNameOld, string categoryNameNew)
         {
 

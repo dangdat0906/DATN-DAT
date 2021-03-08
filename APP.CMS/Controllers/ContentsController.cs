@@ -374,13 +374,28 @@ namespace APP.CMS.Controllers
             var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/the-loai/look-up");      
             return Json(new { Result = false, data = data });
         }
+        //[HttpGet("group-lookup")]
+        //public async Task<IActionResult> Group_Lookup() //Get list of Group from api/group/look-up
+        //{
+        //    try
+        //    {
+        //        //var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
+        //        var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/contents/group-lookup");
+        //        return Json(new { Result = false, data = data });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { Message = ex.Message });
+        //    }
+
+        //}
         [HttpGet("group-lookup")]
         public async Task<IActionResult> Group_Lookup() //Get list of Group from api/group/look-up
         {
             try
             {
                 //var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
-                var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/contents/group-lookup");
+                var data = await HttpHelper.GetData<List<LookupModels>>($"{_domain}/api/groups/look-up");
                 return Json(new { Result = false, data = data });
             }
             catch (Exception ex)
