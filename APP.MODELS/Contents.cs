@@ -33,7 +33,8 @@ namespace APP.MODELS
         public DateTime? CreatedDate { get; set; }
         [Column("UpdateDate")]
         public DateTime? UpdateDate { get; set; }
-       
+        [Column("CreatedBy")]
+        public long? CreatedBy { get; set; }
         //[Column("Tags")]
         //public string Tags { get; set; }
         [Column("TotalView")]

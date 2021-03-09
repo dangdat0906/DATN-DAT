@@ -36,6 +36,10 @@ namespace APP.DependencyInjection
             services.AddTransient<ITypesManager, TypesManager>();
             services.AddTransient<IContentsManager, ContentsManager>();
             services.AddTransient<IMediasManager, MediasManager>();
+            services.AddTransient<IContent_GroupsManager, Content_GroupsManager>();
+            services.AddTransient<IContent_CategoriesManager, Content_CategoriesManager>();
+            services.AddTransient<IContentTypesManager, ContentTypesManager>();
+            services.AddTransient<ITitleImagesManager, TitleImagesManager>();
         }
     }
 }

@@ -21,8 +21,8 @@ namespace APP.MANAGER
         Task<Contents> Find_By_Title(string inputTile);
         Task<Contents> Find_By_Url(string url,string langCode = "VIE");
         Task<List<Contents>> Look_up();
-        Task<List<Contents>> Get_List(long createdBy, string title, long categoryId, int status,string langCode, int pageSize, int pageNumber);
-        Task<List<Contents>> Get_List_Published(string langCode = "VIE");
+        Task<List<Contents>> Get_List(long createdBy, string title, long categoryId, int status, int pageSize, int pageNumber);
+        Task<List<Contents>> Get_List_Published();
         Task<List<Contents>> Get_List_Tophot(string langCode,int take);
         Task<CategoriesViewModel> GetTopNewsByCategoryId(string categoryUrl, int contentNumber);
         Task<(List<Contents> contents, int totalRow)> GetContentPagingById(string categoryUrl, int pageSize, int pageNumber);
@@ -170,7 +170,7 @@ namespace APP.MANAGER
             return await _unitOfWork.ContentsRepository.Get(c => c.Title.ToLower() == inputTitle.Trim().ToLower() && c.Status != (int)ContentStatusEnum.Delete);
         }
 
-        public async Task<List<Contents>> Get_List(long createdBy, string title = "", long categoryId = 0, int status = -1, string langCode="", int pageSize = 10, int pageNumber = 1)
+        public async Task<List<Contents>> Get_List(long createdBy, string title = "", long categoryId = 0, int status = -1, int pageSize = 10, int pageNumber = 1)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace APP.MANAGER
                 throw ex;
             }
         }
-        public async Task<List<Contents>> Get_List_Published(string langCode = "VIE")
+        public async Task<List<Contents>> Get_List_Published()
         {
             try
             {

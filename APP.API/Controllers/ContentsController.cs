@@ -12,7 +12,7 @@ using APP.MANAGER;
 using APP.MODELS;
 using APP.UTILS;
 
-namespace Portal.API.Controllers
+namespace APP.API.Controllers
 {
     [Route("api/contents")]
     [ApiController]
@@ -453,11 +453,11 @@ namespace Portal.API.Controllers
             }
         }
         [HttpGet("get-list")]
-        public async Task<IActionResult> GetList(long createdBy, string title, long categoryId = 0, int status = -1,string langcode = "", int pageSize = 10, int pageNumber = 0)
+        public async Task<IActionResult> GetList(long createdBy, string title, long categoryId = 0, int status = -1, int pageSize = 10, int pageNumber = 0)
         {
             try
             {
-                var data = await _contentsManager.Get_List(createdBy, title, categoryId, status, langcode, pageSize, pageNumber);
+                var data = await _contentsManager.Get_List(createdBy, title, categoryId, status, pageSize, pageNumber);
                 if (data == null)
                 {
                     throw new Exception(MessageConst.DATA_NOT_FOUND);
@@ -595,11 +595,11 @@ namespace Portal.API.Controllers
             }
         }
         [HttpGet("get-list-published")]
-        public async Task<IActionResult> GetListPublished(string langCode = "VIE")
+        public async Task<IActionResult> GetListPublished()
         {
             try
             {
-                var data = await _contentsManager.Get_List_Published(langCode);
+                var data = await _contentsManager.Get_List_Published();
                 if (data == null)
                 {
                     throw new Exception(MessageConst.DATA_NOT_FOUND);

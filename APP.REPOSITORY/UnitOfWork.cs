@@ -56,6 +56,7 @@ namespace APP.REPOSITORY
             Content_GroupsRepository = new Content_GroupsRepository(_dbContext);
             TitleImagesRepository = new TitleImagesRepository(_dbContext);
             MediasRepository = new MediasRepository(_dbContext);
+            ContentsRepository = new ContentsRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
