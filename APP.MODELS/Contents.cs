@@ -18,12 +18,12 @@ namespace APP.MODELS
         public string Url { get; set; }
         [Column("Summary")]
         public string Summary { get; set; }
-        [Column("LangCode")]
-        public string LangCode { get; set; }
+        //[Column("LangCode")]
+        //public string LangCode { get; set; }
         [Column("Content")]
         public string Content { get; set; }
-        [Column("Source")]
-        public string Source { get; set; }
+        //[Column("Source")]
+        //public string Source { get; set; }
         [Column("Status")]
         public byte? Status { get; set; }
 
@@ -33,28 +33,25 @@ namespace APP.MODELS
         public DateTime? CreatedDate { get; set; }
         [Column("UpdateDate")]
         public DateTime? UpdateDate { get; set; }
-        [Column("CreatedBy")]
-        public long? CreatedBy { get; set; }
-        [Column("UpdatedBy")]
-        public long? UpdatedBy { get; set; }
-        [Column("Tags")]
-        public string Tags { get; set; }
+       
+        //[Column("Tags")]
+        //public string Tags { get; set; }
         [Column("TotalView")]
         public long? TotalView { get; set; }
         [Column("TitleImage")]
         public string TitleImage { get; set; }
-        [Column("TopHot")]
-        public DateTime? TopHot { get; set; }
+        //[Column("TopHot")]
+        //public DateTime? TopHot { get; set; }
         [Column("ShowOnTop")]
         public bool? ShowOnTop { get; set; }
-        [Column("ShowOnRightTop")]
-        public bool? ShowOnRightTop { get; set; }
+        //[Column("ShowOnRightTop")]
+        //public bool? ShowOnRightTop { get; set; }
         [Column("ContentType")]
         public byte? ContentType { get; set; }
-        [Column("Reasons")]
-        public string Reasons { get; set; }
-        [Column("RemovedDate")]
-        public DateTime? RemovedDate { get; set; }
+        //[Column("Reasons")]
+        //public string Reasons { get; set; }
+        //[Column("RemovedDate")]
+        //public DateTime? RemovedDate { get; set; }
         [Column("AuthorId")]
         public long? AuthorId { get; set; }
         public long? NewsSource { get; set; }

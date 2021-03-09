@@ -64,6 +64,17 @@ namespace APP.UTILS
 
             return value.ToString();
         }
+        public static string NormalVNese(string inputString)
+        {
+            inputString = inputString.ToLower().Trim();
+            var input = "àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷ";
+            var output = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyy";
+            for (var i = 0; i < input.Length; i++)
+            {
+                inputString = inputString.Replace(input[i], output[i]);
+            }
+            return inputString;
+        }
 
         public static int RandomNumber(int min, int max)
         {

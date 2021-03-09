@@ -232,24 +232,24 @@ namespace Portal.API.Controllers
                 data.Title = inputModel.Title;
                 data.Url = inputModel.Url;
                 data.Summary = inputModel.Summary;
-                data.LangCode = inputModel.LangCode;
+                //data.LangCode = inputModel.LangCode;
                 inputModel.Content = inputModel.Content.Replace($"{_config["CMSDomain"].ToString()}", $"{_config["WebsiteDomain"].ToString()}");
                 data.Content = inputModel.Content;
-                data.Source = inputModel.Source;
+                //data.Source = inputModel.Source;
                 data.Status = inputModel.Status;
                 data.PublishDate = inputModel.PublishDate;
                 data.UpdateDate = DateTime.Now;
-                data.UpdatedBy = inputModel.UpdatedBy;
+                //data.UpdatedBy = inputModel.UpdatedBy;
                 data.TitleImage = inputModel.TitleImage;
                 //data.TotalView = ??
                 data.ShowOnTop = inputModel.ShowOnTop;
-                data.ShowOnRightTop = inputModel.ShowOnRightTop;
+                //data.ShowOnRightTop = inputModel.ShowOnRightTop;
                 data.NewsSource = inputModel.NewsSource;
                 data.AuthorId = inputModel.AuthorId;
                 inputModel.ContentType = inputModel.ContentType == null ? 1 : inputModel.ContentType;
                 data.ContentType = inputModel.ContentType;
                 await _contentsManager.Update(data);
-                inputModel.CreatedBy = data.CreatedBy;
+                //inputModel.CreatedBy = data.CreatedBy;
                 //await Create_Log(inputModel); //create Content_Log 
                 await Update_TitleImage(inputModel.Id, inputModel.TitleImage, inputModel.TitleImgWidth, inputModel.TitleImgHeight);
                 if (inputModel.GroupID != null)

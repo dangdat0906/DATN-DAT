@@ -73,6 +73,41 @@
         list.init();
     });
 </script>
+<script>
+    $('#tblDisplay').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true,
+        "sDom": 'lrtip',
+        "columnDefs": [
+            { "orderable": false, "targets": 2 },
+            { "orderable": false, "targets": 3 },
+            { "orderable": false, "targets": 4 }
+        ],
+        "language": {
+            "emptyTable": "Không tìm thấy dữ liệu"
+        }
+    });
+    $(".checkStatus").off("click").on('click', function (e) {
+        var id = $(this).val();
+        var status = $(this).prop('checked') ? 1 : 0;
+        $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                Id: id,
+                Status: status
+            }
+            , success: function (response) {
+
+            }
+        })
+    })
+</script>
 @*<script>
         var list = {
             tblDisplay: $('tblDisplay'),

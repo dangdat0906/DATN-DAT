@@ -47,7 +47,7 @@ namespace APP.MANAGER
             {
                 List<Contents> contents = new List<Contents>();
                 var data = (await _unitOfWork.ContentsRepository.FindBy(c => (c.Content.Contains(txtSearch) || c.Title.Contains(txtSearch))
-                                                                        && c.LangCode == langCode && c.Status == (byte)ContentStatusEnum.Approved))
+                                                                        && c.Status == (byte)ContentStatusEnum.Approved))
                     .OrderByDescending(c=>c.PublishDate).ToList();
                 contents = data != null ? data.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList() : contents;
                 var totalRow = data.Count();
@@ -183,7 +183,7 @@ namespace APP.MANAGER
                         data = (await _unitOfWork.ContentsRepository.FindBy(x => (x.Status == status || status == (int)ContentStatusEnum.All) &&
                                                                         (x.Status != (byte)StatusEnum.Removed || status == (int)StatusEnum.Removed)
                                                                         && ((string.IsNullOrEmpty(title) || x.Title.ToLower().Contains(title)))
-                                                                        && x.LangCode == langCode
+                                                                        //&& x.LangCode == langCode
                                                                         ))
                                                                         .OrderByDescending(d => d.CreatedDate).ToList();
                     }
@@ -192,11 +192,11 @@ namespace APP.MANAGER
                         data = (await _unitOfWork.ContentsRepository.FindBy(x => (x.Status == status || status == (int)ContentStatusEnum.All) &&
                                                                         (x.Status != (byte)StatusEnum.Removed || status == (int)StatusEnum.Removed)
                                                                         && ((string.IsNullOrEmpty(title) || x.Title.ToLower().Contains(title))
-                                                                        && (x.CreatedBy == createdBy) && x.LangCode == langCode
+                                                                        //&& (x.CreatedBy == createdBy) && x.LangCode == langCode
                                                                         )))
                                                                         .OrderByDescending(d => d.CreatedDate).ToList();
                     }
-                    data = data.Where(x => x.LangCode == langCode).ToList();
+                    data = data/*.Where(x => x.LangCode == langCode)*/.ToList();
                     return data;
                 }
                 else
@@ -210,7 +210,7 @@ namespace APP.MANAGER
                             data = (await _unitOfWork.ContentsRepository.FindBy(x => (x.Status == status || status == (int)ContentStatusEnum.All) &&
                                                                             (x.Status != (byte)StatusEnum.Removed || status == (int)StatusEnum.Removed)
                                                                             && ((string.IsNullOrEmpty(title) || x.Title.ToLower().Contains(title)))
-                                                                            && x.LangCode == langCode
+                                                                            //&& x.LangCode == langCode
                                                                             ))
                                                                             .OrderByDescending(d => d.CreatedDate).ToList();
                         }
@@ -219,7 +219,7 @@ namespace APP.MANAGER
                             data = (await _unitOfWork.ContentsRepository.FindBy(x => (x.Status == status || status == (int)ContentStatusEnum.All) &&
                                                                             (x.Status != (byte)StatusEnum.Removed || status == (int)StatusEnum.Removed)
                                                                             && ((string.IsNullOrEmpty(title) || x.Title.ToLower().Contains(title))
-                                                                            && (x.CreatedBy == createdBy) && x.LangCode == langCode
+                                                                            //&& (x.CreatedBy == createdBy) && x.LangCode == langCode
                                                                             )))
                                                                             .OrderByDescending(d => d.CreatedDate).ToList();
                         }
@@ -244,7 +244,7 @@ namespace APP.MANAGER
             try
             {
                 var data = (await _unitOfWork.ContentsRepository.FindBy(x => (x.Status == (int)ContentStatusEnum.Approved)
-                                                                              && x.LangCode == langCode)).ToList();
+                                                                             /* && x.LangCode == langCode*/)).ToList();
                 return data;
             }
             catch (Exception ex)
@@ -256,8 +256,8 @@ namespace APP.MANAGER
         {
             try
             {
-                return (await _unitOfWork.ContentsRepository.FindBy(c => c.Status == (int)ContentStatusEnum.Approved && 
-                                                                         c.LangCode.ToLower().Trim().Equals(langCode)
+                return (await _unitOfWork.ContentsRepository.FindBy(c => c.Status == (int)ContentStatusEnum.Approved
+                                                                          //&& c.LangCode.ToLower().Trim().Equals(langCode)
                                                                          && c.ShowOnTop == true
                                                                          )) 
                                                                          
@@ -342,7 +342,7 @@ namespace APP.MANAGER
         }
         public async Task<Contents> Find_By_Url(string url, string langCode = "VIE")
         {
-            var content = await _unitOfWork.ContentsRepository.Get(c => c.Url == url && c.LangCode == langCode && c.Status == (int)ContentStatusEnum.Approved);
+            var content = await _unitOfWork.ContentsRepository.Get(c => c.Url == url /*&& c.LangCode == langCode */&& c.Status == (int)ContentStatusEnum.Approved);
             if(content == null)
             {
                 throw new Exception("404");
@@ -404,11 +404,11 @@ namespace APP.MANAGER
                 throw ex;
             }
         }
-        public async Task<List<LookViewModels>> Getstatistical(string langcode)
+        public async Task<List<LookViewModels>> Getstatistical(string title)
         {
             try
             {
-                var data = (await _unitOfWork.ContentsRepository.FindBy(x=>x.LangCode ==langcode)).ToList();
+                var data = (await _unitOfWork.ContentsRepository.FindBy(x=>x.Title ==title)).ToList();
                 
                 var listApproved = data.Where(x => x.Status == (byte)ContentStatusEnum.Approved).ToList();
                 var lisApproving = data.Where(x => x.Status == (byte)ContentStatusEnum.Approving).ToList();

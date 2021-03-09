@@ -236,7 +236,7 @@ namespace APP.CMS.Controllers
         {
             var account = UTILS.SessionExtensions.Get<Accounts>(_session, UTILS.SessionExtensions.SessionAccount);
             //var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
-            inputModel.CreatedBy = account.Id;
+            //inputModel.CreatedBy = account.Id;
             //inputModel.LangCode = langcode;
             try
             {
@@ -256,7 +256,7 @@ namespace APP.CMS.Controllers
             try
             {
                 var inputModel = await HttpHelper.GetData<Contents>($"{_domain}/api/contents/find-by-id-not-delete", $"id={id}");
-                inputModel.UpdatedBy = account.Id;
+                //inputModel.UpdatedBy = account.Id;
                 inputModel.Status = (byte)status;
                 await HttpHelper.PostData<Contents>(inputModel, $"{_domain}/api/contents/update-status");
                 return Json(new { Result = true, Message = "Cập nhật dữ liệu thành công" });
@@ -273,7 +273,7 @@ namespace APP.CMS.Controllers
         {
             var account = UTILS.SessionExtensions.Get<Accounts>(_session, UTILS.SessionExtensions.SessionAccount);
             //var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
-            inputModel.UpdatedBy = account.Id;
+            //inputModel.UpdatedBy = account.Id;
             //inputModel.LangCode = langcode;
             try
             {
@@ -445,7 +445,7 @@ namespace APP.CMS.Controllers
         public async Task<IActionResult> Delete(Contents inputmodel)
         {
             var account = UTILS.SessionExtensions.Get<Accounts>(_session, UTILS.SessionExtensions.SessionAccount);
-            inputmodel.CreatedBy = account.Id;
+            //inputmodel.CreatedBy = account.Id;
             try
             {
                 if (inputmodel.Status == (byte)StatusEnum.Removed)

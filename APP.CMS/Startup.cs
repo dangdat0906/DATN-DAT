@@ -53,7 +53,8 @@ namespace APP.CMS
             app.UseRouting();
             app.UseSession();
             app.UseAuthorization();
-
+            // xoa sau
+            app.UseDeveloperExceptionPage();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

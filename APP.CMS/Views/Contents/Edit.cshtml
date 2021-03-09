@@ -67,7 +67,7 @@
 
             </div>
         </div>
-        <div class="form-group row">
+        @*<div class="form-group row">
             <div class="col-sm-2">
                 <label>Tiêu điểm</label>
             </div>
@@ -108,7 +108,7 @@
                 }
 
             }
-        </div>
+        </div>*@
         <div class="form-group row">
             <div class="col-sm-2">
                 <label class="col-form-label" required for="dtPublishedDate">Ngày đăng tải</label>
@@ -124,14 +124,14 @@
                 </div>
             </div>
         </div>
-        <div class="form-group row">
+        @*<div class="form-group row">
             <div class="col-sm-2">
                 <label class="col-form-label" for="txtSource">Nguồn/Tác giả</label>
             </div>
             <div class="col-sm-6">
                 <input type="text" class="form-control" id="txtSource" placeholder="Nguồn/Tác giả" value="@Model.Source">
             </div>
-        </div>
+        </div>*@
         <div class="form-group row">
             <div class="col-sm-2">
                 <label class="col-form-label" for="txtSummary">Trích dẫn</label>
@@ -254,13 +254,13 @@
                 Summary: $('#frmEdit').find('#txtSummary').val(),
                 Content: $('#frmEdit').find('#txtContent').val(),
                 Url: $('#frmEdit').find('#txtUrl').val(),
-                Source: $('#frmEdit').find('#txtSource').val(),
+                //Source: $('#frmEdit').find('#txtSource').val(),
                 Status: @((int)ContentStatusEnum.Approved),
                 PublishDate: publishedDate,
                 TitleImage: imageUrl,
                 ContentType: $('#frmEdit').find('#dlContentType').val(),
                 ShowOnTop: $('#frmEdit').find('#ckbShowOnTop').prop("checked") ? true : false,
-                ShowOnRightTop: $('#frmEdit').find('#ckbShowOnRightTop').prop("checked") ? true : false,
+                //ShowOnRightTop: $('#frmEdit').find('#ckbShowOnRightTop').prop("checked") ? true : false,
                 GroupID: $('#frmEdit').find('#dlGroup').val(),
                 CategoryId: $('#frmEdit').find('#dlCategoryContent').val(),
                 TitleImgWidth: imgWidth,
@@ -451,9 +451,9 @@
         if ('@(Model.ShowOnTop)' == "True") {
             frmEdit.find('#ckbShowOnTop').prop('checked',true)
         }
-        if ('@(Model.ShowOnRightTop)' == "True") {
+        @*if ('@(Model.ShowOnRightTop)' == "True") {
             frmEdit.find('#ckbShowOnRightTop').prop('checked',true)
-        }
+        }*@
         if ('@Model.PublishDate.HasValue' == "False") {
             frmEdit.find('#dtPublishedDate').val('')
         }
