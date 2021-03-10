@@ -37,7 +37,7 @@ namespace APP.API.Controllers
             this._contentGroupsManager = contentGroupsManager;
             this._groupsManager = groupsManager;
             this._contentCategoriesManager = contentCategoriesManager;
-            //this._titleImagesManager = titleImagesManager;
+            this._titleImagesManager = titleImagesManager;
             this._typeManager = typeManager;
             this._categoryManager = categoryManager;
         }
