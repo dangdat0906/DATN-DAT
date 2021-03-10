@@ -1,0 +1,154 @@
+﻿@model APP.MODELS.TheLoai_HeSo
+@using APP.UTILS
+
+<div id="frmUpdate" class="form-horizontal">
+    <input hidden id="hdId" type="text" value="@Model.Id" />
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-3" required>Tên loại tin</label>
+            <div class="col-sm-4">
+                <select id="slType" required class="form-control">
+                    @{
+                        
+                            foreach (var item in ViewData["listType"] as List<APP.MODELS.Types>)
+                            {
+                                if (item.Id == Model.TypeId)
+                                {
+                                    <option selected value="@item.Id">@item.Name</option>
+                                }
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label required class="col-sm-3">Hệ số nhuận bút</label>
+            <div class="col-sm-4">
+                <input type="number" value="@Model.Coefficient" required min="0" pattern="^\d*(\.\d{0,2})?$" class="form-control" id="txtCoefficient" placeholder="Hệ số nhuận bút">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-3" required>Từ tháng</label>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input required type="text" value="@Model.FromDate.ToString("MM/yyyy")" autocomplete="off" placeholder="Tháng" class="form-control float-right datepicker" id="dtFromDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-3" required>Đến tháng</label>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input required type="text" autocomplete="off" value="@Model.ToDate.ToString("MM/yyyy")" placeholder="Tháng" class="form-control float-right datepicker" id="dtToDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @{
+                if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                {
+                    <label for="ckbStatus" class="col-sm-2">Trạng thái</label>
+                    <div class="col-sm-4">
+                        <input id="ckbStatus" value="@Model.Status" type="checkbox" class="custom-control">
+                    </div>
+                }
+                else
+                {
+                    <label for="ckbStatus" class="col-sm-3">Trạng thái</label>
+                    <div class="col-sm-4">
+                        <input id="ckbStatus" value="@Model.Status" type="checkbox" disabled class="custom-control">
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var frmUpdate = $('#frmUpdate');
+    $(document).ready(function () {
+        addRequired(frmUpdate);
+        setStatus();
+        setDatetimeForNhuanBut();
+    });
+    $(document).on('keydown', 'input[pattern]', function (e) {
+        var input = $(this);
+        var oldVal = input.val();
+        var regex = new RegExp(input.attr('pattern'), 'g');
+
+        setTimeout(function () {
+            var newVal = input.val();
+            if (!regex.test(newVal)) {
+                input.val(oldVal);
+            }
+        }, 0);
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        update();
+    });
+    function setStatus() {
+        if (frmUpdate.find('#ckbStatus').val() == 1) {
+            frmUpdate.find('#ckbStatus').prop('checked', true);
+        }
+    }
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        var dateStringFromDateUpdate = $('#frmUpdate').find('#dtFromDate').val().replaceAll('/', '-');
+        var dateStringToDateUpdate = $('#frmUpdate').find('#dtToDate').val().replaceAll('/', '-');
+        var model = {
+            ID: $('#frmUpdate').find('#hdId').val(),
+            TypeId: frmUpdate.find('#slType').val(),
+            FromDate: moment(convertToDateTimeForThongKe(dateStringFromDateUpdate)).format('YYYY-MM-DD'),
+            ToDate: moment(convertToDateTimeForThongKe(dateStringToDateUpdate)).format('YYYY-MM-DD'),
+            Coefficient: $('#frmUpdate').find('#txtCoefficient').val(),
+            Status: $('#frmUpdate').find('#ckbStatus').prop("checked") ? 1 : 0
+        }
+        showLoading();
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: { "inputObj" : JSON.stringify(model) }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData("", 0, 1)
+                    hideContentModal()
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+
+    }
+
+</script>

@@ -1,0 +1,101 @@
+﻿@using APP.UTILS
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0" style="height:60px">
+                <div class="row" id="frmFilter">
+                    @*<div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" autocomplete="off" required placeholder="Tháng" class="form-control float-right datepicker" id="dtThang">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <select id="drStatus" class="form-control">
+                                <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                                <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                                <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                                <option value="@((int)StatusEnum.Removed)">@Extensions.GetEnumDescription(StatusEnum.Removed)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
+                    </div>*@
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @{
+                                if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                                {
+                                    <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/quan-ly-don-gia-nhuan-but";
+    var take = 10;
+    var skip = 0;
+    $(document).ready(function () {
+        getData();
+        searching();
+        frmFilter.find('#btnCreate').on('click', function () {
+            openCreate();
+        });
+    });
+    function searching() {
+        frmFilter.find("#btnSearch").on('click', function () {
+            //var month = $('#frmFilter').find('#dtThang')
+            getData();
+        });
+    }
+    function getData() {
+        showLoading()
+        $.ajax({
+            url: urlDomain + "/get-list",
+            method: "GET",
+            data: {
+                title: frmFilter.find('#txtName').val(),
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $('#dtTable').html(response);
+                hideLoading()
+            }
+        })
+    }
+    function openCreate() {
+        $.ajax({
+            url: urlDomain + "/tao-moi",
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Tạo  mới")
+            }
+        });
+    }
+</script>

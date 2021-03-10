@@ -1,0 +1,120 @@
+﻿@using APP.UTILS
+@using APP.MODELS
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0" style="height:60px">
+                <div class="row" id="frmFilter">
+                    <div class="col-sm-3 col-8">
+                        <div class="form-group">
+                            <select id="drType" class="form-control">
+                                <option value="0">Tất cả</option>
+                                @{ 
+                                    foreach(var item in ViewData["listType"] as List<APP.MODELS.Types>)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-8">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" autocomplete="off" required placeholder="Tháng" class="form-control float-right datepicker" id="dtThang">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-8">
+                        <div class="form-group">
+                            <select id="drStatus" class="form-control">
+                                <option value="@((int)StatusEnum.All)">@Extensions.GetEnumDescription(StatusEnum.All)</option>
+                                <option value="@((int)StatusEnum.Active)">@Extensions.GetEnumDescription(StatusEnum.Active)</option>
+                                <option value="@((int)StatusEnum.Unactive)">@Extensions.GetEnumDescription(StatusEnum.Unactive)</option>
+                                <option value="@((int)StatusEnum.Removed)">@Extensions.GetEnumDescription(StatusEnum.Removed)</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-6">
+                        <div class="form-group">
+                            <button id="btnSearch" class="btn btn-primary">Tìm kiếm</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-6">
+                        <div class="form-group">
+                            @{
+                                if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                                {
+                                    <button id="btnCreate" style="float:right" class="btn btn-success">Thêm mới</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/he-so-the-loai";
+    var take = 10;
+    var skip = 0;
+    $(document).ready(function () {
+        getData("",0,-1)
+        setDatetimeForNhuanBut();
+        searching();
+        frmFilter.find('#btnCreate').on('click', function () {
+            openCreate();
+        });
+    });
+    function searching() {
+        frmFilter.find("#btnSearch").on('click', function () {
+            //var dateStringFromDate = $('#frmFilter').find('#dtThang').val().replaceAll('/', '-');
+            //var month = moment(convertToDateTimeForThongKe(dateStringFromDate)).format('YYYY-MM');
+            var month = $('#frmFilter').find('#dtThang').val();
+            var typeId = $('#frmFilter').find('#drType').val();
+            var status = $('#frmFilter').find('#drStatus').val();
+            getData(month, typeId, status);
+        });
+    }
+    function getData(month,typeId,status) {
+        showLoading()
+        $.ajax({
+            url: urlDomain + "/get-list?month=" + month + "&typeId=" + typeId +"&status=" + status,
+            method: "GET",
+            data: {
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $('#dtTable').html(response);
+                hideLoading()
+            }
+        })
+    }
+    function openCreate() {
+        $.ajax({
+            url: urlDomain + "/tao-moi",
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Tạo  mới")
+            }
+        });
+    }
+</script>

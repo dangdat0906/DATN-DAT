@@ -1,0 +1,120 @@
+﻿@model APP.MODELS.QuanLyDonGiaNhuanBut
+@using APP.UTILS
+<div id="frmUpdate" class="form-horizontal">
+    <input type="text" id="hdId" hidden value="@Model.Id" />
+        <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2" required>Từ tháng</label>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="text" autocomplete="off" value="@Model.FromMonth.ToString("MM/yyyy")" required placeholder="Tháng" class="form-control float-right datepicker" id="dtFromDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2" required>Đến tháng</label>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="text" autocomplete="off" value="@Model.ToMonth.ToString("MM/yyyy")" required placeholder="Tháng" class="form-control float-right datepicker" id="dtToDate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label required class="col-sm-2">Giá</label>
+            <div class="col-sm-4">
+                <input type="number" step="any" required value="@decimal.Truncate(Model.Value)" min="0" class="form-control" id="txtGia">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            @{
+                if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                {
+                    <label for="ckbStatus" class="col-sm-2">Trạng thái</label>
+                    <div class="col-sm-4">
+                        <input id="ckbStatus" value="@Model.Status" type="checkbox" class="custom-control">
+                    </div>
+                }
+                else
+                {
+                    <label for="ckbStatus" class="col-sm-2">Trạng thái</label>
+                    <div class="col-sm-4">
+                        <input id="ckbStatus" value="@Model.Status" type="checkbox" disabled class="custom-control">
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+</div>
+<script>
+    var frmUpdate = $('#frmUpdate');
+    $(document).ready(function () {
+        addRequired(frmUpdate);
+        setStatus();
+        setDatetimeForNhuanBut();
+    });
+    $('#modal-form').find('#btnSave').off("click").on('click', function (e) {
+        e.preventDefault();
+        update();
+    });
+    function setStatus() {
+        if (frmUpdate.find('#ckbStatus').val() == 1) {
+            frmUpdate.find('#ckbStatus').prop('checked', true);
+        }
+    }
+    function update() {
+        if (ValidateForm(frmUpdate)) {
+            return;
+        }
+        if ((frmUpdate.find('#txtGia').val() % 1) > 0) {
+            showAlert('Giá phải là số nguyên dương')
+            return false;
+        }
+        var dateStringFromDateUpdate = $('#frmUpdate').find('#dtFromDate').val().replaceAll('/', '-');
+        var dateStringToDateUpdate = $('#frmUpdate').find('#dtToDate').val().replaceAll('/', '-');  
+        $.ajax({
+            url: urlDomain + "/create-or-update",
+            method: "POST",
+            data: {
+                ID: $('#frmUpdate').find('#hdId').val(),
+                FromMonth: moment(convertToDateTimeForThongKe(dateStringFromDateUpdate)).format('YYYY-MM-DD'),
+                ToMonth: moment(convertToDateTimeForThongKe(dateStringToDateUpdate)).format('YYYY-MM-DD'),
+                Value: $('#frmUpdate').find('#txtGia').val(),
+                Status: $('#frmUpdate').find('#ckbStatus').prop("checked") ? 1 : 0
+            }
+            , success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    getData()
+                    hideContentModal()
+                } else {
+                    showAlert(response.message)
+                }
+            }
+        });
+
+    }
+
+</script>

@@ -31,6 +31,9 @@ namespace APP.REPOSITORY
         public IContent_GroupsRepository Content_GroupsRepository { get; }
         public ITitleImagesRepository TitleImagesRepository { get; }
         public IMediasRepository MediasRepository { get; }
+        public IQuanLyDonGiaNhuanButRepository QuanLyDonGiaNhuanButRepository { get; }
+        public ITheLoai_HeSoRepository TheLoai_HeSoRepository { get; }
+        public INhuanButRepository NhuanButRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -57,6 +60,9 @@ namespace APP.REPOSITORY
             TitleImagesRepository = new TitleImagesRepository(_dbContext);
             MediasRepository = new MediasRepository(_dbContext);
             ContentsRepository = new ContentsRepository(_dbContext);
+            QuanLyDonGiaNhuanButRepository = new QuanLyDonGiaNhuanButRepository(_dbContext);
+            TheLoai_HeSoRepository = new TheLoai_HeSoRepository(_dbContext);
+            NhuanButRepository = new NhuanButRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -99,6 +105,9 @@ namespace APP.REPOSITORY
         public IContent_GroupsRepository Content_GroupsRepository { get; }
         public ITitleImagesRepository TitleImagesRepository { get; }
         public IMediasRepository MediasRepository { get; }
+        public IQuanLyDonGiaNhuanButRepository QuanLyDonGiaNhuanButRepository { get; }
+        public ITheLoai_HeSoRepository TheLoai_HeSoRepository { get; }
+        public INhuanButRepository NhuanButRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)

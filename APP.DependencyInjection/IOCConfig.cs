@@ -40,6 +40,8 @@ namespace APP.DependencyInjection
             services.AddTransient<IContent_CategoriesManager, Content_CategoriesManager>();
             services.AddTransient<IContentTypesManager, ContentTypesManager>();
             services.AddTransient<ITitleImagesManager, TitleImagesManager>();
+            services.AddTransient<IQuanLyDonGiaNhuanButManager, QuanLyDonGiaNhuanButManager>();
+            services.AddTransient<ITheLoai_HeSoManager, TheLoai_HeSoManager>();
         }
     }
 }

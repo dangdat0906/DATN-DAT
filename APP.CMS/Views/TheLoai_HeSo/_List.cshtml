@@ -1,0 +1,199 @@
+﻿@model List<APP.MODELS.TheLoai_HeSo>
+@using APP.UTILS
+<table style="width:100%;height:100%;" id="tblDisplay" class=" table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th style="text-align:center;width:10%;">STT</th>
+            <th style="width:30%">Tên thể loại</th>
+            <th style="text-align: center; width: 20%">Hệ số nhuận bút</th>
+            <th style="text-align: center;width: 20%">Tháng</th>
+            <th style="text-align:center;width:10%">Trạng thái</th>
+            <th style="text-align:center;width:10%">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count; i++)
+        //@foreach (var item in Model)
+        {
+            var item = Model[i];
+            <tr id="row_@item.Id">
+                <td style="text-align:center;width: 10%;">
+                    @(i+1)
+                </td>
+                <td style="width:30%;">@item.TypeName</td>
+                <td style="text-align: center; width: 20%;">@item.Coefficient</td>
+                <td style="text-align:center;width:20%">@item.FromDate.ToString("MM/yyyy") - @item.ToDate.ToString("MM/yyyy")</td>
+                <td style="text-align:center;width:10%;">
+                    @{
+                        if ((int)ViewData[nameof(RolesEnum.Approval)] == 1)
+                        {
+                            @if (item.Status == (byte)StatusEnum.Active)
+                            {
+                                <input type="checkbox" class="checkStatus" value="@item.Id" checked />
+                            }
+                            @if (item.Status == (byte)StatusEnum.Unactive)
+                            {
+                                <input type="checkbox" class="checkStatus" value="@item.Id" />
+                            }
+                        }
+                        else
+                        {
+                            @if (item.Status == (byte)StatusEnum.Active)
+                            {
+                                <input type="checkbox" disabled class="checkStatus" value="@item.Id" checked />
+                            }
+                            @if (item.Status == (byte)StatusEnum.Unactive)
+                            {
+                                <input type="checkbox" disabled class="checkStatus" value="@item.Id" />
+                            }
+                        }
+
+
+                    }
+
+                </td>
+                <td style="text-align:center;width:10%;">
+                    @if (@item.Status == (byte)StatusEnum.Removed)
+                    {
+                        <a href="javascipt:;" class="btn-delete" onclick="restorn(@item.Id)"><i class="fas fa-trash-restore-alt"></i></a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" class="btn-delete" onclick="deleteItem(@item.Id)"><i class="fas fa-trash-alt"></i></a>
+                        <a class="btn-update" href="javascript:;" onclick="openUpdate(@item.Id)"><i class="fas fa-edit"></i></a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    var tblDisplay = $('#tblDisplay');
+    //$(document).ready(function () {
+    //    $('#btnUpdate').on('click', function () {
+    //        openUpdate();
+    //    });
+    //    $('#btnDelete').on('click', function () {
+    //        openUdapte();
+    //    });
+    //});
+    $(function () {
+        setDataTable();
+    })
+        $(".checkStatus").off("click").on('click', function (e) {
+            var id = $(this).val();
+            console.log(id)
+            var status = $(this).prop('checked') ? 1 : 0;
+            $.ajax({
+                url: urlDomain + '/update-status',
+                method: "POST",
+                data: {
+                    Id: id,
+                    Status: status
+                }
+                , success: function (response) {
+
+                }
+            })
+        })
+    function setDataTable() {
+        tblDisplay.DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
+            "sDom": 'lrtip',
+            "columnDefs": [
+                { "orderable": false, "targets": 4 },
+                { "orderable": false, "targets": 5 }
+            ],
+            "language": {
+                "emptyTable": "Không tìm thấy dữ liệu"
+            }
+        });
+        $(".checkStatus").off("click").on('click', function (e) {
+            var id = $(this).val();
+            var status = $(this).prop('checked') ? 1 : 0;
+            $.ajax({
+                url: urlDomain + '/delete-or-restore',
+                method: "POST",
+                data: {
+                    Id: id,
+                    Status: status
+                }
+                , success: function (response) {
+
+                }
+            })
+        })
+    }
+    function openUpdate(id) {
+        $.ajax({
+            url: urlDomain + "/cap-nhat?id=" + id,
+            method: "Get",
+            success: function (response) {
+                showContentModal(response, "Cập nhật")
+            }
+        });
+        $(".checkStatus").off("click").on('click', function (e) {
+            var id = $(this).val();
+            var status = $(this).prop('checked') ? 1 : 0;
+            $.ajax({
+                url: urlDomain + '/delete-or-restore',
+                method: "POST",
+                data: {
+                    Id: id,
+                    Status: status
+                }
+                , success: function (response) {
+
+                }
+            })
+        })
+    }
+    function deleteItem(id) {
+
+            $.ajax({
+            url: urlDomain + '/delete-or-restore',
+            method: "POST",
+            data: {
+                id: id,
+                status: @((byte)(StatusEnum.Removed)),
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Xóa dữ liệu thành công", 2)
+
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+
+    }
+    function restorn(id) {
+        $.ajax({
+            url: urlDomain + '/update-status',
+            method: "POST",
+            data: {
+                id: id,
+                status: 0,
+            }
+            , success: function (response) {
+                if (response.result) {
+                    $("#row_" + id).slideUp();
+                    showAlert("Khôi phục dữ liệu thành công", 2)
+                } else {
+                    showAlert(response.message)
+
+                }
+            }
+        })
+    }
+</script>

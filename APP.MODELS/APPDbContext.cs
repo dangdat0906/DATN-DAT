@@ -38,5 +38,8 @@ namespace APP.MODELS
         public DbSet<Content_Groups> Content_Groups { get; set; }
         public DbSet<TitleImages> TitleImages { get; set; }
         public DbSet<Medias> Medias { get; set; }
+        public DbSet<QuanLyDonGiaNhuanBut> QuanLyDonGiaNhuanBut { get; set; }
+        public DbSet<NhuanBut> NhuanBut { get; set; }
+        public DbSet<TheLoai_HeSo> TheLoai_HeSo { get; set; }
     }
 }
