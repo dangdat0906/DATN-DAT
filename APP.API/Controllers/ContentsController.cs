@@ -233,7 +233,7 @@ namespace APP.API.Controllers
                 data.Url = inputModel.Url;
                 data.Summary = inputModel.Summary;
                 //data.LangCode = inputModel.LangCode;
-                inputModel.Content = inputModel.Content.Replace($"{_config["CMSDomain"].ToString()}", $"{_config["WebsiteDomain"].ToString()}");
+                //inputModel.Content = inputModel.Content.Replace($"{_config["CMSDomain"].ToString()}", $"{_config["WebsiteDomain"].ToString()}");
                 data.Content = inputModel.Content;
                 //data.Source = inputModel.Source;
                 data.Status = inputModel.Status;

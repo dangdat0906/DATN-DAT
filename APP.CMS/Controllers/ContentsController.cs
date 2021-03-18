@@ -286,6 +286,24 @@ namespace APP.CMS.Controllers
             }
         }
         [CustomAuthen]
+        [HttpPost("updatepd")]
+        public async Task<IActionResult> UpdatePD(Contents inputModel)
+        {
+            var account = UTILS.SessionExtensions.Get<Accounts>(_session, UTILS.SessionExtensions.SessionAccount);
+            //var langcode = UTILS.SessionExtensions.Get<string>(_session, UTILS.SessionExtensions.SesscionLanguages);
+            //inputModel.UpdatedBy = account.Id;
+            //inputModel.LangCode = langcode;
+            try
+            {
+                await HttpHelper.PostData<Contents>(inputModel, $"{_domain}/api/contents/update");
+                return Json(new { Result = true, Message = "Phê duyệt bài viết thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Result = false, Message = ex.Message });
+            }
+        }
+        [CustomAuthen]
         [HttpGet("danh-sach")]
         public async Task<IActionResult> Index()
         {

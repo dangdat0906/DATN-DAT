@@ -245,7 +245,7 @@
         var publishedDate = moment(convertToDateTime(dateString)).format('YYYY-MM-DD HH:mm:ss');
         showLoading();
         $.ajax({
-            url: urlDomain + "/update",
+            url: urlDomain + "/updatepd",
             method: "POST",
             data: {
                 Id: frmApprove.find('#hdId').val(),
