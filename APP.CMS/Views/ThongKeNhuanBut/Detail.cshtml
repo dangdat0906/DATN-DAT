@@ -1,0 +1,117 @@
+﻿@model List<APP.MODELS.ViewModels.ThongKeNhuanButByAuthor>
+@using APP.MODELS
+@{
+    if (Model.Count > 0)
+    {
+        ViewData["Title"] = $"Chi tiết nhuận bút tháng {Model[0].Thang} của {Model[0].TacGia}";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+@{
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0" style="height:60px">
+                <div class="row" id="frmFilter">
+                    <div class="col-sm-12"><a href="javascript:;" style="float:right;margin-bottom:10px" onclick="exportWordDetail()"><i class="fas fa-download"></i>Tải về(.doc)</a></div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div style="text-align:center;">
+                <h1>
+                    BẢNG IN CHI TIẾT NHUẬN BÚT
+                </h1>
+            </div>
+            <div id="dtTable">
+                @{
+                    var today = DateTime.Now;
+                }
+                <div style="margin-left:10px">
+                    @{
+                        var author = ViewData["author"] as APP.MODELS.Authors;
+
+                    }
+                    <p><strong style="text-align:left">Tác giả: @author.Name</strong></p>
+                    <p><strong style="text-align:left">Cơ quan: @author.NewsSourcesName</strong></p>
+                    <p><strong style="text-align:left">Thời gian: Tháng @today.Month năm @today.Year</strong></p>
+                </div>
+                <table style="width:100%;height:100%;page-break-inside:avoid" id="tblDisplay" class=" table table-bordered table-hover nowrap">
+                    <thead>
+                        <tr style="background-color: #C0C0C0; color: #FFFF; font-weight: bold; height: 40px; ">
+                            <th style="text-align: center; width: 5%">STT</th>
+                            <th style="text-align: center; width: 40%">Tên bài viết</th>
+                            <th style="text-align:center; width:10%">Loại bài viết</th>
+                            <th style="text-align: center; width: 10%">Hệ số</th>
+                            <th style="text-align: center; width: 15%">Đơn giá (VNĐ)</th>
+                            <th style="text-align: center; width: 15%">Tổng tiền (VNĐ)</th>
+                            @*<th style="text-align:center;width:10%">Nhuận bút(40%) VNĐ </th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model.Count > 0)
+                            {
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    var item = Model[i];
+                                    <tr>
+                                        <td style="text-align: center; width: 5%">
+                                            @(i + 1)
+                                        </td>
+                                        <td style="width:40%">@item.ContentName</td>
+                                        <td style="width: 10%">@item.LoaiBaiViet</td>
+                                        <td style="text-align: right; width: 10%">@item.HeSo</td>
+                                        <td style="text-align: right; width: 15%"> @String.Format(culture, "{0:N0}", item.Dongia)</td>
+                                        <td style="text-align: right; width: 10%"> @String.Format(culture, "{0:N0}", item.Tongtien)</td>
+                                        @*<td style="text-align: right; width: 10%"> @String.Format(culture, "{0:N0}", item.Tongtien * 40 / 100)</td>*@
+                                    </tr>
+                                }
+                            }
+                        }
+                        @{
+                            var tongTien = ViewData["TongTien"];
+                            var tongNhuanBut = ViewData["tongNhuanBut"];
+                            <tr>
+                                <td style="text-align:center;width:5%;"></td>
+                                <td colspan="4" style="text-align: center; font-weight: bold">Tổng tiền</td>
+                                <td style="text-align: right; font-weight: bold; width: 10% ">
+                                    @String.Format(culture, "{0:N0}", tongTien)
+                                </td>
+                                @*<td style="text-align: right; font-weight: bold; width: 10% ">
+                                        @String.Format(culture, "{0:N0}", tongNhuanBut)
+                                    </td>*@
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div style="text-align:right;margin-right:50px;">
+                    <p><i>Hà Nội, Ngày @today.Day tháng @today.Month năm @today.Year </i></p>
+                    <p style="margin-right:60px;"><b>Người lập biểu</b><br /><br /></p>
+                    <p style="margin-right:55px;">
+                        <i>(Ký ghi rõ họ tên)</i>
+                    </p>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+@{
+    if (Model.Count() > 0)
+    {
+        string title = Model[0].TacGia;
+        <input hidden id="txtChitiet" type="text" value="@title" />
+    }
+    else
+    {
+        <input hidden id="txtChitiet" type="text" value="" />
+    }
+
+}
+<script src="~/dist/js/Export2Word.js"></script>
+
+

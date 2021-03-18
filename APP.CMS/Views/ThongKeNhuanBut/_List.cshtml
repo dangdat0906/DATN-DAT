@@ -1,0 +1,95 @@
+﻿@model List<APP.MODELS.ViewModels.ThongKeNhuanButViewModel>
+@{ 
+    System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+}
+@{ 
+    var today = DateTime.Now;
+}
+<div style="font-size:14px;" >
+    <div style="text-align:center;">
+        <h1>
+            THỐNG KÊ NHUẬN BÚT THÁNG @today.ToString("MM/yyyy")
+        </h1>
+    </div>
+    <table style="width:100%;height:100%;" id="tblDisplay" class="table table-bordered table-hover nowrap">
+        <thead>
+            <tr style="background-color:#C0C0C0;color:#FFFF; font-weight:bold">
+                <th style="text-align:center;width:5%;">STT</th>
+                <th style="text-align:center; width: 15%">Tên tác giả</th>
+                <th style="text-align:center; width: 30%">Tên cơ quan</th>
+                @{
+                    var listType = ViewData["ListType"] as List<APP.MODELS.TheLoai_HeSo>;
+                    foreach (var item in listType)
+                    {
+                        <th style="text-align:center; width: 10%">@item.TypeName (@item.Coefficient) </th>
+                    }
+                }
+                <th style="text-align:center;width:5%">Đơn giá (VNĐ)</th>
+                <th style="text-align:center;width:10%">Tổng tiền (VNĐ)</th>
+                @*<th style="text-align:center;width:10%">Nhuận bút(40%) VNĐ </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        var item = Model[i];
+                        <tr>
+                            <td style="text-align:center;width:5%;">@(i+1)</td>
+                            <td style="width: 15%;">
+                                <a href="/thong-ke-nhuan-but/chi-tiet?authorId=@item.AuthorId&month=@item.Thang">
+                                    @item.AuthorName
+                                </a>
+                            </td>
+                            <td style="text-align:center; width: 10%">@item.TenCoQuan</td>
+                            @{
+                                foreach (var type in item.LoaiBaiViet)
+                                {
+                                    <td style="text-align: right; width: 10%;">@type.SoLuongBaiViet</td>
+                                }
+                            }
+                            <td style="text-align: right; width: 5%;">
+                                @String.Format(culture, "{0:N0}", item.DonGia)
+                            </td>
+                            <td style="text-align: right; width: 10%">
+                                @String.Format(culture, "{0:N0}", item.Tongtien)
+                            </td>
+                            @*<td style="text-align: center; width: 10%">
+                                @String.Format(culture, "{0:N0}", item.NhuanBut)
+                            </td>*@
+                        </tr>
+                    }
+                }
+            }
+            <tr>
+                @{
+                    var tongTien = ViewData["TongTien"];
+                    var tongNhuanBut = ViewData["tongNhuanBut"];
+                }
+                @{
+                    int scope = listType.Count() + 3;
+                }
+                @*<td style="width:5%;"></td>*@
+                <td style="text-align:center;width:5%;"></td>
+                <td colspan="@scope" style="text-align:center;font-weight:bold">Tổng cộng</td>
+                <td style="text-align: center; width: 10%; font-weight: bold;">
+                    @String.Format(culture, "{0:N0}", tongTien)
+                </td>
+                @*<td style="text-align: center; width: 10%; font-weight: bold;">
+                    @String.Format(culture, "{0:N0}", tongNhuanBut)
+                </td>*@
+            </tr>
+        </tbody>
+    </table>
+    <div style="text-align:right;margin-right:50px;">
+        <p><i>Hà Nội, Ngày @today.Day tháng @today.Month năm @today.Year </i></p>
+        <p style="margin-right:60px;"><b>Người lập biểu</b><br /><br /></p>
+        <p style="margin-right:55px;">
+        <i>(Ký ghi rõ họ tên)</i>
+        </p>
+    </div>
+</div>
+
+

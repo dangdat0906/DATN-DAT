@@ -1,0 +1,82 @@
+﻿@using APP.UTILS
+@{
+    ViewData["Title"] = "Thống kê nhuận bút";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header border-0" style="height:60px">
+                <div class="row" id="frmFilter">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" autocomplete="off" required placeholder="Tháng" class="form-control float-right datepicker" id="dtThang">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @{
+                                if ((int)ViewData[nameof(RolesEnum.Create)] == 1)
+                                {
+                                    <button id="btnSearch" class="btn btn-primary">Xem</button>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6"><a href="javascript:;" style="float:right;margin-bottom:10px" onclick="exportWordIndex()"><i class="fas fa-download"></i>Tải về(.doc)</a></div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div id="dtTable">
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script>
+    var frmFilter = $('#frmFilter');
+    var urlDomain = "/thong-ke-nhuan-but";
+    var take = 10;
+    var skip = 0;
+    $(document).ready(function () {
+        setDatetimeForNhuanBut();
+        searching();
+    });
+    function searching() {
+        frmFilter.find("#btnSearch").on('click', function () {
+            //var dateStringFromDate = $('#frmFilter').find('#dtThang').val().replaceAll('/', '-');
+            //var month = moment(convertToDateTimeForThongKe(dateStringFromDate)).format('YYYY-MM');
+            var month = $('#frmFilter').find('#dtThang').val()
+            getData(month);
+        });
+    }
+    function getData(month) {
+        showLoading()
+        $.ajax({
+            url: urlDomain + "/get-list?month=" + month,
+            method: "GET",
+            data: {
+                take: take,
+                skip: skip
+            }
+            , success: function (response) {
+                $('#dtTable').html(response);
+                hideLoading()
+            }
+        })
+    }
+
+
+</script>
+<script src="~/dist/js/Export2Word.js"></script>
+

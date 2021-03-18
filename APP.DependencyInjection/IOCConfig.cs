@@ -42,6 +42,7 @@ namespace APP.DependencyInjection
             services.AddTransient<ITitleImagesManager, TitleImagesManager>();
             services.AddTransient<IQuanLyDonGiaNhuanButManager, QuanLyDonGiaNhuanButManager>();
             services.AddTransient<ITheLoai_HeSoManager, TheLoai_HeSoManager>();
+            services.AddTransient<IThongKeNhuanButManager, ThongKeNhuanButManager>();
         }
     }
 }

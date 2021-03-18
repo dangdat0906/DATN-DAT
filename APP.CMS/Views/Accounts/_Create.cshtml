@@ -17,7 +17,7 @@
                     <label class="col-form-label col-sm-3" for="txtEmail" required>Email</label>
                     <input type="text" required name="txtEmail" class="form-control col-sm-4" id="txtEmail">
                 </div>
-                <div class="form-group row">
+                @*<div class="form-group row">
                     <label class="col-form-label col-sm-3" required for="txtFullName">Chọn đơn vị</label>
                     <select id="cbDonVi" required class="select2 col-sm-6" data-placeholder="đơn vị">
                     </select>
@@ -26,7 +26,7 @@
                     <label class="col-form-label col-sm-3" required for="txtFullName">Chọn chức vụ</label>
                     <select id="cbChucVu" required class="select2 col-sm-6" data-placeholder="Chọn chức vụ">
                     </select>
-                </div>
+                </div>*@
                 <div class="form-group row">
                     <label required class="col-form-label col-sm-3" for="txtUserName">Tên đăng nhập</label>
                     <input type="text" required name="userName" class="form-control col-sm-4" id="txtUserName">
@@ -62,8 +62,8 @@
     $(document).ready(function () {
         addRequired(frmCreate);
         getRoles();
-        layChucVu();
-        layDonVi();
+        //layChucVu();
+        //layDonVi();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
@@ -83,9 +83,9 @@
         if (checkValidateSelect2(frmCreate)) {
             return
         }
-        if (CheckPass($("#txtPass").val())) {
-            return
-        }
+        //if (CheckPass($("#txtPass").val())) {
+        //    return
+        //}
         showLoading();
         $.ajax({
             url: urlDomain + "/them-moi",
@@ -96,8 +96,8 @@
                 Email: frmCreate.find('#txtEmail').val(),
                 Status: frmCreate.find('#ckStatus').prop("checked") ? 1 : 0,
                 ListRoleId: frmCreate.find('#cbRoles').val(),
-                PostionId: frmCreate.find('#cbChucVu').val(),
-                UnitsId: frmCreate.find('#cbDonVi').val(),
+                //PostionId: frmCreate.find('#cbChucVu').val(),
+                //UnitsId: frmCreate.find('#cbDonVi').val(),
                 Password: frmCreate.find('#txtPass').val(),
                 PhoneNumber: frmCreate.find('#txtPhoneNumber').val()
             }
