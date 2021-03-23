@@ -1,0 +1,35 @@
+﻿
+@model APP.MODELS.Contacts
+<div class="d-md-flex justify-content-between">
+    <div class="address-footer">
+        <h3>@Model.TitleFooter.ToUpper()</h3>
+        <pre class="pre-footer">@Model.ContentFooter</pre>
+    </div>
+    <div class="footer-bottom-right" >
+        <div class="link-site" id="linkSite">
+            <select class="form-control">
+                <option>Liên kết website</option>
+            </select>
+        </div>
+        <ul class="static-footer">
+            <li><i class="fa fa-user"></i>Lượt truy cập trong ngày: <strong>@Model.Online</strong></li>
+            <li><i class="fa fa-user-friends"></i> Lượt truy cập trong tháng: <strong>@Model.OnlineOnMonth</strong></li>
+            <li><i class="fa fa-users"></i> Tổng lượt truy cập: <strong>@Model.OnlineTotal</strong></li>
+            <li><a style="margin-right:10px;" href="/so-do-trang"><i class="fas fa-home"></i> Sơ đồ cổng</a><a href="/rss"><i style="position:relative" class="fas fa-rss"></i> RSS</a> </li>
+        </ul>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        loadLinkSite();
+    })
+    function loadLinkSite() {
+        $.ajax({
+            url: "/trang-chu" + "/get-footerBotRight",
+            method: "GET",
+            success: function (response) {
+                $('#linkSite').html(response);
+            }
+        })
+    }
+</script>

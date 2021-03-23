@@ -1,0 +1,115 @@
+﻿@model List<APP.MODELS.Categories>
+@using APP.MODELS
+@using APP.UTILS
+<div id="frmTopMenu" class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+    </button>
+
+    <ul class="navbar-right d-flex d-lg-none">
+        <li class="active"><a href="#">Tiếng việt</a></li>
+        <li><a href="#">English</a></li>
+        <li class="dropdown">
+            <a href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-search"></i></a>
+            <div class="dropdown-menu dropdown-search" aria-labelledby="dropdownMenuButton">
+                <div class="form-search">
+                    <input id="txtSearch" type="text" class="form-control">
+                    <button onclick="search()" class="btn-clear"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto" id="listMenu">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">
+                    <i class="ico-home-lg d-none d-lg-inline-block"></i>
+                    <span class="d-lg-none">Trang chủ</span>
+                </a>
+            </li>
+            @{ var ModelCount = 6; // hiển thị 6 chuyên mục ở menu
+                var childCount = 20; //20 chuyên mục con
+                if (Model.Count() < 7)
+                {
+                    ModelCount = Model.Count();
+                }
+                for (int i = 0; i < ModelCount; i++)
+                {
+                    var checkChild = false; // kiểm tra item có danh mục con là menu hay không
+                    if (Model[i].ListChild != null)
+                    {
+                        foreach (var child in Model[i].ListChild)
+                        {
+                            if (child.IsMenu == true)
+                            {
+                                checkChild = true;
+                            }
+
+                        }
+                        if (checkChild == true) // có chuyên mục con là menu
+                        {
+                            Model[i].ListChild.OrderBy(c => c.DisplayOrder);
+                            if (Model[i].ListChild.Count() < childCount)
+                            {
+                                childCount = Model[i].ListChild.Count();
+                            }
+                            string menu = "/" + @Model[i].Code.ToLower();
+                        <li class="nav-item dropdown">
+                            @if (Model[i].Id != 1)
+                            {
+                                <a href="@menu" class="nav-link">
+                                    @Model[i].MenuDisplay <i class="fa fa-caret-down"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link">
+                                    @Model[i].MenuDisplay <i class="fa fa-caret-down"></i>
+                                </a>
+                            }
+                            <button class="btn-clear btn-toggle-submenu d-lg-none" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus"></i></button>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @for (int j = 0; j < Model[i].ListChild.Count; j++)
+                                {
+                                    if (Model[i].ListChild[j].IsMenu == true)
+                                    {
+                                        string menuchild = "/" + Model[i].ListChild[j].Code.ToLower();
+                                        <li><a class="dropdown-item" href="@menuchild">@Model[i].ListChild[j].MenuDisplay</a></li>
+
+                                    }
+                                }
+
+
+                            </ul>
+                        </li>
+                        }
+                        else //không có
+                        {
+                            string menu = "/" + @Model[i].Code.ToLower();
+                            <li class="nav-item">
+                                <a class="nav-link" href="@menu">@Model[i].MenuDisplay</a>
+                            </li>
+                        }
+                    }
+                    else //không có danh mục con là menu
+                    {
+                        string menu = "/" + @Model[i].Code.ToLower();
+                        <li class="nav-item">
+                            <a class="nav-link" href="@menu">@Model[i].MenuDisplay</a>
+                        </li>
+                    }
+                }
+            }
+            @*<li class="nav-item"><a class="nav-linkrss" href="/so-do-cong">Sơ đồ cổng |</a> <a class="nav-linkrss" href="/rss" >RSS</a> </li>*@
+        </ul>
+    </div>
+</div>
+<script>
+    var search = function () {
+        var txtSearch = $('#txtSearch').val();
+        if (txtSearch !== "") {
+            location.href = "/search/" + txtSearch;
+        }
+    }
+</script>

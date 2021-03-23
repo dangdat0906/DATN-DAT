@@ -43,6 +43,7 @@ namespace APP.DependencyInjection
             services.AddTransient<IQuanLyDonGiaNhuanButManager, QuanLyDonGiaNhuanButManager>();
             services.AddTransient<ITheLoai_HeSoManager, TheLoai_HeSoManager>();
             services.AddTransient<IThongKeNhuanButManager, ThongKeNhuanButManager>();
+            services.AddTransient<IContactManager, ContactManager>();
         }
     }
 }

@@ -22,8 +22,8 @@ namespace APP.MODELS
         //public string LangCode { get; set; }
         [Column("Content")]
         public string Content { get; set; }
-        //[Column("Source")]
-        //public string Source { get; set; }
+        [Column("Source")]
+        public string Source { get; set; }
         [Column("Status")]
         public byte? Status { get; set; }
 
@@ -45,8 +45,8 @@ namespace APP.MODELS
         //public DateTime? TopHot { get; set; }
         [Column("ShowOnTop")]
         public bool? ShowOnTop { get; set; }
-        //[Column("ShowOnRightTop")]
-        //public bool? ShowOnRightTop { get; set; }
+        [Column("ShowOnRightTop")]
+        public bool? ShowOnRightTop { get; set; }
         [Column("ContentType")]
         public byte? ContentType { get; set; }
         //[Column("Reasons")]

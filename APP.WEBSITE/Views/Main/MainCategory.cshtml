@@ -1,0 +1,81 @@
+﻿@model List<APP.MODELS.Categories>
+@using APP.UTILS
+<!-- E: section-featured -->
+<!-- start banner-ads -->
+<div class="box-left" id="bannerleft1" @*class="banner-ads"*@>
+
+</div>
+<!-- E: banner-ads -->
+<!-- start box-left -->
+<!--First-Category--->
+<div class="box-left categorys">
+    @if (Model[0].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Column)
+    {
+        @Html.Partial("_CategoryColumn", Model[0]);
+    }
+    @if (Model[0].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Row)
+    {
+        @Html.Partial("_CategoryRow", Model[0]);
+    }
+    @if (Model[0].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Mix)
+    {
+        @Html.Partial("_CategoryMix", Model[0]);
+    }
+    @if (Model[0].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Row5050)
+    {
+        @Html.Partial("_CategoryRow5050", Model[0]);
+    }
+</div>
+<!--End-First-Category--->
+<!-- E: box-left -->
+
+@for (int i = 1; i < Model.Count; i++)
+{
+    @if (Model[i].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Column)
+    {
+        @Html.Partial("_CategoryColumn", Model[i]);
+    }
+    @if (Model[i].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Row)
+    {
+        @Html.Partial("_CategoryRow", Model[i]);
+    }
+    @if (Model[i].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Mix)
+    {
+        @Html.Partial("_CategoryMix", Model[i]);
+    }
+    @if (Model[i].DisplayOnHomeType == (byte)DisplayCateOnhomeEnum.Row5050)
+    {
+        @Html.Partial("_CategoryRow5050", Model[i]);
+    }
+    @if (i == 1)
+    {
+        <!-- start banner-ads -->
+        <div class="box-left" id="bannerleft2" @*class="banner-ads banner-ads-center-2"*@>
+
+        </div>
+        <!-- E: banner-ads -->
+    }
+}
+<!-- start box-left -->
+<!--Second-Category--->
+@*<div class="box-left" id="secondCategory">
+
+    </div>*@
+<!-- E: box-left -->
+<!--End-Category--->
+<!-- start box-left -->
+<!--Third-Category--->
+@*<div class="box-left" id="thirdCategory">
+
+    </div>*@
+<!-- E: box-left -->
+<!--End-Third-Category--->
+<!-- start box-left -->
+<!--Fourth-Category--->
+@*<div class="box-left" id="fourthCategory">
+
+    </div>*@
+<!-- E: box-left -->
+<!--Fourth-Category--->
+<script src="~/js/MainContent.js"></script>
+

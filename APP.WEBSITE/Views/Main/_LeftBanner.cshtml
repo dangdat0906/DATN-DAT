@@ -1,0 +1,5 @@
+﻿@*@model Portal.Models.Banners
+@{
+    string img = ViewData["CMSDomain"] + Model.Url;
+    <a href="@Model.Link"><img src="@img" alt="Image"></a>
+}*@

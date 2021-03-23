@@ -1,0 +1,49 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+    <div id="send-mail">
+        <div class="form-group">
+            <input type="hidden" id="txtTitle" value="@ViewData["titleDetail"]" />
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Email người gửi * :</label> <input type="text" required class="form-control" onkeypress="validateField('sender-email')" name="_chitietbaiviet_WAR_danangportlet_INSTANCE_LBmxFB8Uhbf9_senderEmail" id="sender-email">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Họ tên người gửi * :</label> <input type="text" required class="form-control" onkeypress="validateField('sender-name')" name="_chitietbaiviet_WAR_danangportlet_INSTANCE_LBmxFB8Uhbf9_senderName" id="sender-name">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Email người nhận * :</label> <input class="form-control" required onkeypress="validateField('recipient-email')" name="_chitietbaiviet_WAR_danangportlet_INSTANCE_LBmxFB8Uhbf9_recipientEmail" id="recipient-email">
+        </div>
+        <div class="form-group">
+            <label class="control-label">Nội dung * :</label>
+            <textarea required class="form-control" name="_chitietbaiviet_WAR_danangportlet_INSTANCE_LBmxFB8Uhbf9_message" id="message"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Đường dẫn * :</label> <input type="text" required class="form-control" name="_chitietbaiviet_WAR_danangportlet_INSTANCE_LBmxFB8Uhbf9_url" value="@ViewData["link"]" id="url" readonly="readonly">
+        </div>
+        <div class="form-group">
+            <div id="html_element"></div>
+        </div>
+    </div>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit&hl=vi"
+            async defer>
+</script>
+<script>
+    var captcharesponse = null;
+    var catpcha = null;
+    var checkCaptcha = false;
+    var verifyCallback = function (response) {
+        checkCaptcha = true;
+    };
+    var onloadCallback = function () {
+        catpcha = grecaptcha.render('html_element', {
+            'sitekey': '6Ld61-AZAAAAAMM0EwmwyBsdwxdvtdUz9YbxZt0f',
+            'callback': verifyCallback,
+            'theme': 'light',
+            'lang': 'vi'
+        });
+    };
+</script>
+        

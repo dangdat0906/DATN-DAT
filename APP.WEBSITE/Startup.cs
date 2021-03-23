@@ -36,6 +36,7 @@ namespace APP.WEBSITE
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -47,7 +48,68 @@ namespace APP.WEBSITE
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                     "document",
+                     "hethongvanban",
+                    new { controller = "Document", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "search",
+                     "search/{search}",
+                    new { controller = "Search", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "rss",
+                     "rss",
+                    new { controller = "Categories", action = "Rss" });
+                endpoints.MapControllerRoute(
+                    "rss",
+                    "rss/feed/{categoryId}",
+                   new { controller = "Categories", action = "GetRss" });
+                endpoints.MapControllerRoute(
+                    "question",
+                    "cau-hoi-doc-gia",
+                   new { controller = "KhaoSat", action = "QuestionCustomer" });
+                endpoints.MapControllerRoute(
+                     "khaosat",
+                     "khaosat",
+                    new { controller = "KhaoSat", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "document",
+                     "hethongvanban-{id}",
+                    new { controller = "Document", action = "Detail" });
+                endpoints.MapControllerRoute(
+                     "content",
+                     "{url}.html",
+                    new { controller = "ContentDetail", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "tags",
+                     "tag-{id}",
+                    new { controller = "Categories", action = "GetContentByTag" });
+                endpoints.MapControllerRoute(
+                     "category",
+                     "{categoryUrl}",
+                    new { controller = "Categories", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "thuvienanh",
+                     "thuvienanh",
+                    new { controller = "ImageLibrary", action = "Index" });
+                endpoints.MapControllerRoute(
+                     "thuvienanh",
+                     "thuvienanh/album{albumId}",
+                    new { controller = "ImageLibrary", action = "DetailAlbum" });
+                endpoints.MapControllerRoute(
+                     "thuvienvideo",
+                     "thuvienvideo",
+                    new { controller = "VideoLibrary", action = "Index" });
+                endpoints.MapControllerRoute(
+                    "thuvienvideo",
+                    "thuvienvideo/album{albumId}",
+                   new { controller = "VideoLibrary", action = "DetailAlbum" });
+                endpoints.MapControllerRoute(
+                    "sodocong",
+                    "so-do-trang",
+                   new { controller = "Categories", action = "SiteMap" });
             });
+
         }
     }
 }

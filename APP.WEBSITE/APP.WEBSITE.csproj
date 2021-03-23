@@ -2,6 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="System.ServiceModel.Syndication" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\APP.DATA\APP.DATA.csproj" />
+    <ProjectReference Include="..\APP.DependencyInjection\APP.DependencyInjection.csproj" />
+    <ProjectReference Include="..\APP.MANAGER\APP.MANAGER.csproj" />
+    <ProjectReference Include="..\APP.MODELS\APP.MODELS.csproj" />
+    <ProjectReference Include="..\APP.REPOSITORY\APP.REPOSITORY.csproj" />
+    <ProjectReference Include="..\APP.UTILS\APP.UTILS.csproj" />
+  </ItemGroup>
 
 </Project>

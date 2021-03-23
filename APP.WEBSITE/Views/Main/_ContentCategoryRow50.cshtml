@@ -1,0 +1,30 @@
+﻿@model List<APP.MODELS.Contents>
+@{
+    string link = "/" + @Model[0].Url;
+}
+@{
+    if (Model.Count > 1)
+    {
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            string imglist_right = ViewData["CMSDomain"] + Model[i].TitleImage;
+            string linkInList = "/" + @Model[i].Url;
+            <div class="col-md-6">
+                <div class="card-info card-info-grid">
+                <div class="card-info-img">
+                    <a href="@linkInList" class="thumbs hover-shine">
+                        <img src="@imglist_right" alt="Image">
+                    </a>
+                </div>
+                <div class="card-info-content">
+                    <h4 class="card-info-title">
+                        <a href="@linkInList">@Model[i].Title</a>
+                    </h4>
+                </div>
+                </div>
+            </div>
+            
+
+        }
+    }
+}

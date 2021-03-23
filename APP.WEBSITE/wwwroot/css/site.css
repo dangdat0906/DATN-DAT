@@ -35,7 +35,7 @@ html {
   }
 }
 
-.border-top {
+/*.border-top {
   border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
@@ -49,23 +49,460 @@ html {
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
-}
+}*/
 
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
+/*html {
   position: relative;
   min-height: 100%;
 }
 
-body {
+body {*/
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  /*margin-bottom: 60px;
 }
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 60px;*/ /* Vertically center the text there */
+/*}*/
+.doc_title {
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 3px;
+}
+
+table.doc_table_nospace {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    width: 810px;
+}
+
+    table.doc_table_nospace td {
+        border: 0px;
+        padding: 0px;
+        vertical-align: middle;
+    }
+.doc_sound_icon {
+    float: right;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.doc_detail {
+    margin-left: 5px;
+}
+
+table.doc_detail_table {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    width: 805px;
+}
+
+    table.doc_detail_table td {
+        border: 0px;
+        padding: 3px;
+        font-family: 'Arial';
+        font-size: 10pt;
+        text-align: justify;
+    }
+
+.doc_detail_attr {
+    font-size: 10pt;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.doc_detail_attr_div {
+}
+
+table.doc_detail_attr_table {
+    border-spacing: 0px;
+    border: #7994CB 1px solid;
+    border-collapse: collapse;
+   
+}
+
+    table.doc_detail_attr_table td {
+        border: #7994CB 1px solid;
+        padding: 5px;
+        margin: 0px;
+        vertical-align: middle;
+        font-family: 'Arial';
+        font-size: 10pt;
+    }
+
+.doc_detail_substract {
+    text-align: justify;
+}
+
+table.doc_detail_file {
+    border-spacing: 0px;
+    border: 0px solid;
+    border-collapse: collapse;
+}
+
+    table.doc_detail_file td {
+        border: 0px solid;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left: 0px;
+        margin: 0px;
+        vertical-align: middle;
+        font-family: 'Arial';
+        font-size: 10pt;
+    }
+
+a:link.doc_detail_file_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:visited.doc_detail_file_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:hover.doc_detail_file_link {
+    text-decoration: none;
+    color: red
+}
+
+.doc_detail_relation {
+    font-size: 10pt;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.doc_detail_relation_item {
+    font-family: 'Arial';
+    font-size: 10pt;
+}
+
+a:link.doc_detail_file {
+    text-decoration: none;
+    color: black
+}
+
+a:visited.doc_detail_file {
+    text-decoration: none;
+    color: black
+}
+
+a:hover.doc_detail_file {
+    text-decoration: none;
+    color: red
+}
+
+.doc_detail_others {
+    font-size: 10pt;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.doc_detail_others_item {
+    font-family: 'Arial';
+    font-size: 9pt;
+    margin-left: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-right: 3px;
+}
+
+a:link.doc_detail_others_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:visited.doc_detail_others_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:hover.doc_detail_others_link {
+    text-decoration: none;
+    color: red
+}
+
+.doc_detail_others_date {
+    color: #C0C0C0
+}
+
+
+table.doc_title_category {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    margin-left: 50px;
+}
+
+    table.doc_title_category td {
+        border: 0px;
+        padding: 3px;
+        font-family: 'Arial';
+        font-size: 9pt;
+        width: 350px;
+    }
+
+.doc_title_category_item {
+    cursor: pointer;
+    color: #0401B2;
+}
+
+.doc_title_search {
+}
+
+
+table.doc_title_search {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+}
+
+    table.doc_title_search td {
+        border: 0px;
+        padding: 3px;
+        font-family: 'Arial';
+        font-size: 10pt;
+    }
+
+.search_item1_title {
+    width: 140px;
+}
+
+.search_item1_value {
+    width: 165px;
+    border: 1px #C0C0C0 solid;
+}
+
+.search_item2_title {
+    width: 250px;
+    text-align: right;
+}
+
+.search_item2_value {
+    width: 180px;
+    border: 1px #C0C0C0 solid;
+}
+
+.search_item3_title {
+    width: 80px;
+    text-align: right;
+}
+
+.search_item3_value {
+    width: 110px;
+    border: 1px #C0C0C0 solid;
+}
+
+.search_item4_title {
+    width: 90px;
+}
+
+.search_item4_value {
+    width: 165px;
+    border: 1px #C0C0C0 solid;
+}
+
+.search_item5_title {
+    width: 35px;
+    text-align: right;
+}
+
+.search_item5_value {
+    width: 35px;
+    margin: 0px;
+    padding: 1px;
+    border: 1px #C0C0C0 solid;
+    font-size: 9pt;
+}
+
+.search_item6_title {
+    width: 90;
+    text-align: right;
+}
+
+.search_item6_value {
+    border: 1px #C0C0C0 solid;
+}
+
+.search_item8_title {
+    width: 180px;
+    text-align: right;
+}
+
+.search_item8_value {
+    width: 40px;
+    margin-right: 70px;
+    border: 1px #C0C0C0 solid;
+}
+
+.search_ext_title {
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+table.doc_list_title {
+    border-spacing: 0px;
+    border: 1px #D1D3D2 solid;
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-left: 3px;
+}
+
+    table.doc_list_title td {
+        border: 1px #D1D3D2 solid;
+        ;
+        padding: 3px;
+        font-family: 'Arial';
+        font-size: 10pt;
+    }
+
+.doc_list_title_notation {
+    width: 120px;
+    background: #EFEEDC;
+    text-align: center;
+}
+
+.doc_list_title_date {
+    width: 100px;
+    background: #EFEEDC;
+    text-align: center;
+}
+
+.doc_list_title_substract {
+    width: 570px;
+    background: #EFEEDC;
+    text-align: center;
+}
+
+.doc_list_row {
+}
+
+table.doc_exception_nospace {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    width: 810px;
+    margin-top: 5px;
+    margin-left: 3px;
+}
+
+    table.doc_exception_nospace td {
+        border: 0px;
+        padding: 0px;
+        vertical-align: top;
+    }
+
+.doc_exception_content {
+    width: 495px;
+}
+
+table.doc_exception_title {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    width: 495px;
+}
+
+    table.doc_exception_title td {
+        border: 0px;
+        padding: 0px;
+        vertical-align: middle;
+    }
+
+.doc_exception_others {
+    width: 300px;
+}
+
+.doc_exception_other_top {
+    background-image: url('/templates/vanbanphapquy/images/box_top.gif');
+    background-repeat: no-repeat;
+    width: 300px;
+    height: 31px;
+}
+
+.doc_exception_other_middle {
+    background-image: url('/templates/vanbanphapquy/images/box_bgr.gif');
+    background-repeat: repeat-y;
+}
+
+.doc_exception_other_bottom {
+    background-image: url('/templates/vanbanphapquy/images/box_bottom.gif');
+    background-repeat: no-repeat;
+    width: 300px;
+    height: 8px;
+}
+
+.doc_exception_other_title {
+    padding-top: 7px;
+    padding-left: 5px;
+    font-family: 'Arial';
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.doc_exception_item {
+    padding-left: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-family: 'Arial';
+    font-size: 10pt;
+}
+
+a:link.doc_list_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:visited.doc_list_link {
+    text-decoration: none;
+    color: #0401B2
+}
+
+a:hover.doc_list_link {
+    text-decoration: none;
+    color: red
+}
+
+table.doc_list_page {
+    border-spacing: 0px;
+    border: 0px;
+    border-collapse: collapse;
+    margin-top: 5px;
+    margin-left: 3px;
+}
+
+    table.doc_list_page td {
+        border: 0px;
+        padding: 3px;
+        font-family: 'Arial';
+        font-size: 10pt;
+        text-align: right;
+    }
+
+
+.doc_list_notfound {
+    padding: 3px;
+    font-family: 'Arial';
+    font-size: 10pt;
+    text-align: center;
+    margin: 5px;
+}
+
+.doc_list_total {
+    padding: 3px;
+    font-family: 'Arial';
+    font-size: 10pt;
+    text-align: right;
+    margin: 5px;
+}
+
+.doc_img_bullet {
+    margin: 3px;
 }

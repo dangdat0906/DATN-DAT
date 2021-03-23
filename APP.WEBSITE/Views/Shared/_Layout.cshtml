@@ -1,48 +1,119 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{ 
+    var contacts = (APP.MODELS.Contacts)ViewBag.Contacts;
+}
+<!DOCTYPE html>
+<html>
 <head>
+    <title id="txtTitle">@contacts.TitleWeb</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - APP.WEBSITE</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" id="metadescription" content="@contacts.MetaDescription" />
+    <meta name="abstract" id="metaabstract" content="@contacts.MetaAbstract" />
+    <meta name="author" id="metaauthor" content="@contacts.MetaAuthor" />
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link href="~/plugin/RitsC-PrintArea-2cc7234/demo/PrintArea.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/plugin/datatables-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+        <link href="~/plugin/datatables-responsive/css/responsive.bootstrap4.css" rel="stylesheet" />*@
+
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/plugin/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="stylesheets/slick.css"> -->
+    <link href="~/css/fontawesome.css" rel="stylesheet" />
+    <link href="~/css/jquery.scrollbar.css" rel="stylesheet" />
+    <link href="~/plugin/toastr/toastr.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/Custom.css" rel="stylesheet" />
+    <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+    <link href="~/css/survey.css" rel="stylesheet" />
+    <link href="~/plugin/loading-modal/css/jquery.loadingModal.min.css" rel="stylesheet" />
+    <link href="~/plugin/Basic-Responsive-Gallery-Lightbox-Plugin-lightweightLightbox/css/lightweightLightbox.css" rel="stylesheet" />
+    <script src="~/plugin/jQuery.3.5.1/Content/Scripts/jquery-3.5.1.js"></script>
+    <link href="~/plugin/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <script src="~/plugin/toastr/toastr.min.js"></script>
+    <script src="~/plugin/RitsC-PrintArea-2cc7234/demo/jquery.PrintArea.js"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <!-- header -->
+    <header class="header-page">
+        <div class="header-top">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">APP.WEBSITE</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <div class="logo-header"><a href="/" class="h-100"><img class="h-100" src="~/images/cobandoingoai.gif" alt=""></a></div>
+                <div class="main-header-top">
+
+                </div>
+                <div class="img-banner">
+                    <img src="~/images/banner.png" class="banner-pc" alt="">
+                    <img src="~/images/banner-mb_1.png" class="banner-mb" alt="">
                 </div>
             </div>
-        </nav>
+        </div><!-- /.header-top -->
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <!-- e: header -->
+    <!-- main content -->
+    <main class="main-content">
+        <nav class="navbar navbdn navbar-expand-lg sticky-top" id="topMenu">
+        </nav>
         <div class="container">
-            &copy; 2020 - APP.WEBSITE - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-md-9 col-left">
+                    @RenderBody()
+                </div>
+                <div class="col-md-3 col-right" id="rightSideBar">
+                </div>
+                <!-- /.col-right -->
+            </div>
         </div>
+    </main>
+    <!-- e: main content -->
+    <!-- footer -->
+    <footer class="footer-page" id="footerPage">
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
+    <!-- footer -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/slick.js"></script>
+    <script src="~/js/jquery.scrollbar.min.js"></script>
+    <script src="~/plugin/Basic-Responsive-Gallery-Lightbox-Plugin-lightweightLightbox/js/lightweightLightbox.min.js"></script>
+    <script type="text/javascript" src="~/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/plugin/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/plugin/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="~/plugin/datatables-responsive/js/dataTables.responsive.js"></script>
+    <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+    @*<script src="~/plugin/html5lightbox/html5lightbox.js"></script>*@
+    @*<script src="~/js/customs.js"></script>*@
+    <script src="~/plugin/daterangepicker/moment.min.js"></script>
+    <script src="~/plugin/daterangepicker/daterangepicker.js"></script>
+    <script src="~/plugin/toastr/toastr.min.js"></script>
+    <script src="~/plugin/loading-modal/js/jquery.loadingModal.js"></script>
+    @*<link href="~/plugin/daterangepicker/website.css" rel="stylesheet" />*@
+    <script src="~/js/site.js"></script>
+    <script>
+        getMeta();
+        function getMeta() {
+            $.ajax({
+                url: "/Home/GetMeta",
+                method: "GET",
+                success: function (response) {
+                    console.log(response)
+                }
+
+            }).then(function (response) {
+                console.log(response)
+                $('#txtTitle').append(response.TitleWeb);
+            })
+        }
+    </script>
+    @Html.Partial("_ModalView")
 </body>
+
 </html>

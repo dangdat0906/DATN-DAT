@@ -1,0 +1,126 @@
+﻿@model APP.MODELS.Categories
+@{
+    string menu = "/" + Model.Code.ToLower();
+}
+<div class="box-left">
+    <div class="box-heading">
+        <div class="box-title">
+            <span class="box-title-icon"><i class="ico-codang"></i></span>
+            <div class="box-title-parent">
+                <h2 class="box-title-parent-label" id="rowCateId" data-id="@Model.Id">
+                    <marquee><a href="@Model.Code.ToLower()">@Model.GroupDisplay</a></marquee>
+                    <a class="marquee" href="@Model.Code.ToLower()">@Model.GroupDisplay</a>
+                </h2>
+            </div>
+        </div>
+        @*<ul class="sub-cate">
+                @{
+                    foreach (var item in Model.ListChild)
+                    {
+                        string menuchild = "/" + item.Code.ToLower();
+                        <li data-id="@item.Id"><a href="@menuchild">@item.Name</a></li>
+                    }
+
+                }
+
+            </ul>*@
+    </div>
+    @if (Model.ListChild != null)
+    {
+        <div class="box-body-dntw row" data-id="@Model.ListChild.First().Id" id="listContentRow@(Model.Id)"> @*Danh muc con dau tien => Dang hang *@
+
+        </div>
+
+        @*<div class="box-body-tindoingoai row" id="box-subcate-mix">
+            @{
+                if (Model.ListChild.Count() > 1) 
+                {
+                    for (int i = 1; i < Model.ListChild.Count(); i++)
+                    {
+                        <div class="col-md-6 col-lg-3 justify-content-center" id="listContentColumn@(i+1)">
+
+                            </div>
+                        <div class="col-md cate col-lg" data-id="@Model.ListChild[i].Id" id="listContentColumn@(Model.ListChild[i].Id)">
+
+                        </div>
+                    }
+                }
+            }
+        </div>*@
+    if (Model.ListChild.Count() > 1)
+    {
+        for (int i = 1; i < Model.ListChild.Count(); i++)
+        {
+                <div class="box-body-tindoingoai row" data-id="@(Model.ListChild[i].Id)" id="box-subcate-mix@(Model.ListChild[i].Id)">
+                    @*<div class="col-md-4 cate col-lg-4" data-id="@Model.ListChild[i].Id"  id="listContentColumn@(Model.ListChild[i].Id)">
+
+                    </div> 
+                    <div class="col-md-4 cate col-lg-4" data-id="@Model.ListChild[i].Id"  id="listContentColumn@(Model.ListChild[i].Id)">
+
+                    </div> 
+                    <div class="col-md-4 cate col-lg-4" data-id="@Model.ListChild[i].Id" id="listContentColumn@(Model.ListChild[i].Id)">
+
+                    </div>*@ 
+                </div>
+
+        }
+     }
+    }
+    else
+    {
+        <div class="box-body-dntw row" data-id="@Model.Id" id="listContentRow@(Model.Id)">
+
+        </div>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+
+        getRowContent($('#listContentRow' + @(Model.Id)).data('id'));
+        @*console.log($('#listContentRow' + @(Model.Id)).data('id'))*@
+        //$('#box-subcate-mix').find('.cate').each(function (index) {
+        //    var listContentColumn = "listContentColumn" + $(this).data('id');
+        //    getContentColumn($(this).data('id'), listContentColumn);
+        //})
+        $('[id^="box-subcate-mix"').each(function (index) {
+            getContentColumn($(this).data('id'));
+        })
+    });
+
+    //function getContentColumn(cateId, listContentColumn) {
+    //    $.ajax({
+    //        url: "/trang-chu" + "/get-content-category-column?cateId=" + cateId,
+    //        method: "GET",
+    //        success: function (response) {
+    //            if (response.result != false) {
+    //                $('#' + listContentColumn).html(response);
+    //            }
+
+    //        }
+    //    })
+    //}
+    function getRowContent(cateId) {
+
+        $.ajax({
+            url: "/trang-chu" + "/get-content-category-row?cateId=" + cateId,
+            method: "GET",
+            success: function (response) {
+                if (response.result != false) {
+                    $('#listContentRow' + @(Model.Id)).html(response);
+                }
+            }
+        })
+    }
+    function getContentColumn(cateId) {
+        $.ajax({
+            url: "/trang-chu" + "/get-content-category-column?cateId=" + cateId,
+            method: "GET",
+            success: function (response) {
+                if (response.result != false) {
+                    $('#box-subcate-mix'+cateId).html(response);
+                }
+
+            }
+        })
+    }
+</script>

@@ -1,0 +1,102 @@
+﻿@model APP.MODELS.CategoriesViewModel;
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Model != null)
+{
+    string categoryUrl = "/" + Model.Code.ToLower();
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            @if (Model.ParentCategory != null)
+            {
+                <li class="breadcrumb-item"><a href="@Model.ParentCategory.Code.ToLower()">@Model.ParentCategory.Name</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+            }
+            else
+            {
+                <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+            }
+
+        </ol>
+    </nav>
+}
+<!-- e: breadcrumb -->
+@*@if (Model.ListContents.Count > 0)
+    {
+
+        <div class="topnews">
+            <article class="card-info md">
+                <div class="card-info-img">
+                    <a href="@Model.ListContents[0].Url" class="thumbs hover-shine">
+                        @{string img = ViewData["CMSDomain"] + @Model.ListContents[0].TitleImage;
+                            <img src="@img" alt="Image">
+                        }
+                    </a>
+                </div>
+                <div class="card-info-content">
+                    <h4 class="card-info-title">
+                        <a href="@Model.ListContents[0].Url">@Model.ListContents[0].Title</a>
+                    </h4>
+                </div>
+            </article>
+        </div>
+
+        <div class="sub-topnews">
+            <div class="row">
+                @for (int i = 1; i < Model.ListContents.Count; i++)
+                {
+                    string imgsub = ViewData["CMSDomain"] + Model.ListContents[i].TitleImage;
+                <div class="col-md-6 col-lg-3">
+                    <div class="card-info">
+                        <div class="card-info-img">
+                            <a href="@Model.ListContents[i].Url" class="thumbs hover-shine">
+                                <img src="@imgsub">
+                            </a>
+                        </div>
+                        <div class="card-info-content">
+                            <h4 class="card-info-title">
+                                <a href="@Model.ListContents[i].Url">@Model.ListContents[i].Title</a>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            </div>
+        </div>
+
+    }*@
+<div id="list-new">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        getlist(@(ViewData["page"]));
+        var model = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["Category"]));
+        console.log(model)
+})
+    function getlist(page)
+    {
+     @{
+         var urlCategory = Html.Raw(Json.Serialize((ViewData["categoryUrl"])));
+     }
+        var urlList = '';
+        if (@(Model.ListContentType) == @((int)ListContentTypeEnum.Doc))
+        {
+            urlList = '/GetListContent';
+        }
+        else {
+            urlList = '/GetListRowContent';
+        }
+        console.log(urlList);
+        $.ajax({
+            url: "/Categories" + urlList + "?categoryUrl=" + @urlCategory + "&page=" + page,
+                method: "GET",
+                success: function (response) {
+                    $('#list-new').html(response);
+             }
+         })
+    }
+</script>

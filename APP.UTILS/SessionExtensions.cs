@@ -18,5 +18,6 @@ namespace APP.UTILS
         }
         public static string SessionAccount = "account";
         public static string SesscionPermission = "permission";
+        public static string SesscionLanguages = "languages";
     }
 }

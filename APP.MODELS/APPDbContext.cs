@@ -41,5 +41,6 @@ namespace APP.MODELS
         public DbSet<QuanLyDonGiaNhuanBut> QuanLyDonGiaNhuanBut { get; set; }
         public DbSet<NhuanBut> NhuanBut { get; set; }
         public DbSet<TheLoai_HeSo> TheLoai_HeSo { get; set; }
+        public DbSet<Contacts> Contacts { get; set; }
     }
 }

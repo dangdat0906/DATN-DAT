@@ -1,0 +1,178 @@
+﻿@model APP.MODELS.Contents
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="height:auto;padding:0" class="breadcrumb row">
+    <nav class="col-sm-9" aria-label="breadcrumb">
+        <ol style="height:auto;padding:0;" class="breadcrumb  h-100">
+            @if (Model.CategoryParent != null)
+            {
+                <li class="breadcrumb-item d-flex align-items-center" style="display:inline-block"><a href="@Model.CategoryParent.Code.ToLower()">@Model.CategoryParent.Name</a></li>
+                <li class="breadcrumb-item active d-flex align-items-center" style="display:inline-block" aria-current="page"><a href="@Model.Categories.Code.ToLower()">@Model.Categories.Name</a></li>
+            }
+            else
+            {
+                <li class="breadcrumb-item active d-flex align-items-center" aria-current="page"><a href="@Model.Categories.Code.ToLower()">@Model.Categories.Name</a></li>
+            }
+        </ol>
+    </nav>
+
+    <div class="col-sm-3" style="float:right;line-height:40px">
+        @if (Model.PublishDate != null)
+        {
+            var date = Model.PublishDate;
+            string datepush = "Ngày đăng bài: " + date?.ToString("dd/MM/yyyy");
+            <span>@datepush</span>
+        }
+    </div>
+</div>
+<div class="tool row">
+    <div class="font-size">
+        <a href="javascript:;" id="btn-print"><i class="fas fa-print"></i></a>
+    </div>
+    <div class="font-size">
+        <a href="javascript:;" id="btn-send-email"><i class="far fa-envelope"></i></a>
+    </div>
+    <div class="font-size">
+        <a href="javascript:;" class="fontSizeMinus">A-</a>
+        <a href="javascript:;" class="fontSizePlus">A+</a>
+    </div>
+    <div class="font-size">
+        <a href="javascript:;" onclick="index.SetColor()"><i class="fas fa-adjust"></i></a>
+    </div>
+
+</div>
+<div id="contentDetail">
+    <h3 id="titleDetail" class="content-title">@Model.Title</h3>
+    @{
+        @Html.Raw(Model.Content)
+    }
+    <div class="row">
+        <div class="col"><b class="float-right">@Model.Source</b></div>
+
+    </div>
+</div>
+<div class="bottom-content-tag">
+    @*//bottom-content*@
+
+    <label>Tags: </label><div id="tags"></div>
+
+</div>
+
+<div class="title-bar">
+    <h3>Tin liên quan</h3>
+</div>
+<div id="list-content">
+
+</div>
+<script src="~/plugin/RitsC-PrintArea-2cc7234/demo/jquery.PrintArea.js"></script>
+<script src="~/js/ContentDetail/index.js"></script>
+<script>
+    $(document).ready(function () {
+        getlist();
+        getTag();
+        TextSize()
+        index.init({
+            title: $("#titleDetail").text(),
+            link: $(location).attr("href")
+        })
+
+        index.sendEmai();
+})
+    function getlist()
+    {
+     @{
+         var urlCategory = Html.Raw(Json.Serialize(Model.Categories.Code.ToLower()));
+
+         var categoryId = Model.Id;
+     }
+        $.ajax({
+            url: "/ContentDetail" + "/GetListSame?urlCategory=" + @urlCategory + "&contentId=" +@categoryId ,
+                method: "GET",
+                success: function (response) {
+                    $('#list-content').html(response);
+                }
+        })
+    }
+    function getTag()
+    {
+        $.ajax({
+            url: "/ContentDetail" + "/GetGroupbyContent" + "?contentId=" +@categoryId ,
+                method: "GET",
+            success: function (response) {
+
+                if (response.length > 0) {
+                    var html = '';
+                    $.each(response, function (i, item) {
+                        var url = "/tag-" + item.id;
+                        html += '<a class="tag-detail" href="' + url + '">' + item.name + '</a>';
+
+                    })
+                    $("#tags").html(html);
+                }
+            }
+        })
+    }
+    function TextSize() {
+
+        // kích thước font chữ tối thiểu
+        var min = 9;
+        //kích thước font chữ tối đa
+        var max = 20;
+
+        // lấy font chữ mực định
+        var reset = $('p').css('fontSize');
+        var title = $(".content-title").css('fontSize');
+
+        //những phần tử sẽ thực hiện khi chức năng được gọi
+        var elm = $('#contentDetail');
+        var elmTitle = $('.content-title');
+        // ấn định kích thước font chữ mặc định và xóa bỏ px từ giá trị
+        var sizeContent = str_replace(reset, 'px', '');
+        var sizeTitle = str_replace(title, 'px', '');
+        //Tăng kích thước font chữ
+        $('a.fontSizePlus').click(function () {
+
+            // Nếu kích thước font chữ nhở hơn hoặc bằng với giá trị tối đa thì
+            if (sizeContent <= max) {
+
+                // tăng kích thước
+                sizeContent++;
+                sizeTitle++;
+                // ấn định kích thước font cho phần tử
+                elm.css({ 'fontSize': sizeContent });
+                elmTitle.css({ 'fontSize': sizeTitle });
+            }
+
+            // hủy sự kiện click
+            return false;
+
+        });
+        // Giảm kích thước font
+        $('a.fontSizeMinus').click(function () {
+
+            // nếu kích thước font chữ lớn hơn hay bằng với giá trị tối thiểu
+            if (sizeContent >= min) {
+
+                //giảm kích thước
+                // tăng kích thước
+                sizeContent--;
+                sizeTitle--;
+                // ấn định kích thước font cho phần tử
+                elm.css({ 'fontSize': sizeContent });
+                elmTitle.css({ 'fontSize': sizeTitle });
+            }
+
+            // hủy sự kiện click
+            return false;
+
+        });
+
+    }
+
+    function str_replace(haystack, needle, replacement) {
+        var temp = haystack.split(needle);
+        return temp.join(replacement);
+    }
+</script>

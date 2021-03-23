@@ -1,0 +1,111 @@
+﻿
+@using APP.MODELS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            @{ 
+                string txtSearch = (string)ViewData["txtSearch"];
+            }
+            <li class="breadcrumb-item active" aria-current="page"><a>Kết quả tìm kiếm cho @txtSearch</a></li>
+
+        </ol>
+    </nav>
+}
+<div id="list-new">
+    @{
+        var listContent = ViewData["listContent"] as APP.UTILS.PaginationSet<APP.MODELS.Contents>;
+        //var listContent1 = listContent.items.ToList();
+    }
+    @if (listContent.items != null)
+    {
+        <div class="view-list">
+            <ul class="list-news">
+                @foreach (var item in listContent.items)
+                {
+                    <li>
+                        <div class="news-item-grid">
+                            <div class="news-item-img">
+                                <a href="@item.Url" class="thumbs hover-shine">
+                                    @{
+                                        string img = ViewData["CMSDomain"] + item.TitleImage;
+                                    }
+                                    <img src="@img" alt="Image">
+                                </a>
+                            </div>
+                            <div class="news-item-content">
+                                <h4 class="news-item-title">
+                                    <a href="@item.Url">@item.Title</a>
+                                </h4>
+                                <div class="news-item-text">
+                                    @item.Summary
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <div class="view-list">
+            <H1 class="text-info">Không có bài trong chuyên mục này mục này </H1>
+        </div>
+    }
+
+
+    @if (listContent.TotalPages > 1)
+    {
+        // Create numeric links
+        var startPageIndex = Math.Max(1, listContent.Page - listContent.MaxPage / 2);
+        var endPageIndex = Math.Min(listContent.TotalPages, listContent.Page + listContent.MaxPage / 2);
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                @if (listContent.Page > 1)
+                {
+                    <li page-item>
+                        <a href="/search/@txtSearch?search=@txtSearch&page=1" class="page-link" aria-label="First">
+                            <i class="fa fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li page-item>
+                        <a href="/search/@txtSearch?search=@txtSearch&page=@(listContent.Page-1)" class="page-link" aria-label="Previous">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = startPageIndex; i <= endPageIndex; i++)
+                {
+                    if (listContent.Page == i)
+                    {
+                        <li class="page-item active"><a class="page-link" href="/search/@txtSearch?search=@txtSearch&page=@i" title="Trang @i">@i</a></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="?/search/@txtSearch?search=@txtSearch&page=@i" title="Trang @i">@i</a></li>
+                    }
+                }
+                @if (listContent.Page < listContent.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="/search/@txtSearch?search=@txtSearch&page=@(listContent.Page+1)" aria-label="Next">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="/search/@txtSearch?search=@txtSearch&page=@listContent.TotalPages" aria-label="Last">
+                            <i class="fa fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+
+</div>

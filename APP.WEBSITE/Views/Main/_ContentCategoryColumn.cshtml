@@ -1,0 +1,162 @@
+﻿@model List<APP.MODELS.Contents>
+@*@{
+        string img = ViewData["CMSDomain"] + Model[0].TitleImage;
+        string link = "/" + @Model[0].Url;
+        <div class="card-info">
+            <div class="card-info-img">
+                <a href="@Model[0].Url" class="thumbs hover-shine ">
+                    <img src="@img" alt="Image">
+                </a>
+            </div>
+            <div class="card-info-content" style="height:60px">
+                <h4 class="card-info-title">
+                    <a class="first_news_right" href="@Model[0].Url">@Model[0].Title</a>
+                </h4>
+            </div>
+        </div>
+        <ul class="list-news-dots">
+            @{
+                @for (int i = 1; i < Model.Count(); i++)
+                {
+                    string linkInList = "/" + Model[i].Url;
+                    <li>
+                        <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                    </li>
+
+                }
+            }
+        </ul>
+    }*@
+@{
+    string img1 = ViewData["CMSDomain"] + Model[0].TitleImage;
+    string img2 = ViewData["CMSDomain"] + Model[1].TitleImage;
+    string img3 = ViewData["CMSDomain"] + Model[2].TitleImage;
+    <div class="col-md-4 cate col-lg-4">
+        <div class="card-info">
+            <div class="card-info-img">
+                <a href="@Model[0].Url" class="thumbs hover-shine ">
+                    <img src="@img1" alt="Image">
+                </a>
+            </div>
+            <div class="card-info-content card-infor-content-responsive" style="height:60px">
+                <h4 class="card-info-title">
+                    <a class="first_news_right" href="@Model[0].Url">@Model[0].Title</a>
+                </h4>
+            </div>
+        </div>
+        <ul class="list-news-dots">
+            @{
+                if (Model.Count() > 4)
+                {
+                    @for (int i = 3; i < 5; i++)
+                    {
+                        string linkInList = "/" + Model[i].Url;
+                        <li>
+                            <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                        </li>
+
+                    }
+                }
+
+            }
+        </ul>
+
+    </div>
+    <div class="col-md-4 cate col-lg-4">
+        <div class="card-info">
+            <div class="card-info-img">
+                <a href="@Model[1].Url" class="thumbs hover-shine ">
+                    <img src="@img2" alt="Image">
+                </a>
+            </div>
+            <div class="card-info-content card-infor-content-responsive" style="height:60px">
+                <h4 class="card-info-title">
+                    <a class="first_news_right" href="@Model[1].Url">@Model[1].Title</a>
+                </h4>
+            </div>
+        </div>
+        <ul class="list-news-dots">
+            @{
+                if (Model.Count() > 6)
+                {
+                    @for (int i = 5; i < 7; i++)
+                    {
+                        string linkInList = "/" + Model[i].Url;
+                        <li>
+                            <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                        </li>
+
+                    }
+                }
+
+            }
+        </ul>
+
+    </div>
+    <div class="col-md-4 cate col-lg-4">
+        <div class="card-info">
+            <div class="card-info-img">
+                <a href="@Model[2].Url" class="thumbs hover-shine ">
+                    <img src="@img3" alt="Image">
+                </a>
+            </div>
+            <div class="card-info-content card-infor-content-responsive" style="height:60px">
+                <h4 class="card-info-title">
+                    <a class="first_news_right" href="@Model[2].Url">@Model[2].Title</a>
+                </h4>
+            </div>
+        </div>
+        <ul class="list-news-dots">
+            @{
+                if (Model.Count() > 8)
+                {
+                    @for (int i = 7; i < 9; i++)
+                    {
+                        string linkInList = "/" + Model[i].Url;
+                        <li>
+                            <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                        </li>
+
+                    }
+                }
+            }
+        </ul>
+    </div>
+}
+
+@*@{
+    for (int i = 0; i < Model.Count; i++)
+    {
+        if (i < 3)
+        {
+            <div class="col-md cate col-lg">
+                <div class="card-info">
+                    <div class="card-info-img">
+                        <a href="@Model[i].Url" class="thumbs hover-shine ">
+                            <img src="@img1" alt="Image">
+                        </a>
+                    </div>
+                    <div class="card-info-content" style="height:60px">
+                        <h4 class="card-info-title">
+                            <a class="first_news_right" href="@Model[i].Url">@Model[i].Title</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            string linkInList = "/" + Model[i].Url;
+            <div class="col-md cate col-lg">
+                <ul class="list-news-dots">
+                    <li>
+                        <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                    </li>
+                </ul>
+            </div>
+        }
+    }
+
+
+}*@
+

@@ -1,0 +1,50 @@
+﻿@model List<APP.MODELS.Categories>
+<div class="row">
+    @{
+        var ModelCount = 5;
+        var childCount = 4;
+        if (Model.Count() < 7)
+        {
+            ModelCount = Model.Count();
+        }
+        for (int i = 0; i < ModelCount; i++)
+        {
+            if (Model[i].ListChild != null)
+            {
+                Model[i].ListChild.OrderBy(c => c.DisplayOrder);
+                if (Model[i].ListChild.Count() < childCount)
+                {
+                    childCount = Model[i].ListChild.Count();
+                }
+                <div class="col-md-4 col-lg-2">
+                    <div class="nav-footer">
+                        <h3>@Model[i].Name.ToUpper()</h3>
+                        <ul>
+                            @{
+                                for (int j = 0; j < childCount; j++)
+                                {
+                                    string menuchild = "/" + Model[i].ListChild[j].Code.ToLower();
+                                    <li><a href="@menuchild">@Model[i].ListChild[j].Name</a></li>
+                                }
+
+                            }
+                        </ul>
+                    </div><!-- /.nav-footer -->
+                </div>
+
+            }
+            else
+            {
+                string link = "/" + Model[i].Code.ToLower();
+                <div class="col-md-4 col-lg-2">
+                    <div class="nav-footer">
+                        <h3><a href="@link">@Model[i].Name.ToUpper()</a></h3>
+                    </div><!-- /.nav-footer -->
+                </div>
+
+
+            }
+
+        }
+    }
+</div>

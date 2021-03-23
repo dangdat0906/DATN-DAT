@@ -1,0 +1,205 @@
+﻿@model APP.MODELS.Contacts
+@using APP.UTILS
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Model != null)
+{
+    <div id="frmCreate" class="form-horizontal">
+        <input type="hidden" value="@Model.Id" id="txtId" />
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2" required>Tên đơn vị</label>
+                <div class="col-sm-8">
+                    <input type="text" value="@Model.Name" required class="form-control" id="txtName" placeholder="Tên đơn vị">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">Tiêu đề trang</label>
+                <div class="col-sm-8">
+                    <input type="text" value="@Model.TitleWeb" class="form-control" id="txtTitle" placeholder="Tiêu đề trang">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">Tiêu đề cuối trang</label>
+                <div class="col-sm-8">
+                    <input type="text" value="@Model.TitleFooter" class="form-control" id="txtTitleFooter" placeholder="Tiêu cuối">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">Thông tin chân trang</label>
+                <div class="col-sm-8">
+                    <textarea style="height:400px" class="col-sm-12" id="txtContentFooter">@Model.ContentFooter</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">MetaDescription</label>
+                <div class="col-sm-8">
+                    <textarea style="height:100px" class="col-sm-12" id="txtMetaDescription">@Model.MetaDescription</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">Meta bstract</label>
+                <div class="col-sm-8">
+                    <textarea style="height:100px" class="col-sm-12" id="txtMetaAbstract">@Model.MetaAbstract</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-sm-2">Meta Author</label>
+                <div class="col-sm-8">
+                    <textarea style="height:100px" class="col-sm-12" id="txtMetaAuthor">@Model.MetaAuthor</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label id="lbStatus" class="col-sm-2">Trạng thái trang</label>
+                <div class="col-sm-8">
+                    @if (Model.StatusWebsite)
+                    {
+                        <input id="ckbStatus" type="checkbox" checked class="custom-control">
+                    }
+                    else
+                    {
+                        <input id="ckbStatus" type="checkbox" class="custom-control">
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <button id="btnSaveContent" style="float:right" class="btn btn-primary">Lưu</button>
+            </div>
+            <div class="col-sm-6">
+                <button id="btnClose" style="float:left" class="btn btn-danger">Trở về</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+<div id="frmCreate" class="form-horizontal">
+    <input type="hidden" value="" id="txtId" />
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2" required>Tên đơn vị</label>
+            <div class="col-sm-8">
+                <input type="text" value="" required class="form-control" id="txtName" placeholder="Tên đơn vị">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Tiêu đề trang</label>
+            <div class="col-sm-8">
+                <input type="text" value="" class="form-control" id="txtTitle" placeholder="Tiêu đề trang">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Tiêu đề cuối trang</label>
+            <div class="col-sm-8">
+                <input type="text" value="" class="form-control" id="txtTitleFooter" placeholder="Tiêu cuối">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Thông tin chân trang</label>
+            <div class="col-sm-8">
+                <textarea style="height:400px" class="col-sm-12" id="txtContentFooter"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">MetaDescription</label>
+            <div class="col-sm-8">
+                <textarea style="height:100px" class="col-sm-12" id="txtMetaDescription"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Meta bstract</label>
+            <div class="col-sm-8">
+                <textarea style="height:100px" class="col-sm-12" id="txtMetaAbstract"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label class="col-sm-2">Meta Author</label>
+            <div class="col-sm-8">
+                <textarea style="height:100px" class="col-sm-12" id="txtMetaAuthor"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <label id="lbStatus" class="col-sm-2">Trạng thái trang</label>
+            <div class="col-sm-8">
+                    <input id="ckbStatus" type="checkbox" checked class="custom-control">
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-6">
+            <button id="btnSaveContent" style="float:right" class="btn btn-primary">Lưu</button>
+        </div>
+        <div class="col-sm-6">
+            <button id="btnClose" style="float:left" class="btn btn-danger">Trở về</button>
+        </div>
+    </div>
+</div>
+}
+<script>
+    $('#btnSaveContent').off("click").on('click', function (e) {
+        e.preventDefault();
+        CreateConfig();
+
+    });
+    function CreateConfig() {
+        showLoading();
+        $.ajax({
+            url: "/cau-hinh/create",
+            method: "POST",
+            data: {
+                Id: $('#frmCreate').find('#txtId').val(),
+                Name: $('#frmCreate').find('#txtName').val(),
+                TitleWeb: $('#frmCreate').find('#txtTitle').val(),    
+                TitleFooter: $('#frmCreate').find('#txtTitleFooter').val(),
+                StatusWebsite: $('#frmCreate').find('#ckbStatus').prop("checked") ? true : false,
+                ContentFooter: $('#frmCreate').find('#txtContentFooter').val(),
+                MetaDescription: $('#frmCreate').find('#txtMetaDescription').val(),
+                MetaAuthor: $('#frmCreate').find('#txtMetaAuthor').val(),
+                MetaAbstract: $('#frmCreate').find('#txtMetaAbstract').val()
+            }, success: function (response) {
+                hideLoading()
+                if (response.result) {
+                    // datasource = response.data
+                    showAlert(response.message, 2)
+                    hideLoading();
+                } else {
+                    showAlert(response.message)
+                    hideLoading();
+                }
+            }
+
+        })
+    }
+</script>

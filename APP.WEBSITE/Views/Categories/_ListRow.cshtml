@@ -1,0 +1,89 @@
+﻿@model APP.UTILS.PaginationSet<APP.MODELS.Contents>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@if (Model.items != null)
+{
+    <div class="view-list">
+        <div class="list-news row">
+            @foreach (var item in Model.items)
+            {
+                string imglist_right = ViewData["CMSDomain"] + item.TitleImage;
+                string linkInList = "/" + item.Url;
+            <div class="col-md-4 cate col-lg-4">
+                <div class="card-info">
+                    <div class="card-info-img">
+                        <a class="h-100" href="@linkInList" class="thumbs hover-shine ">
+                            <img src="@imglist_right" alt="Image">
+                        </a>
+                    </div>
+                    <div class="card-info-content card-infor-content-responsive">
+                        <h4 class="card-info-title">
+                            <a class="@linkInList">@item.Title</a>
+                        </h4>
+                    </div>
+                </div>
+
+            </div>
+            }
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="view-list">
+        <H1 class="text-info">Không có bài trong chuyên mục này mục này </H1>
+    </div>
+}
+
+
+@if (Model.TotalPages > 1)
+{
+    // Create numeric links
+    var startPageIndex = Math.Max(1, Model.Page - Model.MaxPage / 2);
+    var endPageIndex = Math.Min(Model.TotalPages, Model.Page + Model.MaxPage / 2);
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            @if (Model.Page > 1)
+            {
+                <li page-item>
+                    <a href="?categoryUrl=@(ViewData["categoryUrl"])&page=1" class="page-link" aria-label="First">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                </li>
+                <li page-item>
+                    <a href="?categoryUrl=@(ViewData["categoryUrl"])&page=@(Model.Page-1)" class="page-link" aria-label="Previous">
+                        <i class="fa fa-angle-double-left"></i>
+                    </a>
+                </li>
+            }
+
+            @for (int i = startPageIndex; i <= endPageIndex; i++)
+            {
+                if (Model.Page == i)
+                {
+                    <li class="page-item active"><a class="page-link" href="?categoryUrl=@(ViewData["categoryUrl"])&page=@i" title="Trang @i">@i</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" href="?categoryUrl=@(ViewData["categoryUrl"])&page=@i" title="Trang @i">@i</a></li>
+                }
+            }
+            @if (Model.Page < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?categoryUrl=@(ViewData["categoryUrl"])&page=@(Model.Page+1)" aria-label="Next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?categoryUrl=@(ViewData["categoryUrl"])&page=@Model.TotalPages" aria-label="Last">
+                        <i class="fa fa-angle-double-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

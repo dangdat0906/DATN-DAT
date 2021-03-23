@@ -1,0 +1,50 @@
+﻿@model List<APP.MODELS.Contents>
+@{
+    string link = "/" + @Model[0].Url;
+}
+<div class="col-md-6 col-dntw-left">
+    <div class="card-info md">
+        <div class="card-info-img">
+            <a href="@Model[0].Url" class="thumbs hover-shine">
+                @{
+                    string img = ViewData["CMSDomain"] + Model[0].TitleImage;
+                }
+                <!-- <img src="images/upload/block2-img-thumb-2.png" alt="Image"> -->
+                <img src="@img" alt="Image">
+            </a>
+        </div>
+        <div class="card-info-content first_news_right">
+            <h4 class="card-info-title">
+                <a href="@Model[0].Url">@Model[0].Title</a>
+            </h4>
+            <div class="card-info-text">@Model[0].Summary</div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-dntw-right">
+
+    @{
+        if (Model.Count > 1)
+        {
+            @for (int i = 1; i < Model.Count(); i++)
+            {
+                string imglist_right = ViewData["CMSDomain"] + Model[i].TitleImage;
+                string linkInList = "/" + @Model[i].Url;
+                <div class="card-info card-info-grid">
+                    <div class="card-info-img">
+                        <a href="@linkInList" class="thumbs hover-shine">
+                            <img src="@imglist_right" alt="Image">
+                        </a>
+                    </div>
+                    <div class="card-info-content">
+                        <h4 class="card-info-title">
+                            <a href="@linkInList">@Model[i].Title</a>
+                        </h4>
+                    </div>
+                </div>
+
+            }
+        }
+    }
+</div>
+

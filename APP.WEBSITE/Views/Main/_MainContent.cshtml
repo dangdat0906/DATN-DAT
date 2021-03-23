@@ -1,0 +1,85 @@
+﻿@model List<APP.MODELS.Contents>
+
+<!-- start section-featured -->
+
+<section class="section-featured">
+    <div class="row">
+        <div class="col-md-7 col-lg-8">
+            <div class="featured" id="sliderFeatured">
+                @{
+                    var modelCount = 5;
+                    var onTopCount = 1;
+                    for (int i= 0;i < Model.Count();i ++)
+                    {
+                        if (Model[i].ShowOnTop == true && onTopCount <= modelCount)
+                        {
+                            onTopCount ++;
+                            string img = ViewData["CMSDomain"] + Model[i].TitleImage;
+                            string link = "/" + @Model[i].Url;
+                            <div class="featured-item">
+                                <article class="featured-article">
+                                    <div class="featured-img">
+                                        <a href="@link" class="hover-darken h-100"><img class="w-100 h-100" src="@img" alt="Image"></a>
+                                    </div>
+                                    <div class="featured-content">
+                                        <h3 class="featured-name">
+                                            <a href="@link">@Model[i].Title</a>
+                                        </h3>
+                                        <div  class="featured-text first_news_right">
+                                            @Model[i].Summary
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        }
+                    }
+                }
+
+
+            </div>
+        </div>
+        <div class="col-md-5 col-lg-4">
+            <div class="sub-featured">
+                <div class="scroll-wrapper-featured scrollbar-inner">
+                    <ul class="list-news-dots">
+                        @{
+                            var modelRightCount = 15;
+                            var count = 1;
+                            for (int i = 0;i < Model.Count();i++)
+                            {
+                                if (Model[i].ShowOnRightTop == true && count <= modelRightCount )
+                                {
+                                    count++;
+                                    string link = "/" + @Model[i].Url;
+                                    <li>
+                                        <a href="@link">@Model[i].Title</a>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="category">
+    
+</div>
+<script>
+    $(document).ready(function () {
+        loadCategory();
+    })
+    function loadCategory() {
+        $.ajax({
+            url: "/trang-chu" + "/get-main-category",
+            method: "GET",
+            success: function (response) {             
+                    $('#category').html(response);
+            }
+        }).then(function () {
+            
+        });
+    }
+</script>
+

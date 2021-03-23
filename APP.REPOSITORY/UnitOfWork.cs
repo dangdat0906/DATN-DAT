@@ -34,6 +34,7 @@ namespace APP.REPOSITORY
         public IQuanLyDonGiaNhuanButRepository QuanLyDonGiaNhuanButRepository { get; }
         public ITheLoai_HeSoRepository TheLoai_HeSoRepository { get; }
         public INhuanButRepository NhuanButRepository { get; }
+        public IContactRepository ContactRepository { get; }
     }
     public class UnitOfWork : IUnitOfWork
     {
@@ -63,6 +64,7 @@ namespace APP.REPOSITORY
             QuanLyDonGiaNhuanButRepository = new QuanLyDonGiaNhuanButRepository(_dbContext);
             TheLoai_HeSoRepository = new TheLoai_HeSoRepository(_dbContext);
             NhuanButRepository = new NhuanButRepository(_dbContext);
+            ContactRepository = new ContactRepository(_dbContext);
         }
         #region Transaction
         public async Task CreateTransaction()
@@ -108,6 +110,7 @@ namespace APP.REPOSITORY
         public IQuanLyDonGiaNhuanButRepository QuanLyDonGiaNhuanButRepository { get; }
         public ITheLoai_HeSoRepository TheLoai_HeSoRepository { get; }
         public INhuanButRepository NhuanButRepository { get; }
+        public IContactRepository ContactRepository { get; }
 
 
         protected virtual void Dispose(bool disposing)

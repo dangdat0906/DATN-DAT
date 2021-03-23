@@ -1,0 +1,38 @@
+﻿@model APP.MODELS.Categories
+@{
+    string menu = "/" + Model.Code.ToLower();
+}
+<div class="box-left">
+    <div class="box-heading">
+        <div class="box-title">
+            <span class="box-title-icon"><i class="ico-codang"></i></span>
+            <div class="box-title-parent">
+                <h2 class="box-title-parent-label" id="row50CateId" data-id="@Model.Id">
+                    <marquee><a href="@Model.Code.ToLower()">@Model.GroupDisplay</a></marquee>
+                    <a class="marquee" href="@Model.Code.ToLower()">@Model.GroupDisplay</a>
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="box-body-dntw row" id="listContentRow50@(Model.Id)">
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        getRow50Content(@Model.Id);
+
+    });
+    function getRow50Content(cateId) {
+        $.ajax({
+            url: "/trang-chu" + "/get-content-category-row50?cateId=" + cateId,
+            method: "GET",
+            success: function (response) {
+                if (response.result != false) {
+                    $('#listContentRow50' + cateId).html(response);
+                }
+            }
+        })
+    }
+</script>
