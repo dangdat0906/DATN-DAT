@@ -38,18 +38,11 @@ namespace APP.WEBSITE.Controllers
             ViewData["APIDomain"] = _domain;
             return PartialView("_Menu",data);
         }
-        //[HttpGet("get-list-right-banners")]
-        //public async Task<IActionResult> Get_List_Right_Banners() {
-        //    var data = await HttpHelper.GetData<List<Banners>>($"{_domain}/api/banner/get-list-right-published","", "false");
-        //    ViewData["CMSDomain"] = _config["CMSDomain"].ToString();
-        //    //Lấy 14 banner da order by DisplayOrder
-        //    ViewData["AboveDocumentary"] = data.FindAll(c => c.RightSidePosition == (int)RightSideBannerEnum.AboveDocumentary);
-        //    ViewData["BelowDocumentary"] = data.FindAll(c => c.RightSidePosition == (int)RightSideBannerEnum.BelowDocumentary);
-        //    ViewData["AboveImgSlide"] = data.FindAll(c => c.RightSidePosition == (int)RightSideBannerEnum.AboveImgSlide);
-        //    ViewData["BelowImgSlide"] = data.FindAll(c => c.RightSidePosition == (int)RightSideBannerEnum.BelowImgSlide);
-        //    return PartialView("_RightSideBar");
-
-        //}
+        [HttpGet("get-list-right-banners")]
+        public async Task<IActionResult> Get_List_Right_Banners()
+        {          
+            return PartialView("_RightSideBar");
+        }
         [HttpGet("get-list-content")]
         public async Task<IActionResult> Get_TopHot_Content()
         {

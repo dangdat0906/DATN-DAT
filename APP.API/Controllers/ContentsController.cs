@@ -243,7 +243,7 @@ namespace APP.API.Controllers
                 data.TitleImage = inputModel.TitleImage;
                 //data.TotalView = ??
                 data.ShowOnTop = inputModel.ShowOnTop;
-                //data.ShowOnRightTop = inputModel.ShowOnRightTop;
+                data.ShowOnRightTop = inputModel.ShowOnRightTop;
                 data.NewsSource = inputModel.NewsSource;
                 data.AuthorId = inputModel.AuthorId;
                 inputModel.ContentType = inputModel.ContentType == null ? 1 : inputModel.ContentType;
