@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
     <ProjectReference Include="..\APP.MODELS\APP.MODELS.csproj" />
     <ProjectReference Include="..\APP.REPOSITORY\APP.REPOSITORY.csproj" />
     <ProjectReference Include="..\APP.UTILS\APP.UTILS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\fonts\NewFolder\" />
   </ItemGroup>
 
 </Project>
