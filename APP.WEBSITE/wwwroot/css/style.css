@@ -544,13 +544,13 @@ textarea {
     position: relative;
 }
 
-    .header-top .container {
+   /* .header-top .container {
         position: relative;
         height: 50px;
         display: -ms-flexbox;
         display: flex;
         justify-content: flex-end;
-    }
+    }*/
 
         .header-top .container::after {
             content: "";
@@ -558,7 +558,7 @@ textarea {
             top: 0;
             height: 100%;
             left: 30px;
-            background: url(../images/bg/img-banner.png) no-repeat left top;
+            /*background: url(../images/bg/img-banner.png) no-repeat left top;*/
             width: 1429px;
             position: absolute;
             margin-left: -50px;
@@ -572,7 +572,7 @@ textarea {
 
 @media only screen and (min-width: 992px) {
     .header-top .container {
-        height: 114px;
+        height: 121px;
     }
 
         .header-top .container::after {
@@ -610,7 +610,7 @@ textarea {
 
 @media only screen and (min-width: 768px) {
     .header-top .img-banner {
-        max-width: 84.15625%;
+        max-width: 100%;
     }
 }
 
@@ -850,7 +850,7 @@ textarea {
 .navbar-expand-lg {
     padding-top: 4px;
     padding-bottom: 4px;
-    background-color: #0066CC;
+    background-color: #064e96;
 }
 
 @media only screen and (min-width: 992px) {
@@ -963,7 +963,7 @@ textarea {
 
 @media only screen and (min-width: 992px) {
     .navbar-expand-lg .navbar-nav .active .nav-link {
-        background-color: #1477da;
+        /*background-color: #1477da;*/
     }
 }
 
