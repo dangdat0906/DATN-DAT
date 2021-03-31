@@ -20,16 +20,13 @@ namespace APP.WEBSITE.Controllers
             this._config = config;
             this._domain = _config["APIDomain"].ToString();
         }
-        //[HttpGet("get-languages")]
-        //public async Task<IActionResult> Get_Languages()
-        //{
-        //    var data = await HttpHelper.GetData<List<Languages>>($"{_domain}/api/languages/get-list", $"name=&code=&status={(byte)StatusEnum.Active}", "false");
-        //    // danh sach ngon ngu
-        //    ViewData["LangCodeVN"] = _config["LangCodeVN"].ToString();
-        //    ViewData["WebsiteEnglish"] = _config["WebsiteEngDomain"].ToString();
-        //    //ViewData["LangCodeEnglish"] = _config["LangCodeEnglish"].ToString();
-        //    return PartialView("_Ngonngu", data);
-        //}
+        [HttpGet("get-languages")]
+        public async Task<IActionResult> Get_Languages()
+        {
+           
+            
+            return PartialView("_Ngonngu");
+        }
         [HttpGet("get-list-categories")]
         public async Task<IActionResult> Get_List_Menu()
         {

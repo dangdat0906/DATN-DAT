@@ -1,0 +1,21 @@
+﻿
+<ul class="navbar-right d-none d-lg-block">
+  
+    <li class="dropdown">
+        <a href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-search"></i></a>
+        <div class="dropdown-menu dropdown-search" aria-labelledby="dropdownMenuButton">
+            <div class="form-search">
+                <input id="txtSearch" type="text" class="form-control">
+                <button onclick="search()" class="btn-clear"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </li>  
+</ul>
+<script>
+    var search = function () {
+        var txtSearch = $('#txtSearch').val();
+        if (txtSearch !== "") {
+            location.href = "/search/" + txtSearch;
+        }
+    }
+</script>
