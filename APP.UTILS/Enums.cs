@@ -56,7 +56,9 @@ public enum ContentTypeEnum
     [Description("Đã phê duyệt")] // == Đăng tải
     Approved = 2,
     [Description("Đã xóa")]
-    Delete = 3
+    Delete = 3,
+    [Description("Không phê duyệt")]
+    NotApp = 4
     //[Description("Tất cả")]
     //All = -1,
     //[Description("Tạo")]

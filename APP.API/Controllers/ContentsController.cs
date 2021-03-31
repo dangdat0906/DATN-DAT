@@ -249,7 +249,7 @@ namespace APP.API.Controllers
                 inputModel.ContentType = inputModel.ContentType == null ? 1 : inputModel.ContentType;
                 data.ContentType = inputModel.ContentType;
                 await _contentsManager.Update(data);
-                //inputModel.CreatedBy = data.CreatedBy;
+                inputModel.CreatedBy = data.CreatedBy;
                 //await Create_Log(inputModel); //create Content_Log 
                 await Update_TitleImage(inputModel.Id, inputModel.TitleImage, inputModel.TitleImgWidth, inputModel.TitleImgHeight);
                 if (inputModel.GroupID != null)
