@@ -24,6 +24,7 @@
                                     <div class="featured-content">
                                         <h3 class="featured-name">
                                             <a href="@link">@Model[i].Title</a>
+
                                         </h3>
                                         <div  class="featured-text first_news_right">
                                             @Model[i].Summary
@@ -51,9 +52,11 @@
                                 {
                                     count++;
                                     string link = "/" + @Model[i].Url;
-                                    <li>
-                                        <a href="@link">@Model[i].Title</a>
-                                    </li>
+                                                <li>
+                                                    <a href="@link">@Model[i].Title</a>
+                                                    <br />
+                                                    <a>Ngày đăng tải: @Model[i].PublishDate?.ToString("dd/MM/yyyy")</a>
+                                                </li>
                                 }
                             }
                         }

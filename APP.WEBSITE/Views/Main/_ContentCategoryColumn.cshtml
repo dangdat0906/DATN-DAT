@@ -51,9 +51,11 @@
                     @for (int i = 3; i < 5; i++)
                     {
                         string linkInList = "/" + Model[i].Url;
-                        <li>
-                            <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
-                        </li>
+            <li>
+                <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                <br />
+                <a>Ngày đăng tải: @Model[i].PublishDate?.ToString("dd/MM/yyyy")</a>
+            </li>
 
                     }
                 }
@@ -84,6 +86,8 @@
                         string linkInList = "/" + Model[i].Url;
                         <li>
                             <a style="font-weight:normal !important;" href="@linkInList">@Model[i].Title</a>
+                            <br/>
+                            <a>Ngày đăng tải: @Model[i].PublishDate?.ToString("dd/MM/yyyy")</a>
                         </li>
 
                     }
