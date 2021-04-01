@@ -125,7 +125,6 @@ namespace APP.API.Controllers
                         tongBaiVietHeSo += (float)(type.SoLuongBaiViet.Value * type.Coefficient);
                     }
                     item.Tongtien = (decimal)(tongBaiVietHeSo * item.DonGia);
-                    item.NhuanBut = item.Tongtien * 40 / 100;
                 }
                 return result;
             }
@@ -159,7 +158,6 @@ namespace APP.API.Controllers
             foreach (var item in listResult)
             {
                 item.Tongtien = (decimal)(item.HeSo * item.Dongia);
-                item.NhuanBut = item.Tongtien * 40 / 100;
             }
             listResult = listResult.OrderBy(c => c.LoaiBaiViet).ToList();
             return listResult;
