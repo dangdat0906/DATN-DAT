@@ -295,7 +295,7 @@ namespace APP.CMS.Controllers
             //inputModel.LangCode = langcode;
             try
             {
-                await HttpHelper.PostData<Contents>(inputModel, $"{_domain}/api/contents/update");
+                await HttpHelper.PostData<Contents>(inputModel, $"{_domain}/api/contents/updatedb");
                 return Json(new { Result = true, Message = "Phê duyệt bài viết thành công" });
             }
             catch (Exception ex)

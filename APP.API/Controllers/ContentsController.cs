@@ -268,6 +268,61 @@ namespace APP.API.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("updatedb")]
+        public async Task<IActionResult> UpdateDB([FromBody] Contents inputModel)
+        {
+            try
+            {
+                var data = await _contentsManager.Find_By_Id(inputModel.Id);
+                if (data == null)
+                {
+                    inputModel.Id = 0;
+                    await Create(inputModel);
+                }
+                if (string.IsNullOrEmpty(inputModel.Title))
+                {
+                    throw new Exception($"Tên nội dung {MessageConst.NOT_EMPTY_INPUT}");
+                }
+                if (inputModel.Title.Length > 250)
+                {
+                    throw new Exception($"Tên nội dung {MessageConst.LENGTH_ERROR}");
+                }
+                data.Title = inputModel.Title;
+                data.Url = inputModel.Url;
+                data.Summary = inputModel.Summary;
+                //inputModel.Content = inputModel.Content.Replace($"{_config["CMSDomain"].ToString()}", $"{_config["WebsiteDomain"].ToString()}");
+                data.Content = inputModel.Content;
+                //data.Source = inputModel.Source;
+                data.Status = inputModel.Status;
+                data.PublishDate = DateTime.Now;
+                data.UpdateDate = DateTime.Now;
+                data.TitleImage = inputModel.TitleImage;
+                //data.TotalView = ??
+                data.ShowOnTop = inputModel.ShowOnTop;
+                data.ShowOnRightTop = inputModel.ShowOnRightTop;
+                data.NewsSource = inputModel.NewsSource;
+                data.AuthorId = inputModel.AuthorId;
+                inputModel.ContentType = inputModel.ContentType == null ? 1 : inputModel.ContentType;
+                data.ContentType = inputModel.ContentType;
+                await _contentsManager.Update(data);
+                inputModel.CreatedBy = data.CreatedBy;
+                await Update_TitleImage(inputModel.Id, inputModel.TitleImage, inputModel.TitleImgWidth, inputModel.TitleImgHeight);
+                if (inputModel.GroupID != null)
+                {
+                    await Create_Content_Group(inputModel.GroupID, inputModel.Id); // update Content_Group
+                }
+                if (inputModel.CategoryId != null)
+                {
+                    await Create_Content_Category(inputModel.CategoryId, inputModel.Id); //update Content_Category
+                }
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
         private async Task Update_TitleImage(long contentId, string titleImg, int? titleImgWidth, int? titleImgHeight)
         {
             try
